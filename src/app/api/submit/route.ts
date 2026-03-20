@@ -9,45 +9,17 @@ interface SubmitData {
   appliedAt: string
 }
 
-async function appendToGoogleSheets(data: SubmitData) {
-  const sheetsId = process.env.GOOGLE_SHEETS_ID
-  const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
-
-  if (!sheetsId || !serviceAccountKey) {
-    console.log('Google Sheets env vars not set, skipping...')
-    return
-  }
-
-  try {
-    const { google } = await import('googleapis')
-    const credentials = JSON.parse(serviceAccountKey)
-    const auth = new google.auth.GoogleAuth({
-      credentials,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    })
-
-    const sheets = google.sheets({ version: 'v4', auth })
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: sheetsId,
-      range: 'Sheet1!A:F',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [[
-          data.name,
-          data.email,
-          data.contact,
-          data.job,
-          data.motivation,
-          data.appliedAt,
-        ]],
-      },
-    })
-
-    console.log('Google Sheets: row appended')
-  } catch (error) {
-    console.error('Google Sheets error:', error)
-  }
+function formatKoreanTime(isoString: string): string {
+  const date = new Date(isoString)
+  return date.toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
 async function sendSlackNotification(data: SubmitData) {
@@ -58,37 +30,20 @@ async function sendSlackNotification(data: SubmitData) {
     return
   }
 
+  const koreanTime = formatKoreanTime(data.appliedAt)
+
   try {
     await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: `🐙 새로운 AI 5일 챌린지 신청!`,
-        blocks: [
-          {
-            type: 'header',
-            text: { type: 'plain_text', text: '🐙 새로운 AI 5일 챌린지 신청!' },
-          },
-          {
-            type: 'section',
-            fields: [
-              { type: 'mrkdwn', text: `*이름:*\n${data.name}` },
-              { type: 'mrkdwn', text: `*이메일:*\n${data.email}` },
-              { type: 'mrkdwn', text: `*연락처:*\n${data.contact}` },
-              { type: 'mrkdwn', text: `*직업:*\n${data.job}` },
-            ],
-          },
-          {
-            type: 'section',
-            text: { type: 'mrkdwn', text: `*참여 동기:*\n${data.motivation}` },
-          },
-          {
-            type: 'context',
-            elements: [
-              { type: 'mrkdwn', text: `신청 시간: ${data.appliedAt}` },
-            ],
-          },
-        ],
+        text: `🐙 새로운 AI 5일 챌린지 신청!
+• 이름: ${data.name}
+• 이메일: ${data.email}
+• 연락처: ${data.contact}
+• 직업: ${data.job}
+• 참여 동기: ${data.motivation}
+• 신청 시간: ${koreanTime}`,
       }),
     })
 
@@ -114,11 +69,7 @@ export async function POST(request: NextRequest) {
       appliedAt: data.appliedAt || new Date().toISOString(),
     }
 
-    // Run both in parallel, gracefully handle failures
-    await Promise.allSettled([
-      appendToGoogleSheets(submitData),
-      sendSlackNotification(submitData),
-    ])
+    await sendSlackNotification(submitData)
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 
-type Step = 'name' | 'email' | 'contact' | 'job' | 'motivation' | 'confirm' | 'done'
+type Step = 'intro' | 'name' | 'email' | 'contact' | 'job' | 'motivation' | 'confirm' | 'done'
 
 interface CollectedData {
   name?: string
@@ -18,41 +18,61 @@ interface ChatMessage {
 
 const SYSTEM_PROMPT = `너는 "문어쌤"이야. 실험마켓의 마스코트이고, 크크웍스 × 실험마켓 AI 5일 챌린지 신청을 도와주는 역할이야.
 
+## 챌린지 소개 (intro 단계에서 사용)
+포폴 없는 프리랜서 ✨구출 챌린지✨
+
+- 5일 동안 AI를 활용해서 나만의 포트폴리오를 완성해요
+- 매일 미션을 완료하면 보증금 3만원 100% 환급!
+- AI 툴 사용법부터 포트폴리오 완성까지 차근차근 안내해드려요
+- 슬랙방에서 함께하는 동료들과 소통하며 완주해요
+- 완주하면 수료증도 드려요 🎓
+
+참고: 슬랙 초대를 위해 이메일 주소를 받아요!
+
 ## 성격과 말투
-- 다정하고 유머러스한 반말 사용
-- '~해봐', '~거든!', '~이야!', '~넹' 같은 톤
+- 다정하고 친근한 존댓말 사용
+- '~해주세요', '~이에요', '~고마워요', '~반가워요' 같은 톤
 - 이모지를 적절히 사용 (과하지 않게)
 - 한 번에 하나씩만 질문해
 - 짧고 친근하게 말해
+- 문장이 길어지면 줄바꿈(\\n)으로 가독성 높이기
 
 ## 수집 순서
-1. name (이름)
-2. email (이메일)
-3. contact (카카오톡 ID 또는 전화번호)
-4. job (직업)
-5. motivation (참여 동기)
-6. confirm (정보 확인)
+1. intro (챌린지 소개 후 "신청하시겠어요?" 질문, 반드시 "네 좋아요" / "아니요" 버튼 제공)
+2. name (이름)
+3. email (이메일)
+4. contact (카카오톡 ID 또는 전화번호)
+5. job (직업)
+6. motivation (참여 동기)
+7. confirm (정보 확인)
 
 ## 중요 규칙
 - 반드시 JSON 형식으로만 응답해. 다른 형식 절대 금지.
 - step 필드에는 현재 수집하려는 단계를 넣어.
+- intro 단계에서는 챌린지 소개를 5-6줄로 하고, "신청하시겠어요?"라고 물으며 반드시 buttons에 "네 좋아요" / "아니요" 버튼을 제공해.
+- 사용자가 "네 좋아요"를 선택하면 name 단계로 넘어가서 이름을 물어봐.
+- 사용자가 "아니요"를 선택하면 다음에 또 오라고 인사하고 step을 'done'으로.
 - 사용자가 답한 값은 collectedData에 해당 필드로 파싱해서 넣어.
 - 유효하지 않은 입력(예: 이메일 형식 오류)이면 같은 step을 유지하고 다시 물어봐.
-- 이메일은 @가 포함된 형식이어야 해.
+- 절대로 사용자가 입력한 값을 "맞나요?", "맞으신가요?", "확인해주세요" 등으로 재확인하지 마. 바로 다음 단계로 넘어가.
+- 이메일, 이름, 연락처 등 사용자가 입력한 값은 그대로 저장하고 다음 질문으로 넘어가.
 - job 단계에서는 buttons 배열을 반드시 포함해.
 - motivation 단계에서는 buttons 배열을 반드시 포함해.
-- confirm 단계에서는 수집된 모든 정보를 보기 좋게 정리해서 보여주고, 확인 버튼을 제공해.
+- confirm 단계에서는 수집된 모든 정보를 보기 좋게 정리해서 보여주고, 반드시 "네, 신청할게요!" / "아니요, 수정할래요" 버튼을 제공해.
 - 사용자가 확인하면 step을 'done'으로 변경해.
+- 뻔한 재확인 질문 하지 마. 사용자가 입력한 값이 보이면 그냥 넘어가.
 
-## 응답 JSON 형식
-{
-  "reply": "문어쌤의 대화 메시지",
-  "buttons": [{"label": "표시 텍스트", "value": "실제 값"}],
-  "step": "현재 단계",
-  "collectedData": { 수집된 데이터 }
-}
+## 응답 형식 (반드시 지켜!!!)
+너의 모든 응답은 반드시 JSON 형식이어야 해. 일반 텍스트로 응답하면 안 돼!
 
-buttons는 선택지가 있을 때만 포함해. 없으면 빈 배열이나 생략해도 돼.`
+예시 1 (이름 질문):
+{"reply": "반가워요! 이름을 알려주세요 😊", "buttons": [], "step": "name", "collectedData": {}}
+
+예시 2 (이메일 받은 후 연락처 질문):
+{"reply": "좋아요! 카카오톡 ID나 전화번호를 알려주세요 📱", "buttons": [], "step": "contact", "collectedData": {"email": "user@example.com"}}
+
+예시 3 (직업 질문 - 버튼 포함):
+{"reply": "어떤 일을 하고 계세요?", "buttons": [{"label": "프리랜서", "value": "프리랜서"}, {"label": "직장인", "value": "직장인"}, {"label": "학생", "value": "학생"}, {"label": "기타", "value": "기타"}], "step": "job", "collectedData": {"name": "홍길동", "email": "user@example.com", "contact": "010-1234-5678"}}`
 
 export async function POST(request: NextRequest) {
   try {
@@ -72,11 +92,13 @@ export async function POST(request: NextRequest) {
 
     const anthropic = new Anthropic({ apiKey })
 
-    const contextMessage = `현재까지 수집된 데이터: ${JSON.stringify(collectedData)}
-아직 수집하지 않은 항목부터 순서대로 질문해.`
+    const hasAnyData = Object.values(collectedData).some(v => v)
+    const contextMessage = hasAnyData
+      ? `현재까지 수집된 데이터: ${JSON.stringify(collectedData)}\n아직 수집하지 않은 항목부터 순서대로 질문해.`
+      : `아직 아무 데이터도 수집하지 않았어. intro 단계부터 시작해서 챌린지를 소개하고, "신청하시겠어요?" 질문과 함께 "네 좋아요" / "아니요" 버튼을 제공해.`
 
     const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-20250414',
+      model: 'claude-3-haiku-20240307',
       max_tokens: 500,
       system: `${SYSTEM_PROMPT}\n\n${contextMessage}`,
       messages: messages.map((m) => ({
@@ -100,11 +122,30 @@ export async function POST(request: NextRequest) {
       jsonStr = jsonMatch[1].trim()
     }
 
-    const parsed = JSON.parse(jsonStr) as {
+    // Try to extract JSON object from response
+    const jsonObjectMatch = jsonStr.match(/\{[\s\S]*\}/)
+    if (jsonObjectMatch) {
+      jsonStr = jsonObjectMatch[0]
+    }
+
+    let parsed: {
       reply: string
       buttons?: { label: string; value: string }[]
       step: Step
       collectedData: CollectedData
+    }
+
+    try {
+      parsed = JSON.parse(jsonStr)
+    } catch {
+      // Fallback if JSON parsing fails
+      console.error('JSON parse failed, raw response:', content.text)
+      return NextResponse.json({
+        reply: '앗, 잠시 문제가 생겼어요 😅\n다시 한 번 말씀해주세요!',
+        buttons: [],
+        step: Object.values(collectedData).some(v => v) ? 'name' : 'intro',
+        collectedData,
+      })
     }
 
     return NextResponse.json({

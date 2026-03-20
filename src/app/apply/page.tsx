@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -18,7 +19,7 @@ interface CollectedData {
   motivation?: string
 }
 
-type Step = 'name' | 'email' | 'contact' | 'job' | 'motivation' | 'confirm' | 'done'
+type Step = 'intro' | 'name' | 'email' | 'contact' | 'job' | 'motivation' | 'confirm' | 'done'
 
 const pointFont = { fontFamily: "'KyoboHandwriting2019', sans-serif" }
 
@@ -26,7 +27,7 @@ export default function AI5DayApplyPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [step, setStep] = useState<Step>('name')
+  const [step, setStep] = useState<Step>('intro')
   const [collectedData, setCollectedData] = useState<CollectedData>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDone, setIsDone] = useState(false)
@@ -82,56 +83,55 @@ export default function AI5DayApplyPage() {
         ...prev,
         {
           role: 'assistant',
-          content: '앗, 문제가 생겼어 😅 다시 한 번 말해줄래?',
+          content: '앗, 문제가 생겼어요 😅\n다시 한 번 말씀해주세요!',
         },
       ])
     } finally {
       setIsLoading(false)
+      setTimeout(() => inputRef.current?.focus(), 100)
     }
   }, [])
 
-  // Initial greeting
+  // Initial greeting (hardcoded, 4 messages sequentially)
   useEffect(() => {
     if (hasSentInitial.current) return
     hasSentInitial.current = true
 
-    const initChat = async () => {
-      setIsLoading(true)
-      try {
-        const res = await fetch('/api//chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: [{ role: 'user', content: '챌린지 신청하러 왔어요!' }],
-            collectedData: {},
-          }),
-        })
+    const introMessages: Message[] = [
+      {
+        role: 'assistant',
+        content: `안녕하세요! 문어쌤입니다 🐙\n크크웍스 × 실험마켓 AI 5일 챌린지에 오신 걸 환영해요!`,
+      },
+      {
+        role: 'assistant',
+        content: `이 챌린지는 포트폴리오 없는 프리랜서 분들을 위해 준비했어요.\n5일 동안 AI를 활용해 나만의 포트폴리오를 완성할 수 있답니다.`,
+      },
+      {
+        role: 'assistant',
+        content: `매일 미션을 완료하면 보증금 3만원 100% 환급해 드리고,\nAI 사용법부터 포트폴리오 완성까지 차근차근 안내해 드릴게요.\n슬랙 동료들과 함께 소통하며 즐겁게 완주해 보세요.`,
+      },
+      {
+        role: 'assistant',
+        content: `신청하시겠어요?`,
+        buttons: [
+          { label: '네 좋아요', value: '네 좋아요' },
+          { label: '아니요', value: '아니요' },
+        ],
+      },
+    ]
 
-        if (!res.ok) throw new Error('Init chat error')
+    const timers: NodeJS.Timeout[] = []
+    introMessages.forEach((msg, idx) => {
+      const timer = setTimeout(() => {
+        setMessages((prev) => [...prev, msg])
+        if (idx === introMessages.length - 1) {
+          setTimeout(() => inputRef.current?.focus(), 100)
+        }
+      }, idx * 1000)
+      timers.push(timer)
+    })
 
-        const data = await res.json()
-        setMessages([
-          {
-            role: 'assistant',
-            content: data.reply,
-            buttons: data.buttons?.length > 0 ? data.buttons : undefined,
-          },
-        ])
-        setStep(data.step)
-      } catch {
-        setMessages([
-          {
-            role: 'assistant',
-            content:
-              '안녕! 나는 문어쌤이야 🐙\nAI 5일 챌린지 신청을 도와줄게!\n\n먼저 이름이 뭐야? 😊',
-          },
-        ])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    initChat()
+    return () => timers.forEach((t) => clearTimeout(t))
   }, [])
 
   const handleSubmit = async (finalData: CollectedData) => {
@@ -199,7 +199,7 @@ export default function AI5DayApplyPage() {
             ← 뒤로
           </Link>
           <div className="flex items-center gap-2 flex-1 justify-center">
-            <span className="text-2xl">🐙</span>
+            <Image src="/nozy-happy.png" alt="문어쌤" width={32} height={32} className="w-8 h-8" />
             <h1 className="text-[#c8ff00] font-black text-lg">문어쌤과 신청하기</h1>
           </div>
           <div className="w-10" /> {/* spacer */}
@@ -215,19 +215,21 @@ export default function AI5DayApplyPage() {
               initial={{ width: '0%' }}
               animate={{
                 width:
-                  step === 'name'
-                    ? '10%'
-                    : step === 'email'
-                      ? '25%'
-                      : step === 'contact'
-                        ? '40%'
-                        : step === 'job'
-                          ? '55%'
-                          : step === 'motivation'
-                            ? '70%'
-                            : step === 'confirm'
-                              ? '85%'
-                              : '100%',
+                  step === 'intro'
+                    ? '5%'
+                    : step === 'name'
+                      ? '15%'
+                      : step === 'email'
+                        ? '30%'
+                        : step === 'contact'
+                          ? '45%'
+                          : step === 'job'
+                            ? '60%'
+                            : step === 'motivation'
+                              ? '75%'
+                              : step === 'confirm'
+                                ? '90%'
+                                : '100%',
               }}
               transition={{ duration: 0.5 }}
             />
@@ -249,9 +251,7 @@ export default function AI5DayApplyPage() {
               >
                 {msg.role === 'assistant' && (
                   <div className="flex-shrink-0 mr-2 mt-1">
-                    <div className="w-9 h-9 bg-[#c8ff00] rounded-full flex items-center justify-center text-lg">
-                      🐙
-                    </div>
+                    <Image src="/nozy-happy.png" alt="문어쌤" width={36} height={36} className="w-9 h-9" />
                   </div>
                 )}
                 <div className="flex flex-col max-w-[80%]">
@@ -303,9 +303,7 @@ export default function AI5DayApplyPage() {
               className="flex justify-start"
             >
               <div className="flex-shrink-0 mr-2 mt-1">
-                <div className="w-9 h-9 bg-[#c8ff00] rounded-full flex items-center justify-center text-lg">
-                  🐙
-                </div>
+                <Image src="/nozy-happy.png" alt="문어쌤" width={36} height={36} className="w-9 h-9" />
               </div>
               <div className="bg-white/10 rounded-2xl px-4 py-3">
                 <div className="flex gap-1">
