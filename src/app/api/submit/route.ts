@@ -38,7 +38,8 @@ async function sendConfirmationEmail(data: SubmitData) {
 
   try {
     await resend.emails.send({
-      from: '실험마켓 <onboarding@resend.dev>',
+      from: '실험마켓 <noreply@tryoutmarket.co>',
+      replyTo: 'cookie00421@gmail.com',
       to: data.email,
       subject: `[실험마켓x크크웍스] AI 포폴 구출 작전 신청 완료! 🎉`,
       html: `
