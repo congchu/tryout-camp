@@ -46,7 +46,7 @@ export default function FAQSection() {
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="w-full px-4 py-2 md:p-5 flex items-center justify-between text-left"
               >
-                <p className="font-black text-lg text-gray-900">Q. {item.q}</p>
+                <p className="font-black text-md text-gray-900">Q. {item.q}</p>
                 <motion.span
                   animate={{ rotate: openFaq === i ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
@@ -64,7 +64,7 @@ export default function FAQSection() {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <p className="px-5 pb-5 text-gray-600 whitespace-pre-line">{item.a}</p>
+                <p className="px-5 pb-5 text-gray-500 whitespace-pre-line text-sm">{item.a}</p>
               </motion.div>
             </motion.div>
           ))}

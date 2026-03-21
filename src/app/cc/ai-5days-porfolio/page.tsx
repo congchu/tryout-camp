@@ -880,10 +880,11 @@ export default function AI5DayPortfolioChallenge() {
             className="text-3xl md:text-5xl lg:text-6xl font-black text-[#c8ff00] mb-4"
             style={pointFont}
           >
-            5일 후, 나만의 포트폴리오가 생긴다
+            5일 후, <br/>나만의 포트폴리오가 생긴다!
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-gray-400 text-lg mb-6">
-            더 이상 미루지 마. AI가 도와줄게.
+            더 이상 미루지 마세요. 저희가 도와드릴께요 💪
+
           </motion.p>
 
           {/* 보증금 정보 */}
