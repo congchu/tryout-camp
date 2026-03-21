@@ -91,7 +91,7 @@ const FLOW: Record<Step, { message: string; buttons?: { label: string; value: st
     multiSelect: true,
   },
   comment: {
-    message: '마지막으로! 🎤\n기대하는 것이나 운영자에게 하고 싶은 말 있으면 자유롭게 적어주세요~\n(없으면 건너뛰기 눌러주세요!)',
+    message: '함께 만들어가는 맞춤형 캠프예요! 🎯\n기대하는 것이나 걱정되는 부분 있으면 알려주세요~\n(없으면 건너뛰기 눌러주세요!)',
     buttons: [
       { label: '건너뛰기', value: '__skip__' },
     ],
