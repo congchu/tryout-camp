@@ -662,7 +662,7 @@ export default function ApplyForm() {
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <Link href="/cc/ai-5days-porfolio" className="text-white/60 hover:text-white transition-colors">←</Link>
           <div className="flex items-center gap-2 flex-1 justify-center">
-            <Image src="/nozy-right.png" alt="문어쌤" width={32} height={32} className="w-8 h-8" />
+            <Image src="/nozy-right.png" alt="문어쌤" width={48} height={32} className="h-8 w-auto" />
             <h1 className="text-[#c8ff00] font-black text-lg">문어쌤과 신청하기</h1>
           </div>
           <button
@@ -712,7 +712,7 @@ export default function ApplyForm() {
               >
                 {msg.role === 'assistant' && (
                   <div className="flex-shrink-0 mr-2 mt-1">
-                    <Image src="/nozy-right.png" alt="문어쌤" width={36} height={36} className="w-9 h-9" />
+                    <Image src="/nozy-right.png" alt="문어쌤" width={54} height={36} className="h-9 w-auto" />
                   </div>
                 )}
                 <div className="flex flex-col max-w-[80%]">

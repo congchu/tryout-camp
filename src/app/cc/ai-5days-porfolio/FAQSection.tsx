@@ -64,7 +64,7 @@ export default function FAQSection() {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <p className="px-5 pb-5 text-gray-600">{item.a}</p>
+                <p className="px-5 pb-5 text-gray-600 whitespace-pre-line">{item.a}</p>
               </motion.div>
             </motion.div>
           ))}

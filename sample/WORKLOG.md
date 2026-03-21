@@ -229,3 +229,15 @@ WHY: designer-sample.html에서 이미지가 안 뜸 (SSL 오류)
 HOW: 잘못된 도메인 `camp.tryout.co` → `camp.tryoutmarket.co`로 일괄 변경
 -> public/cc/sample/designer-sample.html, sample/output/designer-portfolio-v9.html 수정
 ✅ 해결
+
+## 2026-03-21 - FAQ 가독성 개선
+WHY: FAQ 답변이 줄글이라 읽기 불편함
+HOW: `whitespace-pre-line` 클래스 추가해서 `\n` 줄바꿈 반영
+-> FAQSection.tsx 수정 (1줄)
+✅ 해결
+
+## 2026-03-21 - 404 페이지 추가
+WHY: 없는 URL 접근 시 기본 404가 아닌 브랜딩된 페이지 필요
+HOW: Next.js App Router의 not-found.tsx 생성, 기존 스타일 유지
+-> /src/app/not-found.tsx 생성
+✅ 완료
