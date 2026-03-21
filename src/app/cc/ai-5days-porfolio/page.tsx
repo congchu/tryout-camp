@@ -875,7 +875,7 @@ export default function AI5DayPortfolioChallenge() {
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full px-4 py-2 md:p-5 flex items-center justify-between text-left"
                 >
-                  <p className="font-black text-lg">Q. {item.q}</p>
+                  <p className="font-black text-lg text-gray-900">Q. {item.q}</p>
                   <motion.span
                     animate={{ rotate: openFaq === i ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
