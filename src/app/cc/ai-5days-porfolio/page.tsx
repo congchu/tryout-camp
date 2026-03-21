@@ -768,7 +768,7 @@ export default function AI5DayPortfolioChallenge() {
             나만의 페이지를 만들어요
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-center text-white/60 mb-10">
-            샘플로 미리 느껴보세요.
+            직접 만들기 전에, 샘플로 미리 구경해보세요!
           </motion.p>
 
           {/* 예시 포트폴리오 그리드 */}
@@ -834,10 +834,7 @@ export default function AI5DayPortfolioChallenge() {
             ))}
           </div>
 
-          <motion.p variants={fadeInUp} className="text-center text-white/50 text-sm mt-6">
-            * 당신의 포트폴리오도 여기에 올라갈 수 있어요!
-          </motion.p>
-        </motion.div>
+                  </motion.div>
       </section>
 
       {/* FAQ */}
