@@ -111,6 +111,7 @@ export default function AI5DayPortfolioChallenge() {
   const [kjang2Active, setKjang2Active] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [showBottomBar, setShowBottomBar] = useState(true)
+  const [passedHero, setPassedHero] = useState(false)
   const [colorOffset, setColorOffset] = useState(0)
 
   // 타이틀 색상 배열
@@ -123,6 +124,17 @@ export default function AI5DayPortfolioChallenge() {
       setColorOffset((prev) => (prev + 1) % titleColors.length)
     }, 400)
     return () => clearInterval(colorTimer)
+  }, [])
+
+  // 스크롤 감지 - hero 섹션 벗어나면 하단 바 표시
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const heroHeight = window.innerHeight
+      setPassedHero(scrollY > heroHeight * 0.5)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const handleCharClick = (name: string) => {
@@ -192,12 +204,12 @@ export default function AI5DayPortfolioChallenge() {
           />
           {(jeongkooActive || clickedChar === 'jeongkoo') && (
             <motion.div
-              className="absolute -top-4 left-full ml-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold"
+              className="absolute -top-4 left-full ml-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold text-black"
               initial={{ opacity: 0, scale: 0.8, x: -10 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.8 }}
             >
-              AI 어렵지 않아요. 뚝딱임.
+              AI 어렵지 않아요. 도와드릴께요💚
               <div className="absolute top-1/2 -left-2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-white" />
             </motion.div>
           )}
@@ -230,7 +242,7 @@ export default function AI5DayPortfolioChallenge() {
           />
           {(kjang1Active || clickedChar === 'kjang1') && (
             <motion.div
-              className="absolute -top-4 right-full mr-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold"
+              className="absolute -top-4 right-full mr-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold text-black"
               initial={{ opacity: 0, scale: 0.8, x: 10 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -268,7 +280,7 @@ export default function AI5DayPortfolioChallenge() {
           />
           {(kjang2Active || clickedChar === 'kjang2') && (
             <motion.div
-              className="absolute -top-4 right-full mr-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold"
+              className="absolute -top-4 right-full mr-2 bg-white rounded-2xl px-3 py-2 shadow-lg whitespace-nowrap text-sm font-bold text-black"
               initial={{ opacity: 0, scale: 0.8, x: 10 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -290,7 +302,7 @@ export default function AI5DayPortfolioChallenge() {
           </motion.p>
           <motion.h1
             variants={pop}
-            className="text-4xl md:text-7xl lg:text-8xl font-black leading-tight mb-6"
+            className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-6"
             style={{ ...pointFont, WebkitTextStroke: '3px black', paintOrder: 'stroke fill' }}
           >
             <span className="inline-block text-5xl md:text-8xl lg:text-9xl">
@@ -918,7 +930,7 @@ export default function AI5DayPortfolioChallenge() {
       )}
 
       {/* 모바일 하단 고정 바 */}
-      {showBottomBar && (
+      {showBottomBar && passedHero && (
         <motion.div
           className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 px-4 py-3 md:hidden z-40"
           initial={{ y: 100 }}
