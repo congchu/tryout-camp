@@ -38,35 +38,36 @@ async function sendConfirmationEmail(data: SubmitData) {
 
   try {
     await resend.emails.send({
-      from: 'AI 5일 챌린지 <onboarding@resend.dev>',
+      from: '실험마켓 <onboarding@resend.dev>',
       to: data.email,
-      subject: `${data.name}님, AI 5일 챌린지 신청이 접수되었어요! 🎉`,
+      subject: `[실험마켓x크크웍스] AI 포폴 구출 작전 신청 완료! 🎉`,
       html: `
         <div style="font-family: 'Apple SD Gothic Neo', sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #c8ff00; background: #1a1a1a; padding: 20px; border-radius: 16px; text-align: center;">
-            🐙 AI 5일 챌린지
-          </h1>
+          <div style="background: #1a1a1a; padding: 24px 20px; border-radius: 16px; text-align: center;">
+            <p style="color: #c8ff00; font-size: 14px; margin: 0 0 8px 0;">AI로 5일 만에 포트폴리오 완성!</p>
+            <h1 style="color: white; margin: 0; font-size: 22px;">포폴 없는 프리랜서 구출 챌린지</h1>
+            <p style="color: #999; font-size: 13px; margin: 8px 0 0 0;">실험마켓 x 크크웍스</p>
+          </div>
 
           <p style="font-size: 18px; margin-top: 24px;">
             안녕하세요, <strong>${data.name}</strong>님! 👋
           </p>
 
-          <p>신청이 접수되었어요. 아래 보증금 입금 후 참여가 확정됩니다!</p>
+          <p>신청이 접수되었어요.<br/>아래 보증금 입금 후 참여가 확정됩니다!</p>
 
           <div style="background: #f5f5f5; padding: 20px; border-radius: 12px; margin: 20px 0;">
-            <p style="margin: 0 0 8px 0;"><strong>💰 보증금:</strong> 3만원</p>
+            <p style="margin: 0 0 8px 0;"><strong>💰 보증금:</strong> 3만원 (5일 미션 완료 시 전액 환급)</p>
             <p style="margin: 0 0 8px 0;"><strong>🏦 계좌:</strong> 국민은행 206802-04-058304 (구민정)</p>
-            <p style="margin: 0;"><strong>📱 카카오페이:</strong> <a href="https://qr.kakaopay.com/FFqnDXru7">송금하기</a></p>
+            <p style="margin: 0;"><strong>📱 카카오페이:</strong> <a href="https://qr.kakaopay.com/FFqnDXru7">바로 송금하기</a></p>
           </div>
 
           <p style="color: #666; font-size: 14px;">
-            * 입금자명을 신청자 이름으로 해주세요<br/>
-            * 5일 미션 완료 시 100% 환급!
+            * 입금자명을 신청자 이름으로 해주세요
           </p>
 
           <div style="background: #1a1a1a; color: white; padding: 16px; border-radius: 12px; margin-top: 24px;">
             <p style="margin: 0 0 8px 0;">📅 챌린지 시작: <strong>3/28(토)</strong></p>
-            <p style="margin: 0;">💬 슬랙 초대는 다음 주 중 보내드려요!</p>
+            <p style="margin: 0;">💬 슬랙 초대는 다음 주 중 보내드려요</p>
           </div>
 
           <p style="color: #999; font-size: 12px; margin-top: 24px; text-align: center;">
