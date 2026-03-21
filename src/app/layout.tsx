@@ -3,11 +3,18 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AI 5일 챌린지 | 크크웍스 × 실험마켓',
-  description: '5일 만에 AI로 포트폴리오 만들기! 크크웍스와 실험마켓이 함께하는 프리랜서 구출 챌린지',
+  description: '포폴 없는 프리랜서를 구출하라~~ 💕',
   openGraph: {
     title: 'AI 5일 챌린지 | 크크웍스 × 실험마켓',
-    description: '5일 만에 AI로 포트폴리오 만들기!',
+    description: '포폴 없는 프리랜서를 구출하라~~ 💕',
     type: 'website',
+    images: [
+      {
+        url: '/cc/og-image.png',
+        width: 1200,
+        height: 600,
+      },
+    ],
   },
 }
 
