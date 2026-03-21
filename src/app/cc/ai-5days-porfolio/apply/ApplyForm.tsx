@@ -224,10 +224,6 @@ export default function ApplyForm() {
       },
       {
         role: 'assistant',
-        content: '매일 미션 클리어하면 보증금 3만원 전액 환급! 💰',
-      },
-      {
-        role: 'assistant',
         content: '같이 해볼래요? 🙌',
         buttons: FLOW.intro.buttons,
       },
@@ -357,7 +353,7 @@ export default function ApplyForm() {
               ...prev,
               {
                 role: 'assistant',
-                content: '앗 잠깐요! 😢\n\n5일 동안 매일 30분만 투자하면 돼요.\n게다가 미션 완료하면 보증금 3만원 전액 환급!\n\n부담 없이 한번 도전해보는 건 어때요?',
+                content: '앗 잠깐요! 😢\n\n5일 동안 매일 30분만 투자하면 돼요.\n\n부담 없이 한번 도전해보는 건 어때요?',
                 buttons: [
                   { label: '좋아요, 해볼게요!', value: 'yes' },
                   { label: '다음에 할게요', value: 'bye' },
@@ -821,10 +817,11 @@ export default function ApplyForm() {
                     />
                   </motion.div>
                   <h2 className="text-[#c8ff00] font-black text-2xl mb-4">신청 감사합니다💕</h2>
-                  <p className="text-white text-sm font-bold mb-2">보증금 3만원 입금하면 참여가 확정돼요!</p>
+                  
                   <p className="text-white/60 text-sm mb-5">챌린지 3/28(토) 시작 <br/> 슬랙 초대는 다음 주 중 보내드려요~!</p>
 
                   <div className="space-y-3">
+                    <p className="text-white text-sm font-bold mb-2">보증금 <span className="text-[#c8ff00]">1만 5천원</span> 입금하면 참여가 확정돼요!</p>
                     <div className="flex items-center justify-between w-full bg-[#FEE500] text-[#3C1E1E] px-4 py-3 rounded-2xl font-bold">
                       <a
                         href="https://qr.kakaopay.com/FFqnDXru7"
@@ -832,7 +829,7 @@ export default function ApplyForm() {
                         rel="noopener noreferrer"
                         className="text-left hover:opacity-80 transition-opacity"
                       >
-                        <span className="text-lg block">카카오페이로 3만원 송금</span>
+                        <span className="text-lg block">카카오페이로 송금</span>
                         <span className="text-sm opacity-70">바로 송금하기 →</span>
                       </a>
                       <button
@@ -853,7 +850,7 @@ export default function ApplyForm() {
                         <span className="text-white/40 text-xs">복사</span>
                       </button>
                       <p className="text-white/60 text-xs mt-2">* 입금자명을 신청자 이름으로 해주세요</p>
-                      <p className="text-white/60 text-xs">* 5일 미션 완료 시 100% 환급!</p>
+                      <p className="text-white/60 text-xs">* 최종 결과물 제출 시 100% 환급!</p>
                     </div>
                   </div>
 
@@ -944,7 +941,7 @@ export default function ApplyForm() {
               className="bg-white rounded-3xl p-6 text-center"
             >
               <Image src="/cc/kakaopay-qr.jpeg" alt="카카오페이 QR" width={280} height={280} className="rounded-xl" />
-              <p className="mt-4 text-gray-800 font-bold text-lg">3만원 · 정쿠</p>
+              <p className="mt-4 text-gray-800 font-bold text-lg">1만 5천원 · 정쿠</p>
               <p className="text-gray-500 text-sm">QR코드를 스캔해주세요</p>
               <button
                 onClick={() => setShowQRModal(false)}

@@ -57,7 +57,7 @@ async function sendConfirmationEmail(data: SubmitData) {
           <p>신청이 접수되었어요.<br/>아래 보증금 입금 후 참여가 확정됩니다!</p>
 
           <div style="background: #f5f5f5; padding: 20px; border-radius: 12px; margin: 20px 0;">
-            <p style="margin: 0 0 8px 0;"><strong>💰 보증금:</strong> 3만원 (5일 미션 완료 시 전액 환급)</p>
+            <p style="margin: 0 0 8px 0;"><strong>💰 보증금:</strong> 1만 5천원 (웹 포폴 제출 시 전액 환급!)</p>
             <p style="margin: 0 0 8px 0;"><strong>🏦 계좌:</strong> 국민은행 206802-04-058304 (구민정)</p>
             <p style="margin: 0;"><strong>📱 카카오페이:</strong> <a href="https://qr.kakaopay.com/FFqnDXru7">바로 송금하기</a></p>
           </div>

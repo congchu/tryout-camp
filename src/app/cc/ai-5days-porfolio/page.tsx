@@ -882,15 +882,11 @@ export default function AI5DayPortfolioChallenge() {
           >
             5일 후, <br/>나만의 포트폴리오가 생긴다!
           </motion.h2>
-          <motion.p variants={fadeInUp} className="text-gray-400 text-lg mb-6">
-            더 이상 미루지 마세요. 저희가 도와드릴께요 💪
-
-          </motion.p>
-
-          {/* 보증금 정보 */}
+          
+          
           <motion.div variants={fadeInUp} className="mb-8">
             <span className="inline-block bg-white/10 rounded-full px-4 py-2 text-sm">
-              도망 못 가게 <span className="text-[#c8ff00] font-black">3만원</span> 걸어요 · 다 하면 <span className="text-[#c8ff00] font-black">돌려줌</span>
+          더 이상 미루지 마세요. 저희가 도와드릴께요 💪
             </span>
           </motion.div>
 

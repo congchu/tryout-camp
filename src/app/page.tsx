@@ -13,7 +13,7 @@ const CHALLENGES = [
     subtitle: '5일 만에 AI로 포트폴리오 만들기',
     status: 'open', // open, coming, closed
     date: '3/28 ~ 4/1',
-    price: '3만원 (완주 시 환급)',
+    price: '1만 5천원 (결과물 제출 시 환급)',
     tags: ['AI', '포트폴리오', '5일'],
   },
   {
