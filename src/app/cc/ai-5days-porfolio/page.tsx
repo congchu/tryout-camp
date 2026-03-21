@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import FAQSection from './FAQSection'
 
 const DAYS = [
   {
@@ -111,7 +112,6 @@ export default function AI5DayPortfolioChallenge() {
   const [showPopup, setShowPopup] = useState(false)
   const [showBottomBar, setShowBottomBar] = useState(true)
   const [colorOffset, setColorOffset] = useState(0)
-  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   // 타이틀 색상 배열
   const titleColors = ['#00d4aa', '#4d9fff', '#ff6633', '#ff66aa', '#aa44ff']
@@ -331,7 +331,7 @@ export default function AI5DayPortfolioChallenge() {
 
           <motion.button
             variants={pop}
-            onClick={() => router.push('/apply')}
+            onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
             className="inline-block bg-black text-[#c8ff00] text-2xl font-black px-10 py-5 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform"
           >
             지금 신청하기 🔥
@@ -768,7 +768,7 @@ export default function AI5DayPortfolioChallenge() {
             나만의 페이지를 만들어요
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-center text-white/60 mb-10">
-            직접 만들기 전에, 샘플로 미리 구경해보세요!
+            직접 만들기 전에, 미리 구경해보세요! 샘플은 계속 추가될 에정입니다😘
           </motion.p>
 
           {/* 예시 포트폴리오 그리드 */}
@@ -837,69 +837,7 @@ export default function AI5DayPortfolioChallenge() {
                   </motion.div>
       </section>
 
-      {/* FAQ */}
-      <section className="px-6 py-16 bg-[#c8ff00] min-h-screen flex flex-col justify-center snap-start" style={{ fontFamily: "'KyoboHandwriting2019', sans-serif" }}>
-        <motion.div
-          className="max-w-2xl mx-auto w-full"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={stagger}
-        >
-          <motion.h2
-            variants={fadeInUp}
-            className="text-3xl md:text-5xl lg:text-6xl font-black text-center mb-10 text-gray-900"
-            style={pointFont}
-          >
-            자주 묻는 질문
-          </motion.h2>
-
-          <div className="space-y-3">
-            {[
-              { q: '코딩/디자인 못해도 되나요?', a: '네! AI가 다 해줘요. 복붙만 하면 됩니다.' },
-              { q: '하루에 얼마나 시간 써야 하나요?', a: '30분이면 충분해요. 커피 한 잔 마시면서 하면 딱!' },
-              { q: '미션북이 뭔가요?', a: '따라하기만 하면 되는 실습 가이드에요. 읽고 → 따라하고 → 제출!' },
-              { q: '어떻게 소통하나요?', a: '슬랙 채널에서 소통해요. 질문하면 바로 답변 드려요!' },
-              { q: '보증금은 어떻게 돌려받나요?', a: '5일 미션 다 완료하면 100% 돌려드려요. 도망 못 가게 하는 장치예요 😉' },
-              { q: '뒷풀이 겸 축하모임 꼭 참석해야 하나요?', a: '필수는 아니에요! 하지만 오시면 맥주도 마시고 네트워킹도 하고 🍻' },
-              { q: '어떤 툴 사용하나요?', a: 'Cursor(AI 코딩툴) + Vercel(무료 호스팅). 둘 다 무료예요!' },
-              { q: '추가 비용이 있나요?', a: '사용하는 AI툴에 따라 비용이 필요할 수 있어요. 3~5만원 정도 생각하시면 좋아요. 챌린지 시작 시 안내드릴게요!' },
-              { q: '챌린지 끝나고도 사이트 유지되나요?', a: '네! 평생 무료로 유지돼요. 도메인 연결하면 더 멋져요.' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                variants={fadeInUp}
-                className="bg-white rounded-2xl shadow-sm overflow-hidden"
-              >
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full px-4 py-2 md:p-5 flex items-center justify-between text-left"
-                >
-                  <p className="font-black text-lg text-gray-900">Q. {item.q}</p>
-                  <motion.span
-                    animate={{ rotate: openFaq === i ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-2xl text-black/40"
-                  >
-                    ▾
-                  </motion.span>
-                </button>
-                <motion.div
-                  initial={false}
-                  animate={{
-                    height: openFaq === i ? 'auto' : 0,
-                    opacity: openFaq === i ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <p className="px-5 pb-5 text-gray-600">{item.a}</p>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
+      <FAQSection />
 
       {/* CTA */}
       <section id="apply" className="bg-black text-white px-6 py-20 text-center min-h-screen flex flex-col justify-center snap-start" style={{ fontFamily: "'KyoboHandwriting2019', sans-serif" }}>
@@ -930,7 +868,7 @@ export default function AI5DayPortfolioChallenge() {
 
           <motion.button
             variants={pop}
-            onClick={() => router.push('/apply')}
+            onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
             className="inline-block bg-[#c8ff00] text-black text-2xl font-black px-12 py-6 rounded-full shadow-xl cursor-pointer hover:scale-105 transition-transform"
           >
             지금 신청하기 🔥
@@ -996,7 +934,7 @@ export default function AI5DayPortfolioChallenge() {
             </button>
             <p className="text-white/60 text-sm flex-1">3/28 시작 · 보증금 3만원</p>
             <button
-              onClick={() => router.push('/apply')}
+              onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
               className="bg-[#c8ff00] text-black text-sm font-black px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-transform"
             >
               지금 신청하기 🔥
