@@ -125,10 +125,10 @@ const FLOW: Record<Step, { message: string; buttons?: { label: string; value: st
 export default function ApplyForm() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [step, setStep] = useState<Step>('confirm')
+  const [step, setStep] = useState<Step>('intro')
   const [collectedData, setCollectedData] = useState<CollectedData>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isDone, setIsDone] = useState(true) // TODO: 테스트 후 false로, step도 'intro'로 변경
+  const [isDone, setIsDone] = useState(false)
   const [selectedTools, setSelectedTools] = useState<string[]>([])
   const [selectedMotivations, setSelectedMotivations] = useState<string[]>([])
   const [showMotivationInput, setShowMotivationInput] = useState(false)
@@ -138,12 +138,42 @@ export default function ApplyForm() {
   const [isComposing, setIsComposing] = useState(false)
   const [showQRModal, setShowQRModal] = useState(false)
   const [showCopiedSnackbar, setShowCopiedSnackbar] = useState(false)
+  const [showInquiryModal, setShowInquiryModal] = useState(false)
+  const [inquiryMessage, setInquiryMessage] = useState('')
+  const [isSendingInquiry, setIsSendingInquiry] = useState(false)
+  const [inquirySent, setInquirySent] = useState(false)
 
   const copyAccountNumber = async () => {
     await navigator.clipboard.writeText('206802-04-058304')
     setShowCopiedSnackbar(true)
     setTimeout(() => setShowCopiedSnackbar(false), 2000)
   }
+
+  const sendInquiry = async () => {
+    if (!inquiryMessage.trim()) return
+    setIsSendingInquiry(true)
+    try {
+      await fetch('/api/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: inquiryMessage,
+          collectedData,
+        }),
+      })
+      setInquirySent(true)
+      setTimeout(() => {
+        setShowInquiryModal(false)
+        setInquiryMessage('')
+        setInquirySent(false)
+      }, 2000)
+    } catch (error) {
+      console.error('Inquiry error:', error)
+    } finally {
+      setIsSendingInquiry(false)
+    }
+  }
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -635,7 +665,12 @@ export default function ApplyForm() {
             <Image src="/nozy-right.png" alt="문어쌤" width={32} height={32} className="w-8 h-8" />
             <h1 className="text-[#c8ff00] font-black text-lg">문어쌤과 신청하기</h1>
           </div>
-          <div className="w-10" />
+          <button
+            onClick={() => setShowInquiryModal(true)}
+            className="text-white/60 hover:text-white text-sm transition-colors"
+          >
+            문의
+          </button>
         </div>
       </header>
 
@@ -761,20 +796,32 @@ export default function ApplyForm() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: 20 }}
                   transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className="bg-[#1a1a1a] border border-[#c8ff00]/30 rounded-3xl p-6 max-w-sm w-full text-center"
+                  className="bg-[#1a1a1a] border border-[#c8ff00]/30 rounded-3xl p-6 max-w-sm w-full text-left relative overflow-visible"
                 >
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <h2 className="text-[#c8ff00] font-black text-2xl">거의 다 왔어요!</h2>
-                    <motion.div
-                      initial={{ scale: 0, rotate: -10 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ delay: 0.2, type: 'spring', damping: 10 }}
-                    >
-                      <Image src="/cc/kjang1_v2.png" alt="축하" width={60} height={60} className="w-15 h-15" />
-                    </motion.div>
-                  </div>
-                  <p className="text-[#c8ff00] text-sm font-bold mb-2">보증금 3만원 입금하면 참여 확정!</p>
-                  <p className="text-white/60 text-sm mb-5">챌린지 3/28(토) 시작 <br/> 슬랙 초대는 다음 주 중 보내드려요</p>
+                  {/* 튀어나온 이미지 */}
+                  <motion.div
+                    initial={{ scale: 0, rotate: -10 }}
+                    animate={{
+                      scale: 1,
+                      rotate: [0, -5, 5, -5, 5, 0],
+                    }}
+                    transition={{
+                      scale: { delay: 0.2, type: 'spring', damping: 10 },
+                      rotate: { delay: 0.5, duration: 0.5, repeat: Infinity, repeatDelay: 2 }
+                    }}
+                    className="absolute -top-16 -right-16"
+                  >
+                    <Image
+                      src="/cc/kjang1_v2.png"
+                      alt="축하"
+                      width={220}
+                      height={220}
+                      className="w-[220px] h-[220px] object-contain"
+                    />
+                  </motion.div>
+                  <h2 className="text-[#c8ff00] font-black text-2xl mb-4">신청 감사합니다💕</h2>
+                  <p className="text-white text-sm font-bold mb-2">보증금 3만원 입금하면 참여가 확정돼요!</p>
+                  <p className="text-white/60 text-sm mb-5">챌린지 3/28(토) 시작 <br/> 슬랙 초대는 다음 주 중 보내드려요~!</p>
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between w-full bg-[#FEE500] text-[#3C1E1E] px-4 py-3 rounded-2xl font-bold">
@@ -904,6 +951,65 @@ export default function ApplyForm() {
               >
                 닫기
               </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Inquiry Modal */}
+      <AnimatePresence>
+        {showInquiryModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowInquiryModal(false)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#1a1a1a] border border-[#c8ff00]/30 rounded-3xl p-6 w-full max-w-sm"
+              style={pointFont}
+            >
+              {inquirySent ? (
+                <div className="text-center py-8">
+                  <p className="text-4xl mb-4">✅</p>
+                  <p className="text-[#c8ff00] font-bold text-lg">문의가 전송됐어요!</p>
+                  <p className="text-white/60 text-sm mt-2">빠르게 답변 드릴게요</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-[#c8ff00] font-black text-xl mb-4">💬 문의하기</h3>
+                  <textarea
+                    value={inquiryMessage}
+                    onChange={(e) => setInquiryMessage(e.target.value)}
+                    placeholder="궁금한 점이나 문의사항을 적어주세요..."
+                    className="w-full bg-white/10 text-white placeholder-white/30 rounded-2xl px-4 py-3 text-base outline-none focus:ring-2 focus:ring-[#c8ff00]/50 resize-none h-32"
+                    style={pointFont}
+                  />
+                  <p className="text-white/40 text-xs mt-2 mb-4">
+                    * 입력하신 정보와 함께 전송됩니다
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowInquiryModal(false)}
+                      className="flex-1 text-white/60 hover:text-white py-3 transition-colors"
+                    >
+                      취소
+                    </button>
+                    <button
+                      onClick={sendInquiry}
+                      disabled={!inquiryMessage.trim() || isSendingInquiry}
+                      className="flex-1 bg-[#c8ff00] text-black font-bold py-3 rounded-full hover:scale-[1.02] transition-transform disabled:opacity-50"
+                    >
+                      {isSendingInquiry ? '전송 중...' : '보내기'}
+                    </button>
+                  </div>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}

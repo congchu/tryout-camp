@@ -15,7 +15,10 @@
       "Bash(npx vercel:*)",
       "WebFetch(domain:www.tryoutmarket.co)",
       "WebFetch(domain:codepen.io)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "WebFetch(domain:docs.mixpanel.com)",
+      "WebSearch",
+      "Bash(npx tsx:*)"
     ]
   }
 }
