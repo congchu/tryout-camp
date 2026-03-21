@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import FAQSection from './FAQSection'
 import { initMixpanel, trackPageView, trackButtonClick } from '@/lib/mixpanel'
 
@@ -496,7 +497,7 @@ export default function AI5DayPortfolioChallenge() {
                 title: '재밌게 읽기',
                 desc: '캐릭터가 알려주는 이론 콘텐츠',
                 detail: '딱딱한 강의? 노노. 문어쌤이 재밌게 설명해줘요.',
-                character: '🐙',
+                character: '📖',
               },
               {
                 step: 2,
@@ -518,7 +519,7 @@ export default function AI5DayPortfolioChallenge() {
                 step: 4,
                 emoji: '🍻',
                 title: '자랑하고 축하받기',
-                desc: '4/3 (목)에 모여서 결과물 자랑 타임!',
+                desc: '4/3 (금)에 모여서 결과물 자랑 타임!',
                 detail: '완성된 포트폴리오 들고 와서 자랑 타임!',
                 character: '🎉',
               },
@@ -537,10 +538,14 @@ export default function AI5DayPortfolioChallenge() {
                   {/* 스텝 번호 */}
                   <div className="flex-shrink-0">
                     <motion.div
-                      className="w-14 h-14 rounded-full bg-[#c8ff00] text-black flex items-center justify-center text-2xl font-black"
+                      className="w-14 h-14 rounded-full bg-[#c8ff00] text-black flex items-center justify-center text-2xl font-black overflow-hidden"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      {item.emoji}
+                      {item.step === 1 ? (
+                        <Image src="/nozy-right.png" alt="문어쌤" width={60} height={40} className="w-[150%] h-auto" />
+                      ) : (
+                        item.emoji
+                      )}
                     </motion.div>
                   </div>
 
