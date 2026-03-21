@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김수진 | Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --bg-dark: #1a1a1a;
+      --black: #1a1a1a;
+      --gray-light: #d4d4d4;
+      --gray-text: #666;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      padding: 8px;
+      border-radius: 100px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .nav-link {
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 15px;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 48px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero-line {
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--gray-light);
+      transition: color 0.4s ease;
+    }
+
+    .hero-line.active {
+      color: var(--black);
+    }
+
+    .hero-profile {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      margin-left: 0.1em;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .emoji {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Banner Image */
+    .banner {
+      padding: 0 48px;
+      max-width: 1400px;
+      margin: 0 auto 120px;
+    }
+
+    .banner-image {
+      width: 100%;
+      border-radius: 32px;
+      object-fit: cover;
+      aspect-ratio: 16/7;
+    }
+
+    /* Section Common */
+    .section {
+      padding: 100px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 60px;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+    }
+
+    .project-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+
+    .project-content {
+      padding: 32px;
+    }
+
+    .project-category {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      background: var(--black);
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 16px;
+      color: var(--gray-text);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    /* About/Process Section */
+    .about-section {
+      background: var(--bg-dark);
+      padding: 120px 48px;
+      margin-top: 80px;
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin-bottom: 80px;
+      max-width: 800px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    .process-item {
+      color: var(--white);
+    }
+
+    .process-number {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 16px;
+    }
+
+    .process-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .process-desc {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      gap: 80px;
+      margin-top: 80px;
+      padding-top: 80px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat-item {
+      color: var(--white);
+    }
+
+    .stat-number {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* Contact */
+    .contact {
+      padding: 160px 48px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact-title {
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .contact-desc {
+      font-size: 20px;
+      color: var(--gray-text);
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--black);
+      padding: 20px 48px;
+      border-radius: 100px;
+      transition: all 0.3s;
+    }
+
+    .contact-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+
+    .contact-social {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .contact-social a {
+      color: var(--gray-text);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .contact-social a:hover {
+      color: var(--black);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-light);
+      font-size: 14px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 32px;
+      max-width: 1000px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: var(--white);
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      transform: scale(1.1);
+    }
+
+    .modal-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 32px 32px 0 0;
+    }
+
+    .modal-content {
+      padding: 48px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .modal-category {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      background: var(--black);
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .modal-meta {
+      font-size: 16px;
+      color: var(--gray-text);
+    }
+
+    .modal-section {
+      margin-bottom: 32px;
+    }
+
+    .modal-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-text);
+      margin-bottom: 12px;
+    }
+
+    .modal-section-content {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--black);
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .modal-tag {
+      background: var(--bg);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .modal-stats {
+      display: flex;
+      gap: 48px;
+      padding: 32px;
+      background: var(--bg);
+      border-radius: 20px;
+      margin-top: 32px;
+    }
+
+    .modal-stat {
+      text-align: center;
+    }
+
+    .modal-stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--black);
+    }
+
+    .modal-stat-label {
+      font-size: 14px;
+      color: var(--gray-text);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .modal-overlay {
+        padding: 20px;
+      }
+      .modal-content {
+        padding: 32px 24px;
+      }
+      .modal-title {
+        font-size: 28px;
+      }
+      .modal-stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+    }
+
+    /* Rotating Badge */
+    .rotating-badge {
+      position: fixed;
+      bottom: 48px;
+      left: 48px;
+      width: 80px;
+      height: 80px;
+      animation: rotate 20s linear infinite;
+      z-index: 50;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .stats {
+        flex-wrap: wrap;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 16px 24px;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero {
+        padding: 120px 24px 80px;
+      }
+      .banner {
+        padding: 0 24px;
+      }
+      .section {
+        padding: 80px 24px;
+      }
+      .about-section {
+        padding: 80px 24px;
+      }
+      .contact {
+        padding: 100px 24px;
+      }
+      .rotating-badge {
+        width: 60px;
+        height: 60px;
+        bottom: 24px;
+        left: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">SJ</a>
+    <div class="nav-menu">
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-line active" data-line="0">
+      <span class="emoji">👋</span> 안녕하세요, 김수진입니다
+    </p>
+    <p class="hero-line" data-line="1">
+      Product Designer <span class="emoji">✨</span>
+    </p>
+    <p class="hero-line" data-line="2">
+      스타트업과 빠르게 호흡하며 <span class="emoji">🚀</span>
+    </p>
+    <p class="hero-line" data-line="3">
+      복잡한 문제를 심플하게 풉니다
+    </p>
+  </section>
+
+  <!-- Banner Image -->
+  <div class="banner">
+    <img src="https://cdn.prod.website-files.com/60c5f64abe141da7260da0b9/64d4f59d7f784e715fe3209f_DSC01457.jpg" alt="작업물" class="banner-image">
+  </div>
+
+  <!-- Projects Section -->
+  <section class="section" id="projects">
+    <h2 class="section-title">Recent Projects</h2>
+
+    <div class="projects-grid">
+      <article class="project-card" data-project="1" style="cursor:pointer">
+        <img src="https://camp.tryout.co/cc/sample/designer-project-01.png" alt="핀테크 앱 리디자인" class="project-image">
+        <div class="project-content">
+          <span class="project-category">App UI/UX</span>
+          <h3 class="project-title">핀테크 앱 리디자인</h3>
+          <p class="project-desc">기존 뱅킹 앱의 복잡한 UX를 개선했습니다. 사용자 테스트 기반으로 플로우를 단순화하고, 전환율 40% 상승을 달성했습니다.</p>
+          <p class="project-meta">⚡ 2주 완성</p>
+        </div>
+      </article>
+
+      <article class="project-card" data-project="2" style="cursor:pointer">
+        <img src="https://camp.tryout.co/cc/sample/designer-project-02.png" alt="이커머스 웹사이트" class="project-image">
+        <div class="project-content">
+          <span class="project-category">Web Design</span>
+          <h3 class="project-title">이커머스 웹사이트</h3>
+          <p class="project-desc">패션 스타트업의 반응형 쇼핑몰을 디자인했습니다. 모바일 퍼스트로 접근해 런칭 첫 달 매출 2배를 기록했습니다.</p>
+          <p class="project-meta">⚡ 3주 완성</p>
+        </div>
+      </article>
+
+      <article class="project-card" data-project="3" style="cursor:pointer">
+        <img src="https://camp.tryout.co/cc/sample/designer-project-03.png" alt="헬스케어 대시보드" class="project-image">
+        <div class="project-content">
+          <span class="project-category">Dashboard</span>
+          <h3 class="project-title">헬스케어 대시보드</h3>
+          <p class="project-desc">의료진을 위한 데이터 시각화 대시보드입니다. 복잡한 환자 데이터를 한눈에 파악할 수 있도록 정보 구조를 재설계했습니다.</p>
+          <p class="project-meta">⚡ 2주 완성</p>
+        </div>
+      </article>
+
+      <article class="project-card" data-project="4" style="cursor:pointer">
+        <img src="https://camp.tryout.co/cc/sample/designer-project-04.png" alt="푸드테크 브랜딩" class="project-image">
+        <div class="project-content">
+          <span class="project-category">Branding</span>
+          <h3 class="project-title">푸드테크 브랜딩</h3>
+          <p class="project-desc">신규 푸드테크 스타트업의 브랜드 아이덴티티를 구축했습니다. 로고, 컬러, 타이포그래피부터 가이드라인까지 전 과정을 담당했습니다.</p>
+          <p class="project-meta">⚡ 10일 완성</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- About/Process Section -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <h2 class="about-title">빠르게 치고, 자주 보여주고, 바로 고칩니다</h2>
+
+      <div class="process-grid">
+        <div class="process-item">
+          <p class="process-number">01</p>
+          <h3 class="process-title">빠른 시작</h3>
+          <p class="process-desc">미팅 후 3일 내 첫 시안을 공유합니다. 완벽한 기획서보다 빠른 시각화가 더 효과적입니다.</p>
+        </div>
+
+        <div class="process-item">
+          <p class="process-number">02</p>
+          <h3 class="process-title">자주 소통</h3>
+          <p class="process-desc">매일 슬랙 체크인, 3일마다 시안 공유. 피드백 반영은 24시간 내에 완료합니다.</p>
+        </div>
+
+        <div class="process-item">
+          <p class="process-number">03</p>
+          <h3 class="process-title">빠른 완성</h3>
+          <p class="process-desc">평균 2주 내 프로젝트 완료. 스타트업의 속도에 맞춰 움직입니다.</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <p class="stat-number">5+</p>
+          <p class="stat-label">스타트업 경험</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-number">2주</p>
+          <p class="stat-label">평균 딜리버리</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-number">24h</p>
+          <p class="stat-label">피드백 반영</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <h2 class="contact-title">같이 일해요! <span class="emoji">🎉</span></h2>
+    <p class="contact-desc">
+      빠르게 움직이는 팀과 함께하고 싶습니다.<br>
+      프로젝트 문의는 언제든 환영해요.
+    </p>
+    <a href="mailto:sujin.design@gmail.com" class="contact-btn">
+      이메일 보내기 →
+    </a>
+    <div class="contact-social">
+      <a href="https://linkedin.com/in/sujinkim-design">LinkedIn</a>
+      <a href="https://instagram.com/sujin.designs">Instagram</a>
+      <a href="https://behance.net/sujinkim">Behance</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2024 김수진. All rights reserved.
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal">
+      <img src="" alt="" class="modal-image" id="modal-image">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <span class="modal-category" id="modal-category"></span>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-meta" id="modal-client"></p>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <p class="modal-section-title">Overview</p>
+          <p class="modal-section-content" id="modal-overview"></p>
+        </div>
+
+        <div class="modal-section">
+          <p class="modal-section-title">My Role</p>
+          <p class="modal-section-content" id="modal-role"></p>
+        </div>
+
+        <div class="modal-section">
+          <p class="modal-section-title">협업 방식</p>
+          <p class="modal-section-content" id="modal-collab"></p>
+        </div>
+
+        <div class="modal-stats">
+          <div class="modal-stat">
+            <p class="modal-stat-number" id="modal-duration"></p>
+            <p class="modal-stat-label">작업 기간</p>
+          </div>
+          <div class="modal-stat">
+            <p class="modal-stat-number" id="modal-result"></p>
+            <p class="modal-stat-label">성과</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rotating Badge -->
+  <div class="rotating-badge">
+    <svg viewBox="0 0 100 100">
+      <path id="curve" fill="transparent" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"/>
+      <text font-size="10" font-weight="600" fill="#1a1a1a">
+        <textPath href="#curve">FAST & FRIENDLY • FAST & FRIENDLY • </textPath>
+      </text>
+    </svg>
+  </div>
+
+  <script>
+    // Hero scroll reveal
+    const heroLines = document.querySelectorAll('.hero-line');
+    const totalLines = heroLines.length;
+
+    function updateActiveLines() {
+      const scrollY = window.scrollY;
+      const scrollPerLine = 80;
+      const activeIndex = Math.min(
+        Math.floor(scrollY / scrollPerLine),
+        totalLines - 1
+      );
+
+      heroLines.forEach((line, index) => {
+        if (index <= activeIndex) {
+          line.classList.add('active');
+        } else {
+          line.classList.remove('active');
+        }
+      });
+    }
+
+    updateActiveLines();
+    window.addEventListener('scroll', updateActiveLines);
+
+    // Project Modal
+    const projectData = {
+      1: {
+        image: 'https://camp.tryout.co/cc/sample/designer-project-01.png',
+        category: 'App UI/UX',
+        title: '핀테크 앱 리디자인',
+        client: '초기 스타트업 · 시리즈 A',
+        overview: '기존 뱅킹 앱의 복잡한 사용자 경험을 전면 개편했습니다. 사용자 인터뷰와 데이터 분석을 통해 주요 pain point를 파악하고, 핵심 플로우를 3단계로 단순화했습니다. 특히 송금 과정에서 이탈률이 높았던 문제를 해결하는 데 집중했습니다.',
+        role: 'UX 리서치, 와이어프레임, UI 디자인, 프로토타이핑, 사용성 테스트',
+        collab: '매일 슬랙으로 체크인하고, 3일마다 피그마에서 시안을 공유했습니다. 개발팀과 실시간으로 소통하며 구현 가능성을 검토했습니다.',
+        duration: '2주',
+        result: '전환율 40%↑'
+      },
+      2: {
+        image: 'https://camp.tryout.co/cc/sample/designer-project-02.png',
+        category: 'Web Design',
+        title: '이커머스 웹사이트',
+        client: '패션 스타트업',
+        overview: 'MZ세대를 타겟으로 한 패션 이커머스 플랫폼을 디자인했습니다. 모바일 트래픽이 80% 이상인 점을 고려해 모바일 퍼스트로 접근했고, 빠른 탐색과 간편한 결제에 초점을 맞췄습니다.',
+        role: '반응형 웹 디자인, 디자인 시스템 구축, 상품 상세 페이지 UX',
+        collab: '피그마 코멘트로 실시간 피드백을 주고받았습니다. 주 1회 화상 미팅으로 진행 상황을 공유했습니다.',
+        duration: '3주',
+        result: '매출 2배↑'
+      },
+      3: {
+        image: 'https://camp.tryout.co/cc/sample/designer-project-03.png',
+        category: 'Dashboard',
+        title: '헬스케어 대시보드',
+        client: '헬스케어 스타트업',
+        overview: '의료진이 환자 데이터를 한눈에 파악할 수 있는 대시보드를 설계했습니다. 복잡한 의료 데이터를 시각화하고, 긴급 알림이 즉시 눈에 들어오도록 정보 계층을 재구성했습니다.',
+        role: '정보 아키텍처, 데이터 시각화, UI 디자인, 사용성 검증',
+        collab: '주 2회 화상 미팅과 슬랙을 병행했습니다. 실제 의료진 피드백을 받아 반복 개선했습니다.',
+        duration: '2주',
+        result: '업무효율 35%↑'
+      },
+      4: {
+        image: 'https://camp.tryout.co/cc/sample/designer-project-04.png',
+        category: 'Branding',
+        title: '푸드테크 브랜딩',
+        client: '푸드테크 스타트업',
+        overview: '새롭게 런칭하는 푸드테크 서비스의 브랜드 아이덴티티를 처음부터 구축했습니다. 신선함과 신뢰감을 동시에 전달하는 것이 핵심 과제였습니다.',
+        role: '브랜드 전략, 로고 디자인, 컬러 시스템, 타이포그래피, 브랜드 가이드라인',
+        collab: '3가지 컨셉 방향을 먼저 제안하고, 하나를 선택한 뒤 빠르게 확정했습니다. 의사결정을 최소화해서 속도를 높였습니다.',
+        duration: '10일',
+        result: '브랜드 구축'
+      }
+    };
+
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modal-close');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const projectId = card.dataset.project;
+        const data = projectData[projectId];
+
+        document.getElementById('modal-image').src = data.image;
+        document.getElementById('modal-category').textContent = data.category;
+        document.getElementById('modal-title').textContent = data.title;
+        document.getElementById('modal-client').textContent = data.client;
+        document.getElementById('modal-overview').textContent = data.overview;
+        document.getElementById('modal-role').textContent = data.role;
+        document.getElementById('modal-collab').textContent = data.collab;
+        document.getElementById('modal-duration').textContent = data.duration;
+        document.getElementById('modal-result').textContent = data.result;
+
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+      });
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.classList.remove('modal-open');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+      }
+    });
+  </script>
+</body>
+</html>
