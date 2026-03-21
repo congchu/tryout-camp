@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김수진 | Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --bg-dark: #1a1a1a;
+      --black: #1a1a1a;
+      --gray-light: #d4d4d4;
+      --gray-text: #666;
+      --white: #ffffff;
+      --accent: #ff6b6b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      padding: 8px;
+      border-radius: 100px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .nav-link {
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 15px;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 48px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero-line {
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--gray-light);
+      transition: color 0.4s ease;
+    }
+
+    .hero-line.active {
+      color: var(--black);
+    }
+
+    .hero-profile {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      margin-left: 0.1em;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
+    }
+
+    .emoji {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Banner Image */
+    .banner {
+      padding: 0 48px;
+      max-width: 1400px;
+      margin: 0 auto 120px;
+    }
+
+    .banner-image {
+      width: 100%;
+      border-radius: 32px;
+      object-fit: cover;
+      aspect-ratio: 16/7;
+    }
+
+    /* Section Common */
+    .section {
+      padding: 100px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-desc {
+      text-align: center;
+      color: var(--gray-text);
+      font-size: 18px;
+      margin-bottom: 60px;
+    }
+
+    /* Resources Grid */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .resource-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .resource-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .resource-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .resource-content {
+      padding: 24px;
+    }
+
+    .resource-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #ffeaa7;
+      color: var(--black);
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+
+    .resource-badge.free {
+      background: #a8e6cf;
+    }
+
+    .resource-badge.paid {
+      background: #fdcb6e;
+    }
+
+    .resource-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .resource-link {
+      font-size: 14px;
+      color: var(--gray-text);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .resource-link:hover {
+      color: var(--black);
+    }
+
+    .more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--black);
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 15px;
+      margin-top: 48px;
+      transition: transform 0.2s;
+    }
+
+    .more-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    /* Dark Section */
+    .dark-section {
+      background: var(--bg-dark);
+      padding: 120px 48px;
+      margin-top: 80px;
+    }
+
+    .dark-section .section-title {
+      color: var(--white);
+      max-width: 800px;
+      margin: 0 auto 60px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+    }
+
+    .service-card:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-4px);
+    }
+
+    .service-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+
+    .service-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .service-link {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+
+    .service-link:hover {
+      color: var(--white);
+    }
+
+    .service-image {
+      width: 100%;
+      border-radius: 16px;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+
+    /* Guides Section */
+    .guides-section {
+      padding: 120px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .guides-header {
+      margin-bottom: 48px;
+    }
+
+    .guides-title {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .guides-desc {
+      color: var(--gray-text);
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .subscribe-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--black);
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .subscribe-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .guide-card {
+      transition: transform 0.3s;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .guide-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .guide-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .guide-meta {
+      font-size: 13px;
+      color: var(--gray-text);
+    }
+
+    /* Thanks Message */
+    .thanks {
+      text-align: center;
+      padding: 80px 48px;
+      color: var(--gray-text);
+    }
+
+    .thanks p {
+      margin-bottom: 8px;
+    }
+
+    .thanks-signature {
+      font-style: italic;
+      font-size: 24px;
+      color: var(--black);
+      margin-top: 16px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--white);
+      padding: 80px 48px 40px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: 1400px;
+      margin: 0 auto 60px;
+    }
+
+    .footer-logo {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-text);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: var(--gray-text);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--black);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 40px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      color: var(--gray-text);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-social a {
+      color: var(--gray-text);
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-social a:hover {
+      color: var(--black);
+    }
+
+    /* Rotating Badge */
+    .rotating-badge {
+      position: fixed;
+      bottom: 48px;
+      left: 48px;
+      width: 80px;
+      height: 80px;
+      animation: rotate 20s linear infinite;
+      z-index: 50;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .resources-grid,
+      .guides-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 16px 24px;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero {
+        padding: 120px 24px 80px;
+      }
+      .banner {
+        padding: 0 24px;
+      }
+      .section,
+      .dark-section,
+      .guides-section {
+        padding: 80px 24px;
+      }
+      .resources-grid,
+      .services-grid,
+      .guides-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer {
+        padding: 60px 24px 30px;
+      }
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      .rotating-badge {
+        width: 60px;
+        height: 60px;
+        bottom: 24px;
+        left: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">SJ</a>
+    <div class="nav-menu">
+      <a href="#resources" class="nav-link">Resources</a>
+      <a href="#guides" class="nav-link">Guides</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#work" class="nav-link">Work</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-line active" data-line="0">
+      <span class="emoji">👋</span> 안녕하세요, 김수진입니다
+      <img src="images/profile-photo.jpg" alt="김수진" class="hero-profile">
+    </p>
+    <p class="hero-line" data-line="1">
+      Product Designer <span class="emoji">✨</span>
+    </p>
+    <p class="hero-line" data-line="2">
+      스타트업과 빠르게 호흡하며 <span class="emoji">🌱</span>
+    </p>
+    <p class="hero-line" data-line="3">
+      복잡한 문제를 심플하게 <span class="emoji">🎯</span>
+    </p>
+  </section>
+
+  <!-- Banner Image -->
+  <div class="banner">
+    <img src="images/mockup-desktop.webp" alt="작업 환경" class="banner-image">
+  </div>
+
+  <!-- Resources Section -->
+  <section class="section" id="resources">
+    <h2 class="section-title">Resources for Designers</h2>
+    <p class="section-desc">디자이너를 위한 실용적인 리소스 모음</p>
+
+    <div class="resources-grid">
+      <article class="resource-card">
+        <img src="images/project-01.webp" alt="Figma UI Kit" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge free">Free</span>
+          <h3 class="resource-title">Figma UI Kit</h3>
+          <a href="#" class="resource-link">다운로드 →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="images/project-02.webp" alt="포트폴리오 템플릿" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge paid">$9</span>
+          <h3 class="resource-title">포트폴리오 템플릿</h3>
+          <a href="#" class="resource-link">구매하기 →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="images/project-03.webp" alt="디자인 로드맵" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge free">Free</span>
+          <h3 class="resource-title">UI/UX 학습 로드맵</h3>
+          <a href="#" class="resource-link">확인하기 →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="images/project-04.webp" alt="디자인 툴 리스트" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge free">Free</span>
+          <h3 class="resource-title">디자인 툴 추천 리스트</h3>
+          <a href="#" class="resource-link">보러가기 →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="images/project-05.webp" alt="앱 디자인 키트" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge paid">$15</span>
+          <h3 class="resource-title">앱 디자인 컴포넌트</h3>
+          <a href="#" class="resource-link">구매하기 →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="images/project-06.png" alt="런칭 체크리스트" class="resource-image">
+        <div class="resource-content">
+          <span class="resource-badge free">Free</span>
+          <h3 class="resource-title">프로젝트 런칭 체크리스트</h3>
+          <a href="#" class="resource-link">확인하기 →</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="center">
+      <a href="#" class="more-btn">더 많은 리소스 보기 →</a>
+    </div>
+  </section>
+
+  <!-- Dark Section - Services -->
+  <section class="dark-section" id="work">
+    <h2 class="section-title">복잡한 아이디어를 직관적인 경험으로 바꿉니다</h2>
+
+    <div class="services-grid">
+      <article class="service-card">
+        <p class="service-label">UI/UX Design</p>
+        <h3 class="service-title">사용자가 사랑할 깔끔한 경험을 디자인합니다</h3>
+        <a href="#" class="service-link">작업물 보기 →</a>
+        <img src="images/mockup-mobile.webp" alt="UI/UX 작업물" class="service-image">
+      </article>
+
+      <article class="service-card">
+        <p class="service-label">Branding & Web</p>
+        <h3 class="service-title">빠르고 퀄리티 높은 웹사이트를 만듭니다</h3>
+        <a href="#" class="service-link">프로세스 보기 →</a>
+        <img src="images/mockup-desktop.webp" alt="웹 작업물" class="service-image">
+      </article>
+    </div>
+  </section>
+
+  <!-- Guides Section -->
+  <section class="guides-section" id="guides">
+    <div class="guides-header">
+      <h2 class="guides-title">Guides</h2>
+      <p class="guides-desc">
+        UI/UX 디자인과 프리랜서 생존에 대한 실전 팁들.<br>
+        5분 안에 읽을 수 있는, 바로 적용 가능한 내용만.
+      </p>
+      <a href="#" class="subscribe-btn">뉴스레터 구독하기</a>
+    </div>
+
+    <div class="guides-grid">
+      <article class="guide-card">
+        <img src="images/project-01.webp" alt="프리랜서 가격 책정" class="guide-image">
+        <h3 class="guide-title">프리랜서 단가, 어떻게 책정할까?</h3>
+        <p class="guide-meta">2024년 3월 • 8분 읽기</p>
+      </article>
+
+      <article class="guide-card">
+        <img src="images/project-02.webp" alt="포트폴리오 작성법" class="guide-image">
+        <h3 class="guide-title">합격하는 포트폴리오의 3가지 비밀</h3>
+        <p class="guide-meta">2024년 2월 • 6분 읽기</p>
+      </article>
+
+      <article class="guide-card">
+        <img src="images/project-03.webp" alt="클라이언트 커뮤니케이션" class="guide-image">
+        <h3 class="guide-title">어려운 클라이언트 대처법</h3>
+        <p class="guide-meta">2024년 1월 • 10분 읽기</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Thanks Message -->
+  <section class="thanks">
+    <p>방문해주셔서 감사합니다!</p>
+    <p>도움이 되는 무언가를 찾으셨길 바라요.</p>
+    <p class="thanks-signature">— 수진</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <div class="footer-logo">SJ</div>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Hello</p>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Services</p>
+        <ul class="footer-links">
+          <li><a href="#">Product Design</a></li>
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Branding</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Resources</p>
+        <ul class="footer-links">
+          <li><a href="#">Figma UI Kit</a></li>
+          <li><a href="#">포트폴리오 템플릿</a></li>
+          <li><a href="#">UI/UX 로드맵</a></li>
+          <li><a href="#">디자인 툴 리스트</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2024 김수진 · Built with Figma & Code</p>
+      <div class="footer-social">
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+        <a href="#">Behance</a>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Rotating Badge -->
+  <div class="rotating-badge">
+    <svg viewBox="0 0 100 100">
+      <path id="curve" fill="transparent" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"/>
+      <text font-size="10" font-weight="600" fill="#1a1a1a">
+        <textPath href="#curve">THINK LESS • CREATE MORE • THINK LESS • CREATE MORE •</textPath>
+      </text>
+    </svg>
+  </div>
+
+  <script>
+    // Scroll-based line reveal
+    const heroLines = document.querySelectorAll('.hero-line');
+    const totalLines = heroLines.length;
+
+    function updateActiveLines() {
+      const scrollY = window.scrollY;
+      const scrollPerLine = 80;
+      const activeIndex = Math.min(
+        Math.floor(scrollY / scrollPerLine),
+        totalLines - 1
+      );
+
+      heroLines.forEach((line, index) => {
+        if (index <= activeIndex) {
+          line.classList.add('active');
+        } else {
+          line.classList.remove('active');
+        }
+      });
+    }
+
+    updateActiveLines();
+    window.addEventListener('scroll', updateActiveLines);
+  </script>
+</body>
+</html>

@@ -5,7 +5,10 @@ interface SubmitData {
   email: string
   contact: string
   job: string
+  aiTools?: string[]
+  aiLevel?: string
   motivation: string
+  comment?: string
   appliedAt: string
 }
 
@@ -42,7 +45,10 @@ async function sendSlackNotification(data: SubmitData) {
 • 이메일: ${data.email}
 • 연락처: ${data.contact}
 • 직업: ${data.job}
+• AI 툴: ${data.aiTools?.join(', ') || '없음'}
+• AI 친숙도: ${data.aiLevel || '없음'}
 • 참여 동기: ${data.motivation}
+• 하고 싶은 말: ${data.comment || '없음'}
 • 신청 시간: ${koreanTime}`,
       }),
     })

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import FAQSection from './FAQSection'
+import { initMixpanel, trackPageView, trackButtonClick } from '@/lib/mixpanel'
 
 const DAYS = [
   {
@@ -117,6 +118,12 @@ export default function AI5DayPortfolioChallenge() {
   // 타이틀 색상 배열
   const titleColors = ['#00d4aa', '#4d9fff', '#ff6633', '#ff66aa', '#aa44ff']
   const getTitleColor = (index: number) => titleColors[(index + colorOffset) % titleColors.length]
+
+  // Mixpanel 초기화 및 페이지뷰 트래킹
+  useEffect(() => {
+    initMixpanel()
+    trackPageView('AI 5Days Challenge Landing')
+  }, [])
 
   // 색상 이동 애니메이션
   useEffect(() => {
@@ -343,7 +350,10 @@ export default function AI5DayPortfolioChallenge() {
 
           <motion.button
             variants={pop}
-            onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
+            onClick={() => {
+              trackButtonClick('지금 신청하기', 'hero')
+              router.push('/cc/ai-5days-porfolio/apply')
+            }}
             className="inline-block bg-black text-[#c8ff00] text-2xl font-black px-10 py-5 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform"
           >
             지금 신청하기 🔥
@@ -880,7 +890,10 @@ export default function AI5DayPortfolioChallenge() {
 
           <motion.button
             variants={pop}
-            onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
+            onClick={() => {
+              trackButtonClick('지금 신청하기', 'cta')
+              router.push('/cc/ai-5days-porfolio/apply')
+            }}
             className="inline-block bg-[#c8ff00] text-black text-2xl font-black px-12 py-6 rounded-full shadow-xl cursor-pointer hover:scale-105 transition-transform"
           >
             지금 신청하기 🔥
@@ -946,7 +959,10 @@ export default function AI5DayPortfolioChallenge() {
             </button>
             <p className="text-white/60 text-sm flex-1">3/28 시작 · 보증금 3만원</p>
             <button
-              onClick={() => router.push('/cc/ai-5days-porfolio/apply')}
+              onClick={() => {
+                trackButtonClick('지금 신청하기', 'bottom_bar')
+                router.push('/cc/ai-5days-porfolio/apply')
+              }}
               className="bg-[#c8ff00] text-black text-sm font-black px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-transform"
             >
               지금 신청하기 🔥

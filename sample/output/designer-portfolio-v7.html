@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김수진 | Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --black: #1a1a1a;
+      --gray-light: #d4d4d4;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 28px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--black);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      padding: 8px;
+      border-radius: 100px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .nav-link {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: var(--black);
+      font-weight: 500;
+      font-size: 15px;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg);
+    }
+
+    /* Hero - Scroll Reveal */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 48px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero-line {
+      font-size: clamp(48px, 8vw, 90px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--gray-light);
+      transition: color 0.4s ease;
+    }
+
+    .hero-line.active {
+      color: var(--black);
+    }
+
+    .hero-profile {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      margin-left: 0.1em;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
+    }
+
+    .emoji {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Rotating Badge */
+    .rotating-badge {
+      position: fixed;
+      bottom: 48px;
+      left: 48px;
+      width: 80px;
+      height: 80px;
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .rotating-badge svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Section Common */
+    .section {
+      padding: 120px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 60px;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .skill-tag {
+      background: var(--white);
+      border: 1.5px solid rgba(0,0,0,0.08);
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .skill-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.1);
+    }
+
+    .project-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+
+    .project-content {
+      padding: 32px;
+    }
+
+    .project-category {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-light);
+      margin-bottom: 12px;
+    }
+
+    .project-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Contact */
+    .contact {
+      text-align: center;
+      padding: 160px 48px;
+    }
+
+    .contact-title {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--black);
+      padding: 20px 48px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .contact-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+
+    .contact-social {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .contact-social a {
+      color: var(--gray-light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .contact-social a:hover {
+      color: var(--black);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-light);
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 16px 24px;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero {
+        padding: 120px 24px 80px;
+      }
+      .section {
+        padding: 80px 24px;
+      }
+      .rotating-badge {
+        width: 60px;
+        height: 60px;
+        bottom: 24px;
+        left: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">SJ</a>
+    <div class="nav-menu">
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero - Scroll Reveal Lines -->
+  <section class="hero">
+    <p class="hero-line active" data-line="0">
+      <span class="emoji">👋</span> 안녕하세요, 김수진입니다
+      <img src="images/profile-photo.jpg" alt="김수진" class="hero-profile">
+    </p>
+    <p class="hero-line" data-line="1">
+      Product Designer <span class="emoji">✨</span>
+    </p>
+    <p class="hero-line" data-line="2">
+      스타트업과 빠르게 호흡하며 <span class="emoji">🌱</span>
+    </p>
+    <p class="hero-line" data-line="3">
+      깔끔하고 즐거운 경험을 만듭니다
+    </p>
+  </section>
+
+  <!-- Rotating Badge -->
+  <div class="rotating-badge">
+    <svg viewBox="0 0 100 100">
+      <path id="curve" fill="transparent" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"/>
+      <text font-size="10" font-weight="600" fill="#1a1a1a">
+        <textPath href="#curve">THINK LESS • CREATE MORE • THINK LESS • CREATE MORE •</textPath>
+      </text>
+    </svg>
+  </div>
+
+  <!-- Skills -->
+  <section class="section" id="skills">
+    <h2 class="section-title">Skills & Tools</h2>
+    <div class="skills-grid">
+      <span class="skill-tag">Figma</span>
+      <span class="skill-tag">Sketch</span>
+      <span class="skill-tag">Adobe XD</span>
+      <span class="skill-tag">Photoshop</span>
+      <span class="skill-tag">Illustrator</span>
+      <span class="skill-tag">Framer</span>
+      <span class="skill-tag">Notion</span>
+      <span class="skill-tag">Slack</span>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section" id="projects">
+    <h2 class="section-title">Recent Projects</h2>
+    <div class="projects-grid">
+      <article class="project-card">
+        <img src="images/project-01.webp" alt="핀테크 앱 리디자인" class="project-image">
+        <div class="project-content">
+          <p class="project-category">App UI/UX</p>
+          <h3 class="project-title">핀테크 앱 리디자인</h3>
+          <p class="project-desc">기존 뱅킹 앱 사용성 개선. 전환율 40% 상승.</p>
+        </div>
+      </article>
+      <article class="project-card">
+        <img src="images/project-02.webp" alt="이커머스 웹사이트" class="project-image">
+        <div class="project-content">
+          <p class="project-category">Web Design</p>
+          <h3 class="project-title">이커머스 웹사이트</h3>
+          <p class="project-desc">반응형 쇼핑몰 디자인. 런칭 후 첫 달 매출 2배.</p>
+        </div>
+      </article>
+      <article class="project-card">
+        <img src="images/project-03.webp" alt="헬스케어 대시보드" class="project-image">
+        <div class="project-content">
+          <p class="project-category">Dashboard</p>
+          <h3 class="project-title">헬스케어 대시보드</h3>
+          <p class="project-desc">의료진용 데이터 시각화. 복잡한 정보를 단순하게.</p>
+        </div>
+      </article>
+      <article class="project-card">
+        <img src="images/project-04.webp" alt="푸드테크 브랜딩" class="project-image">
+        <div class="project-content">
+          <p class="project-category">Branding</p>
+          <h3 class="project-title">푸드테크 브랜딩</h3>
+          <p class="project-desc">로고, 컬러, 타이포. 브랜드 가이드라인까지.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <h2 class="contact-title">같이 일해요! <span class="emoji">🎉</span></h2>
+    <a href="mailto:sujin.design@gmail.com" class="contact-btn">
+      이메일 보내기 →
+    </a>
+    <div class="contact-social">
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2024 김수진. All rights reserved.
+  </footer>
+
+  <script>
+    // Scroll-based line reveal
+    const heroLines = document.querySelectorAll('.hero-line');
+    const totalLines = heroLines.length;
+
+    function updateActiveLines() {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Calculate which line should be active based on scroll
+      // Each 100px of scroll activates the next line
+      const scrollPerLine = 100;
+      const activeIndex = Math.min(
+        Math.floor(scrollY / scrollPerLine),
+        totalLines - 1
+      );
+
+      heroLines.forEach((line, index) => {
+        if (index <= activeIndex) {
+          line.classList.add('active');
+        } else {
+          line.classList.remove('active');
+        }
+      });
+    }
+
+    // Initial state
+    updateActiveLines();
+
+    // Update on scroll
+    window.addEventListener('scroll', updateActiveLines);
+  </script>
+</body>
+</html>
