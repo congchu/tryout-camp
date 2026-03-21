@@ -11,6 +11,9 @@ export const initMixpanel = () => {
     debug: process.env.NODE_ENV === 'development',
     track_pageview: true,
     persistence: 'localStorage',
+    // Session Replay
+    record_sessions_percent: 100, // 100% 세션 녹화
+    record_mask_text_selector: '', // 텍스트 마스킹 안 함 (필요시 선택자 추가)
   })
   initialized = true
 }
