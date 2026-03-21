@@ -155,6 +155,9 @@ export default function ApplyForm() {
     const flow = FLOW[nextStep]
     if (!flow) return
 
+    // step을 즉시 변경해서 중복 입력 방지
+    setStep(nextStep)
+
     let content = customMessage || flow.message
 
     if (nextStep === 'confirm') {
@@ -178,15 +181,14 @@ export default function ApplyForm() {
           multiSelect: flow.multiSelect,
         },
       ])
-      setStep(nextStep)
       if (flow.inputType) {
         setTimeout(() => inputRef.current?.focus(), 100)
       }
     }, 300)
   }
 
-  const handleUserResponse = (value: string) => {
-    setMessages((prev) => [...prev, { role: 'user', content: value }])
+  const handleUserResponse = (value: string, displayText?: string) => {
+    setMessages((prev) => [...prev, { role: 'user', content: displayText || value }])
 
     switch (step) {
       case 'intro':
@@ -467,7 +469,7 @@ export default function ApplyForm() {
                         msg.buttons.map((btn, btnIdx) => (
                           <button
                             key={btnIdx}
-                            onClick={() => handleUserResponse(btn.value)}
+                            onClick={() => handleUserResponse(btn.value, btn.label)}
                             className="bg-[#c8ff00]/10 border border-[#c8ff00]/30 text-[#c8ff00] px-4 py-2 rounded-full text-sm font-bold hover:bg-[#c8ff00]/20 transition-colors"
                           >
                             {btn.label}
