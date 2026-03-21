@@ -765,10 +765,10 @@ export default function AI5DayPortfolioChallenge() {
             className="text-3xl md:text-5xl lg:text-6xl font-black text-[#c8ff00] text-center mb-4"
             style={pointFont}
           >
-            이런 페이지를 만들 수 있어요
+            나만의 페이지를 만들어요
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-center text-white/60 mb-10">
-            실험마켓에서 직접 제작한 샘플 페이지에요.
+            샘플로 미리 느껴보세요.
           </motion.p>
 
           {/* 예시 포트폴리오 그리드 */}
