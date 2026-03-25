@@ -241,3 +241,17 @@ WHY: 없는 URL 접근 시 기본 404가 아닌 브랜딩된 페이지 필요
 HOW: Next.js App Router의 not-found.tsx 생성, 기존 스타일 유지
 -> /src/app/not-found.tsx 생성
 ✅ 완료
+
+## 2026-03-25 - AI 5일 챌린지 워크북 Day 1~5 페이지 제작
+WHY: 챌린지 참가자들이 매일 따라할 수 있는 워크북 콘텐츠 페이지가 필요
+HOW: /cc/ai-5days-porfolio/day/[day] 동적 라우트로 5일치 페이지 생성
+- content.ts: 5일치 콘텐츠 데이터 (Step별 텍스트, 프롬프트 템플릿, 팁 등)
+- DayWorkbook.tsx: 클라이언트 컴포넌트 (framer-motion 애니메이션, 복사 버튼)
+- page.tsx: 서버 컴포넌트 (generateStaticParams로 1~5 정적 생성)
+- 디자인: 검정 배경 + #c8ff00 포인트, 기존 랜딩 페이지 톤 유지
+- 기능: 진행 바, 프롬프트 복사 버튼, 이전/다음 Day 네비게이션, 미션 완료 박스
+- generateStaticParams는 'use client'와 함께 사용 불가 → 서버/클라이언트 분리 💡
+-> /src/app/cc/ai-5days-porfolio/day/[day]/content.ts
+-> /src/app/cc/ai-5days-porfolio/day/[day]/DayWorkbook.tsx
+-> /src/app/cc/ai-5days-porfolio/day/[day]/page.tsx
+✅ 빌드 성공
