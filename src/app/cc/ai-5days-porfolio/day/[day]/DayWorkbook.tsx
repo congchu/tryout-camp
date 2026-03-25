@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { DAYS_CONTENT, type ContentBlock } from './content'
+import AIMissionHelper from '@/components/AIMissionHelper'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -69,6 +70,7 @@ function ContentRenderer({ block }: { block: ContentBlock }) {
 export default function DayWorkbook({ day }: { day: string }) {
   const router = useRouter()
   const dayNum = Number(day)
+  const [desktopOpen, setDesktopOpen] = useState(false)
 
   const dayData = DAYS_CONTENT.find((d) => d.day === dayNum)
 
@@ -259,6 +261,15 @@ export default function DayWorkbook({ day }: { day: string }) {
 
       {/* 하단 여백 */}
       <div className="h-20" />
+
+      {/* AI 미션 도우미 */}
+      <AIMissionHelper
+        desktopOpen={desktopOpen}
+        setDesktopOpen={setDesktopOpen}
+        day={dayData.day}
+        missionTitle={dayData.title}
+        missionContent={dayData.steps.map((s) => s.title).join(', ') + ' → 미션: ' + dayData.mission}
+      />
     </div>
   )
 }
