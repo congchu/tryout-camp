@@ -9,6 +9,8 @@ export type ContentBlock =
   | { type: 'prompt'; value: string }
   | { type: 'list'; items: string[] }
   | { type: 'tip'; value: string }
+  | { type: 'input'; label: string; placeholder?: string }
+  | { type: 'checkbox'; items: string[] }
 
 export type DayContent = {
   day: number
