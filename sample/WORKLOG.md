@@ -241,3 +241,73 @@ WHY: 없는 URL 접근 시 기본 404가 아닌 브랜딩된 페이지 필요
 HOW: Next.js App Router의 not-found.tsx 생성, 기존 스타일 유지
 -> /src/app/not-found.tsx 생성
 ✅ 완료
+
+## 2026-03-25 - 크크웍스 워크북 초안 작성
+WHY: 참여자들에게 제공할 5일 챌린지 가이드 문서 필요
+HOW: 기존 포트폴리오 제작 4단계(브랜딩→구조→UI/UX→프롬프트)를 5일 미션으로 확장
+-> sample/workbook-draft.md 생성
+
+포함된 내용:
+- 챌린지 소개 및 일정
+- Day 1~5 미션 상세 (제출 양식 포함)
+- AI 도구 사용법 (Lovable 추천)
+- 배포 가이드 (Vercel)
+- FAQ
+- AI 프롬프트 팁
+
+5일 미션 구조:
+| Day | 주제 | 핵심 질문 |
+|-----|------|----------|
+| 1 | 브랜딩 | 어떤 사람으로 보여지고 싶은가? |
+| 2 | 구조 설계 | 뭘 보여줘야 하나? |
+| 3 | AI로 생성 | 어떤 스타일로? |
+| 4 | 수정/개선 | 다듬기 |
+| 5 | 배포 | 세상에 공개 |
+
+✅ 완료
+
+## 2026-03-25 - 워크북 시스템 적용
+WHY: tryout-market의 워크북 시스템을 이 프로젝트에도 사용하려고
+HOW: tryout-market에서 핵심 파일들 참고해서 구조 재구성
+
+URL 구조:
+- `/cc/[slug]/mission-book` - 챌린지 소개 + 미션 목록
+- `/cc/[slug]/mission-book/day1` - Day별 미션 페이지
+
+생성된 파일들:
+```
+src/lib/content.types.ts          - 타입 정의
+src/lib/workbook-schema.types.ts  - 워크북 스키마 타입
+src/lib/file-content.ts           - 콘텐츠 로더
+
+src/app/cc/[slug]/mission-book/page.tsx          - 미션 목록 페이지
+src/app/cc/[slug]/mission-book/[day]/page.tsx    - Day별 페이지
+src/app/cc/[slug]/mission-book/[day]/_components/InteractiveWorkbook.tsx
+
+contents/ai-5days-portfolio/
+├── meta.yaml       - 워크북 메타데이터
+├── challenge.yaml  - 미션 정의
+└── missions/
+    └── day-01.md   - Day 1 마크다운
+```
+
+설치된 의존성:
+- react-markdown, remark-gfm (마크다운 렌더링)
+- gray-matter (YAML frontmatter 파싱)
+- @tailwindcss/typography (prose 스타일)
+- yaml, server-only
+
+마크다운 작성 규칙:
+- `## Step N: 제목 (시간)` - 스텝 구분
+- `- [ ] 체크리스트` - 체크박스
+- `✏️ 라벨:` - 입력 필드
+- `📊 Day N 최종 체크리스트` - 최종 체크리스트
+
+핵심 기능:
+- localStorage 기반 진행 상태 저장
+- Step별 접기/펼치기
+- 체크박스 완료 시 Step 완료 표시
+- 진행률 표시 (프로그레스바)
+- Day간 네비게이션
+
+✅ 빌드 성공
