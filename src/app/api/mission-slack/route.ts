@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Slack not configured' }, { status: 500 })
     }
 
+    const webhookUrl2 = process.env.SLACK_WEBHOOK_URL_2
     const { userName, day, tool, reference, result, rating, likes, dislikes, feedback } = data
 
     // 결과물 링크 처리
@@ -44,14 +45,21 @@ ${tool || '-'}
 
     const message = { text }
 
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(message)
-    })
+    // 두 개의 webhook으로 동시 전송
+    const webhooks = [webhookUrl, webhookUrl2].filter(Boolean) as string[]
+    const results = await Promise.allSettled(
+      webhooks.map(url =>
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(message)
+        })
+      )
+    )
 
-    if (!response.ok) {
-      console.error('Slack webhook failed:', await response.text())
+    const failed = results.filter(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.ok))
+    if (failed.length === webhooks.length) {
+      console.error('All Slack webhooks failed')
       return NextResponse.json({ error: 'Slack send failed' }, { status: 500 })
     }
 
