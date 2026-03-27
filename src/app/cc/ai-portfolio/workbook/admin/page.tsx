@@ -356,18 +356,26 @@ export default function WorkbookAdminPage() {
                                     {sub.reference && (
                                       <div>
                                         <span className="font-medium text-gray-700">레퍼런스:</span>
-                                        <a href={sub.reference} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline break-all">
-                                          {sub.reference}
-                                        </a>
+                                        {sub.reference.startsWith('data:') ? (
+                                          <span className="ml-2 text-gray-500">(이미지 첨부됨)</span>
+                                        ) : (
+                                          <a href={sub.reference} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline">
+                                            링크 보기
+                                          </a>
+                                        )}
                                       </div>
                                     )}
 
                                     {sub.result && (
                                       <div>
                                         <span className="font-medium text-gray-700">결과물:</span>
-                                        <a href={sub.result} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline break-all">
-                                          {sub.result}
-                                        </a>
+                                        {sub.result.startsWith('data:') ? (
+                                          <span className="ml-2 text-gray-500">(이미지 첨부됨)</span>
+                                        ) : (
+                                          <a href={sub.result} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline">
+                                            링크 보기
+                                          </a>
+                                        )}
                                       </div>
                                     )}
 
