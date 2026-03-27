@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
-import { getWorkbookProgress, initWorkbookProgress, WorkbookProgress, DayProgress } from '@/lib/workbook-db'
-import { ArrowLeft, Clock, CheckCircle2, PlayCircle, Circle, Lock } from 'lucide-react'
+import { getWorkbookProgress, initWorkbookProgress, WorkbookProgress, DayProgress, getUserProfile, saveUserProfile, UserProfile } from '@/lib/workbook-db'
+import { ArrowLeft, Clock, CheckCircle2, PlayCircle, Circle, Lock, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 const CHALLENGE_INFO = {
@@ -52,12 +52,28 @@ export default function WorkbookPage() {
   const { user, loading, signInWithGoogle, signOut } = useAuth()
   const [progress, setProgress] = useState<WorkbookProgress | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(false)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [showNameModal, setShowNameModal] = useState(false)
+  const [nameInput, setNameInput] = useState('')
+  const [savingName, setSavingName] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    async function loadProgress() {
+    async function loadUserData() {
       if (user) {
         setLoadingProgress(true)
+
+        // Load profile
+        const userProfile = await getUserProfile(user.uid)
+        if (userProfile) {
+          setProfile(userProfile)
+        } else {
+          // New user - show name modal
+          setNameInput(user.displayName || '')
+          setShowNameModal(true)
+        }
+
+        // Load progress
         let data = await getWorkbookProgress(user.uid)
         if (!data) {
           await initWorkbookProgress(user.uid)
@@ -67,8 +83,21 @@ export default function WorkbookPage() {
         setLoadingProgress(false)
       }
     }
-    loadProgress()
+    loadUserData()
   }, [user])
+
+  const handleSaveName = async () => {
+    if (!user || !nameInput.trim()) return
+
+    setSavingName(true)
+    await saveUserProfile(user.uid, {
+      name: nameInput.trim(),
+      email: user.email || ''
+    })
+    setProfile({ name: nameInput.trim(), email: user.email || '' })
+    setShowNameModal(false)
+    setSavingName(false)
+  }
 
   const getDayStatus = (dayNum: number): 'completed' | 'in_progress' | 'not_started' => {
     if (!progress) return 'not_started'
@@ -168,9 +197,51 @@ export default function WorkbookPage() {
 
   // 로그인 된 상태
   const firstIncomplete = getFirstIncompleteDay()
+  const displayName = profile?.name || user.displayName || '참가자'
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Name Input Modal */}
+      {showNameModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-3">👋</div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">환영합니다!</h2>
+              <p className="text-gray-500 text-sm">챌린지에서 사용할 이름을 알려주세요</p>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">이름</label>
+              <input
+                type="text"
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                placeholder="홍길동"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                autoFocus
+              />
+              <p className="mt-2 text-xs text-gray-400">다른 참가자와 운영자에게 보여지는 이름이에요</p>
+            </div>
+
+            <button
+              onClick={handleSaveName}
+              disabled={!nameInput.trim() || savingName}
+              className="w-full py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {savingName ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  저장 중...
+                </>
+              ) : (
+                '시작하기'
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
       <section className="relative pt-14 pb-8 px-4">
         <div className="max-w-3xl mx-auto">
@@ -183,7 +254,7 @@ export default function WorkbookPage() {
               챌린지 홈
             </Link>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500">{user.displayName}</span>
+              <span className="text-sm text-gray-500">{displayName}</span>
               <button
                 onClick={signOut}
                 className="text-sm text-gray-400 hover:text-gray-600"

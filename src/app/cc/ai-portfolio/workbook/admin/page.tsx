@@ -41,6 +41,7 @@ export default function WorkbookAdminPage() {
   const [submissions, setSubmissions] = useState<MissionSubmission[]>([])
   const [loadingProgress, setLoadingProgress] = useState(false)
   const [expandedUser, setExpandedUser] = useState<string | null>(null)
+  const [imageModal, setImageModal] = useState<string | null>(null)
 
   // Auth check
   const isAdmin = user?.email === ADMIN_EMAIL
@@ -179,6 +180,38 @@ export default function WorkbookAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Image Modal */}
+      {imageModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setImageModal(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] overflow-auto">
+            <img
+              src={imageModal}
+              alt="첨부 이미지"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg"
+            />
+            <div className="mt-4 flex justify-center gap-3">
+              <a
+                href={imageModal}
+                download="image.png"
+                onClick={(e) => e.stopPropagation()}
+                className="px-4 py-2 bg-white text-gray-800 rounded-lg font-medium hover:bg-gray-100"
+              >
+                다운로드
+              </a>
+              <button
+                onClick={() => setImageModal(null)}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white border-b">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -240,30 +273,31 @@ export default function WorkbookAdminPage() {
             ) : (
               <div className="space-y-3">
                 {usersProgress.map((userProgress) => {
-                  const userSubs = getUserSubmissions(userProgress.odId)
-                  const isExpanded = expandedUser === userProgress.odId
+                  const visitorId = userProgress.visitorId
+                  const userSubs = getUserSubmissions(visitorId)
+                  const isExpanded = expandedUser === visitorId
                   const progress = userProgress.progress
 
                   return (
                     <div
-                      key={userProgress.odId}
+                      key={visitorId}
                       className="bg-white rounded-xl border border-gray-200 overflow-hidden"
                     >
                       {/* User Header */}
                       <button
-                        onClick={() => setExpandedUser(isExpanded ? null : userProgress.odId)}
+                        onClick={() => setExpandedUser(isExpanded ? null : visitorId)}
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">
-                            {userProgress.odId.slice(0, 2).toUpperCase()}
+                            {(userProgress.name || visitorId).slice(0, 2).toUpperCase()}
                           </div>
                           <div className="text-left">
                             <p className="font-medium text-gray-900">
-                              {userSubs[0]?.userName || userProgress.odId.slice(0, 8)}
+                              {userProgress.name || userSubs[0]?.userName || visitorId.slice(0, 8)}
                             </p>
                             <p className="text-sm text-gray-500">
-                              {userSubs[0]?.userEmail || userProgress.odId}
+                              {userProgress.email || userSubs[0]?.userEmail || visitorId}
                             </p>
                           </div>
                         </div>
@@ -347,7 +381,12 @@ export default function WorkbookAdminPage() {
                                       <div className="bg-gray-50 rounded-lg px-3 py-2">
                                         <div className="text-xs text-gray-500">레퍼런스</div>
                                         {sub.reference.startsWith('data:') ? (
-                                          <div className="text-gray-500">(이미지)</div>
+                                          <button
+                                            onClick={() => setImageModal(sub.reference!)}
+                                            className="text-blue-600 hover:underline font-medium"
+                                          >
+                                            이미지 보기
+                                          </button>
                                         ) : (
                                           <a href={sub.reference} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">
                                             링크 보기
@@ -359,7 +398,12 @@ export default function WorkbookAdminPage() {
                                       <div className="bg-gray-50 rounded-lg px-3 py-2">
                                         <div className="text-xs text-gray-500">결과물</div>
                                         {sub.result.startsWith('data:') ? (
-                                          <div className="text-gray-500">(이미지)</div>
+                                          <button
+                                            onClick={() => setImageModal(sub.result!)}
+                                            className="text-blue-600 hover:underline font-medium"
+                                          >
+                                            이미지 보기
+                                          </button>
                                         ) : (
                                           <a href={sub.result} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">
                                             링크 보기

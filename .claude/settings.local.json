@@ -19,7 +19,17 @@
       "WebFetch(domain:docs.mixpanel.com)",
       "WebSearch",
       "Bash(npx tsx:*)",
-      "Bash(pnpm run build)"
+      "Bash(pnpm run build)",
+      "Bash(git checkout:*)",
+      "Bash(sips:*)",
+      "Bash(git merge:*)",
+      "Bash(git restore:*)",
+      "Bash(pnpm dev)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(kill:*)",
+      "Bash(node -e:*)",
+      "Bash(rm:*)"
     ]
   }
 }

@@ -84,6 +84,38 @@ export interface WorkbookProgress {
   updatedAt?: Date
 }
 
+// ============================================
+// User Profile
+// ============================================
+
+export interface UserProfile {
+  name: string
+  email: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+// Get user profile
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  const docRef = doc(db, 'user_profiles', userId)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return docSnap.data() as UserProfile
+  }
+  return null
+}
+
+// Save user profile
+export async function saveUserProfile(userId: string, profile: { name: string; email: string }): Promise<void> {
+  const docRef = doc(db, 'user_profiles', userId)
+  await setDoc(docRef, {
+    ...profile,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  })
+}
+
 // Get user's workbook progress
 export async function getWorkbookProgress(userId: string): Promise<WorkbookProgress | null> {
   const docRef = doc(db, 'workbook_progress', userId)
@@ -198,7 +230,7 @@ export async function submitMission(
     feedback: string
   }
 ): Promise<string> {
-  const { addDoc, collection } = await import('firebase/firestore')
+  const { addDoc, collection, query, where, getDocs, updateDoc: updateDocument, limit } = await import('firebase/firestore')
 
   // Filter out undefined/empty values to avoid Firestore errors
   const submission: Record<string, unknown> = {
@@ -209,7 +241,6 @@ export async function submitMission(
     prompt: data.prompt,
     tool: data.tool,
     feedback: data.feedback,
-    submittedAt: new Date(),
   }
 
   // Only add optional fields if they have values
@@ -219,22 +250,45 @@ export async function submitMission(
   if (data.likes) submission.likes = data.likes
   if (data.dislikes) submission.dislikes = data.dislikes
 
-  // Save to mission_submissions collection
-  const docRef = await addDoc(collection(db, 'mission_submissions'), submission)
+  // Check if submission already exists for this user/day
+  const existingQuery = query(
+    collection(db, 'mission_submissions'),
+    where('userId', '==', userId),
+    where('day', '==', day),
+    limit(1)
+  )
+  const existingSnapshot = await getDocs(existingQuery)
+
+  let docId: string
+
+  if (!existingSnapshot.empty) {
+    // Update existing submission
+    const existingDoc = existingSnapshot.docs[0]
+    docId = existingDoc.id
+    await updateDocument(doc(db, 'mission_submissions', docId), {
+      ...submission,
+      updatedAt: new Date(),
+    })
+  } else {
+    // Create new submission
+    submission.submittedAt = new Date()
+    const docRef = await addDoc(collection(db, 'mission_submissions'), submission)
+    docId = docRef.id
+  }
 
   // Also update user's progress
   const progressDocRef = doc(db, 'workbook_progress', userId)
   await updateDoc(progressDocRef, {
     [`day${day}`]: {
       status: 'completed',
-      submissionId: docRef.id,
+      submissionId: docId,
       submittedAt: new Date(),
       updatedAt: new Date(),
     },
     updatedAt: new Date(),
   })
 
-  return docRef.id
+  return docId
 }
 
 // Get all submissions for a specific day (for community view)
@@ -280,7 +334,9 @@ export async function getUserSubmission(userId: string, day: number): Promise<Mi
 // ============================================
 
 export interface UserProgressWithInfo {
-  odId: string
+visitorId: string
+  name?: string
+  email?: string
   progress: WorkbookProgress
 }
 
@@ -288,11 +344,25 @@ export interface UserProgressWithInfo {
 export async function getAllUsersProgress(): Promise<UserProgressWithInfo[]> {
   const { collection, getDocs } = await import('firebase/firestore')
 
-  const snapshot = await getDocs(collection(db, 'workbook_progress'))
-  return snapshot.docs.map(doc => ({
-    odId: doc.id,
-    progress: doc.data() as WorkbookProgress
-  }))
+  // Get all progress
+  const progressSnapshot = await getDocs(collection(db, 'workbook_progress'))
+
+  // Get all profiles
+  const profilesSnapshot = await getDocs(collection(db, 'user_profiles'))
+  const profiles = new Map<string, UserProfile>()
+  profilesSnapshot.docs.forEach(doc => {
+    profiles.set(doc.id, doc.data() as UserProfile)
+  })
+
+  return progressSnapshot.docs.map(doc => {
+    const profile = profiles.get(doc.id)
+    return {
+visitorId: doc.id,
+      name: profile?.name,
+      email: profile?.email,
+      progress: doc.data() as WorkbookProgress
+    }
+  })
 }
 
 // Get all mission submissions (for admin)

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth-context'
-import { getWorkbookProgress, updateDayProgress, submitDayMission, submitMission, saveMissionDraft, DayProgress } from '@/lib/workbook-db'
+import { getWorkbookProgress, updateDayProgress, submitDayMission, submitMission, saveMissionDraft, getUserSubmission, DayProgress } from '@/lib/workbook-db'
 import type { DayContent, Step as StepContent } from './_content'
 import { ArrowLeft, Clock, CheckCircle2, ChevronLeft, ChevronRight, Copy, Check, X, Image as ImageIcon } from 'lucide-react'
 import { DAY_CONTENT } from './_content'
@@ -161,10 +161,26 @@ export default function WorkbookDayPage() {
             }))
           }
         }
+
+        // 기존 제출물 불러오기
+        const existingSubmission = await getUserSubmission(user.uid, day)
+        if (existingSubmission) {
+          setMissionForm(prev => ({
+            ...prev,
+            prompt: existingSubmission.prompt || '',
+            tool: existingSubmission.tool || '',
+            reference: existingSubmission.reference || '',
+            result: existingSubmission.result || '',
+            rating: existingSubmission.rating || '',
+            likes: existingSubmission.likes || '',
+            dislikes: existingSubmission.dislikes || '',
+            feedback: existingSubmission.feedback || '',
+          }))
+        }
       }
     }
     loadProgress()
-  }, [user, dayKey])
+  }, [user, dayKey, day])
 
   const handleSave = async () => {
     if (!user) return
@@ -621,14 +637,14 @@ export default function WorkbookDayPage() {
                                 onChange={(e) => setMissionForm(prev => ({ ...prev, [field.id]: e.target.value }))}
                                 placeholder={field.placeholder}
                                 className="w-full h-32 p-4 rounded-xl border border-gray-300 focus:border-gray-500 focus:outline-none resize-none bg-white text-gray-900 placeholder:text-gray-400"
-                                disabled={progress?.status === 'completed'}
+                                disabled={false}
                               />
                             ) : field.type === 'select' ? (
                               <select
                                 value={missionForm[field.id] || ''}
                                 onChange={(e) => setMissionForm(prev => ({ ...prev, [field.id]: e.target.value }))}
                                 className="w-full p-3 rounded-xl border border-gray-300 focus:border-gray-500 focus:outline-none bg-white text-gray-900"
-                                disabled={progress?.status === 'completed'}
+                                disabled={false}
                               >
                                 <option value="">선택해주세요</option>
                                 {field.options?.map(opt => (
@@ -642,7 +658,7 @@ export default function WorkbookDayPage() {
                                   accept={field.accept || 'image/*'}
                                   onChange={(e) => handleFileSelect(field.id, e.target.files?.[0] || null)}
                                   className="w-full p-3 rounded-xl border border-gray-300 focus:border-gray-500 focus:outline-none bg-white text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-                                  disabled={progress?.status === 'completed'}
+                                  disabled={false}
                                 />
                                 {filePreviews[field.id] && (
                                   <div className="mt-2">
@@ -669,7 +685,7 @@ export default function WorkbookDayPage() {
                                     }}
                                     placeholder="URL 입력"
                                     className="flex-1 p-3 rounded-xl border border-gray-300 focus:border-gray-500 focus:outline-none bg-white text-gray-900 placeholder:text-gray-400"
-                                    disabled={progress?.status === 'completed'}
+                                    disabled={false}
                                   />
                                   <span className="text-gray-400 text-sm">또는</span>
                                   <label className={`px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 text-sm font-medium cursor-pointer hover:bg-gray-50 ${progress?.status === 'completed' ? 'opacity-50 cursor-not-allowed' : ''}`}>
@@ -685,7 +701,7 @@ export default function WorkbookDayPage() {
                                         }
                                       }}
                                       className="hidden"
-                                      disabled={progress?.status === 'completed'}
+                                      disabled={false}
                                     />
                                   </label>
                                 </div>
@@ -706,7 +722,7 @@ export default function WorkbookDayPage() {
                                 onChange={(e) => setMissionForm(prev => ({ ...prev, [field.id]: e.target.value }))}
                                 placeholder={field.placeholder}
                                 className="w-full p-3 rounded-xl border border-gray-300 focus:border-gray-500 focus:outline-none bg-white text-gray-900 placeholder:text-gray-400"
-                                disabled={progress?.status === 'completed'}
+                                disabled={false}
                               />
                             )}
                           </div>
@@ -726,30 +742,26 @@ export default function WorkbookDayPage() {
                     <div className="flex items-center justify-between mt-4">
                       <div className="text-sm">
                         {progress?.status === 'completed' ? (
-                          <span className="text-green-600 font-medium">제출 완료!</span>
+                          <span className="text-green-600 font-medium">제출 완료! (수정 가능)</span>
                         ) : saved ? (
                           <span className="text-gray-600">저장됨!</span>
                         ) : null}
                       </div>
                       <div className="flex gap-2">
-                        {progress?.status !== 'completed' && (
-                          <>
-                            <button
-                              onClick={handleSaveDraft}
-                              disabled={saving}
-                              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
-                            >
-                              {saving ? '저장 중...' : '임시 저장'}
-                            </button>
-                            <button
-                              onClick={handleSubmit}
-                              disabled={saving || uploading || !isFormValid()}
-                              className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm font-bold hover:bg-gray-900 disabled:opacity-50"
-                            >
-                              {uploading ? '업로드 중...' : saving ? '제출 중...' : '제출하기'}
-                            </button>
-                          </>
-                        )}
+                        <button
+                          onClick={handleSaveDraft}
+                          disabled={saving || uploading}
+                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+                        >
+                          {saving ? '저장 중...' : '임시 저장'}
+                        </button>
+                        <button
+                          onClick={handleSubmit}
+                          disabled={saving || uploading || !isFormValid()}
+                          className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm font-bold hover:bg-gray-900 disabled:opacity-50"
+                        >
+                          {uploading ? '업로드 중...' : saving ? '제출 중...' : progress?.status === 'completed' ? '다시 제출' : '제출하기'}
+                        </button>
                       </div>
                     </div>
                   </>

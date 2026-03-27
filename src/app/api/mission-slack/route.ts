@@ -10,82 +10,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Slack not configured' }, { status: 500 })
     }
 
-    const { userName, userEmail, day, prompt, tool, reference, result, rating, likes, dislikes, feedback } = data
+    const { userName, day, tool, reference, result, rating, likes, dislikes, feedback } = data
 
-    const message = {
-      blocks: [
-        {
-          type: 'header',
-          text: {
-            type: 'plain_text',
-            text: `🎯 Day ${day} 미션 제출!`,
-            emoji: true
-          }
-        },
-        {
-          type: 'section',
-          fields: [
-            {
-              type: 'mrkdwn',
-              text: `*제출자:*\n${userName} (${userEmail})`
-            },
-            {
-              type: 'mrkdwn',
-              text: `*사용한 도구:*\n${tool || '-'}`
-            }
-          ]
-        },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `*완성된 프롬프트:*\n\`\`\`${prompt?.slice(0, 500)}${prompt?.length > 500 ? '...' : ''}\`\`\``
-          }
-        },
-        {
-          type: 'section',
-          fields: [
-            {
-              type: 'mrkdwn',
-              text: `*참고 사이트:*\n${reference || '-'}`
-            },
-            {
-              type: 'mrkdwn',
-              text: `*결과물:*\n${result || '-'}`
-            }
-          ]
-        },
-        {
-          type: 'section',
-          fields: [
-            {
-              type: 'mrkdwn',
-              text: `*첫인상:*\n${rating || '-'}`
-            },
-            {
-              type: 'mrkdwn',
-              text: `*마음에 드는 부분:*\n${likes || '-'}`
-            }
-          ]
-        },
-        {
-          type: 'section',
-          fields: [
-            {
-              type: 'mrkdwn',
-              text: `*아쉬운 부분:*\n${dislikes || '-'}`
-            },
-            {
-              type: 'mrkdwn',
-              text: `*소감:*\n${feedback || '-'}`
-            }
-          ]
-        },
-        {
-          type: 'divider'
-        }
-      ]
+    // 결과물 링크 처리
+    let resultText = ''
+    if (result && result !== '(이미지 첨부됨)') {
+      resultText = result
+    } else if (result === '(이미지 첨부됨)') {
+      resultText = '📎 이미지 첨부됨'
     }
+
+    // 참고 사이트 링크 처리
+    let refText = ''
+    if (reference && reference !== '(이미지 첨부됨)') {
+      refText = reference
+    }
+
+    const text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*사용 도구*
+${tool || '-'}
+
+*결과 평가*
+• 첫인상: ${rating || '-'}
+• 좋은 점: ${likes || '-'}
+• 아쉬운 점: ${dislikes || '-'}
+• 소감: ${feedback || '-'}
+
+*링크*${refText ? `\n• 참고: ${refText}` : ''}${resultText ? `\n• 결과물: ${resultText}` : ''}${!refText && !resultText ? '\n없음' : ''}`
+
+    const message = { text }
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
