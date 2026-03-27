@@ -329,74 +329,78 @@ export default function WorkbookAdminPage() {
                                     </span>
                                   </div>
 
-                                  <div className="space-y-3 text-sm">
+                                  {/* 상단 요약 정보 */}
+                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-4">
                                     {sub.tool && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">사용 도구:</span>
-                                        <span className="ml-2 text-gray-600">{sub.tool}</span>
+                                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="text-xs text-gray-500">도구</div>
+                                        <div className="font-medium text-gray-800">{sub.tool}</div>
                                       </div>
                                     )}
-
                                     {sub.rating && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">만족도:</span>
-                                        <span className="ml-2 text-gray-600">{sub.rating}</span>
+                                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="text-xs text-gray-500">만족도</div>
+                                        <div className="font-medium text-gray-800">{sub.rating}</div>
                                       </div>
                                     )}
+                                    {sub.reference && (
+                                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="text-xs text-gray-500">레퍼런스</div>
+                                        {sub.reference.startsWith('data:') ? (
+                                          <div className="text-gray-500">(이미지)</div>
+                                        ) : (
+                                          <a href={sub.reference} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">
+                                            링크 보기
+                                          </a>
+                                        )}
+                                      </div>
+                                    )}
+                                    {sub.result && (
+                                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="text-xs text-gray-500">결과물</div>
+                                        {sub.result.startsWith('data:') ? (
+                                          <div className="text-gray-500">(이미지)</div>
+                                        ) : (
+                                          <a href={sub.result} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">
+                                            링크 보기
+                                          </a>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
 
+                                  {/* 상세 내용 */}
+                                  <div className="space-y-3 text-sm">
                                     {sub.prompt && (
                                       <div>
-                                        <span className="font-medium text-gray-700 block mb-1">프롬프트:</span>
-                                        <pre className="bg-gray-100 rounded p-2 text-xs text-gray-600 whitespace-pre-wrap max-h-32 overflow-y-auto">
+                                        <div className="text-xs text-gray-500 mb-1">프롬프트</div>
+                                        <pre className="bg-gray-50 rounded-lg p-3 text-xs text-gray-700 whitespace-pre-wrap max-h-32 overflow-y-auto">
                                           {sub.prompt}
                                         </pre>
                                       </div>
                                     )}
 
-                                    {sub.reference && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">레퍼런스:</span>
-                                        {sub.reference.startsWith('data:') ? (
-                                          <span className="ml-2 text-gray-500">(이미지 첨부됨)</span>
-                                        ) : (
-                                          <a href={sub.reference} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline">
-                                            링크 보기
-                                          </a>
+                                    {(sub.likes || sub.dislikes) && (
+                                      <div className="grid grid-cols-2 gap-3">
+                                        {sub.likes && (
+                                          <div>
+                                            <div className="text-xs text-gray-500 mb-1">👍 마음에 드는 부분</div>
+                                            <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.likes}</p>
+                                          </div>
                                         )}
-                                      </div>
-                                    )}
-
-                                    {sub.result && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">결과물:</span>
-                                        {sub.result.startsWith('data:') ? (
-                                          <span className="ml-2 text-gray-500">(이미지 첨부됨)</span>
-                                        ) : (
-                                          <a href={sub.result} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600 hover:underline">
-                                            링크 보기
-                                          </a>
+                                        {sub.dislikes && (
+                                          <div>
+                                            <div className="text-xs text-gray-500 mb-1">👎 아쉬운 부분</div>
+                                            <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.dislikes}</p>
+                                          </div>
                                         )}
-                                      </div>
-                                    )}
-
-                                    {sub.likes && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">마음에 드는 부분:</span>
-                                        <p className="text-gray-600 mt-1">{sub.likes}</p>
-                                      </div>
-                                    )}
-
-                                    {sub.dislikes && (
-                                      <div>
-                                        <span className="font-medium text-gray-700">아쉬운 부분:</span>
-                                        <p className="text-gray-600 mt-1">{sub.dislikes}</p>
                                       </div>
                                     )}
 
                                     {sub.feedback && (
                                       <div>
-                                        <span className="font-medium text-gray-700">소감:</span>
-                                        <p className="text-gray-600 mt-1">{sub.feedback}</p>
+                                        <div className="text-xs text-gray-500 mb-1">💬 소감</div>
+                                        <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.feedback}</p>
                                       </div>
                                     )}
                                   </div>
