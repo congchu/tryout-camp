@@ -318,7 +318,7 @@ export default function WorkbookPage() {
                     className={`w-full block rounded-xl border p-4 text-left transition-all ${
                       isLocked
                         ? "bg-gray-100 border-gray-200 cursor-not-allowed"
-                        : "bg-white border-gray-100 hover:border-orange-300 hover:shadow-md"
+                        : "bg-white border-gray-100 hover:border-orange-300 hover:shadow-md cursor-pointer"
                     }`}
                   >
                     <div className="flex items-start gap-4">

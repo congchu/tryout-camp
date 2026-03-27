@@ -94,6 +94,7 @@ export default function WorkbookDayPage() {
   const [activeStep, setActiveStep] = useState<string>('step-1')
   const [content, setContent] = useState<DayContent | null>(null)
   const [contentLoading, setContentLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
 
   const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
 
@@ -145,16 +146,37 @@ export default function WorkbookDayPage() {
     }
   }, [content, searchParams])
 
+  // 세션 스토리지 키
+  const sessionKey = `mission-form-day${day}`
+
+  // 폼 값 변경 시 세션 스토리지에 자동 저장
+  useEffect(() => {
+    if (day && Object.values(missionForm).some(v => v)) {
+      sessionStorage.setItem(sessionKey, JSON.stringify(missionForm))
+    }
+  }, [missionForm, day, sessionKey])
+
   useEffect(() => {
     async function loadProgress() {
+      // 1. 먼저 세션 스토리지에서 불러오기 (새로고침 대비)
+      const savedSession = sessionStorage.getItem(sessionKey)
+      if (savedSession) {
+        try {
+          const parsed = JSON.parse(savedSession)
+          setMissionForm(prev => ({ ...prev, ...parsed }))
+        } catch (e) {
+          console.error('Failed to parse session storage:', e)
+        }
+      }
+
       if (user) {
         const data = await getWorkbookProgress(user.uid)
         if (data && data[dayKey]) {
           const dayData = data[dayKey] as DayProgress
           setProgress(dayData)
           setSubmission(dayData.submission || '')
-          // 임시 저장된 드래프트 불러오기
-          if (dayData.draft) {
+          // 임시 저장된 드래프트 불러오기 (세션 스토리지가 없을 때만)
+          if (dayData.draft && !savedSession) {
             setMissionForm(prev => ({
               ...prev,
               ...dayData.draft
@@ -162,25 +184,27 @@ export default function WorkbookDayPage() {
           }
         }
 
-        // 기존 제출물 불러오기
-        const existingSubmission = await getUserSubmission(user.uid, day)
-        if (existingSubmission) {
-          setMissionForm(prev => ({
-            ...prev,
-            prompt: existingSubmission.prompt || '',
-            tool: existingSubmission.tool || '',
-            reference: existingSubmission.reference || '',
-            result: existingSubmission.result || '',
-            rating: existingSubmission.rating || '',
-            likes: existingSubmission.likes || '',
-            dislikes: existingSubmission.dislikes || '',
-            feedback: existingSubmission.feedback || '',
-          }))
+        // 기존 제출물 불러오기 (세션 스토리지가 없을 때만)
+        if (!savedSession) {
+          const existingSubmission = await getUserSubmission(user.uid, day)
+          if (existingSubmission) {
+            setMissionForm(prev => ({
+              ...prev,
+              prompt: existingSubmission.prompt || '',
+              tool: existingSubmission.tool || '',
+              reference: existingSubmission.reference || '',
+              result: existingSubmission.result || '',
+              rating: existingSubmission.rating || '',
+              likes: existingSubmission.likes || '',
+              dislikes: existingSubmission.dislikes || '',
+              feedback: existingSubmission.feedback || '',
+            }))
+          }
         }
       }
     }
     loadProgress()
-  }, [user, dayKey, day])
+  }, [user, dayKey, day, sessionKey])
 
   const handleSave = async () => {
     if (!user) return
@@ -303,12 +327,15 @@ export default function WorkbookDayPage() {
       }
 
       setProgress({ status: 'completed' })
+      // 제출 성공 시 세션 스토리지 비우기
+      sessionStorage.removeItem(sessionKey)
     } else {
       // Legacy: simple text submission
       if (!submission.trim()) return
       setSaving(true)
       await submitDayMission(user.uid, dayKey, submission)
       setProgress({ status: 'completed', submission })
+      sessionStorage.removeItem(sessionKey)
     }
 
     setSaving(false)
@@ -318,6 +345,24 @@ export default function WorkbookDayPage() {
     if (!content?.mission.fields) return submission.trim().length > 0
     const requiredFields = content.mission.fields.filter(f => f.required)
     return requiredFields.every(f => missionForm[f.id]?.trim())
+  }
+
+  const handleCopyForm = () => {
+    if (!content?.mission.fields) return
+
+    const lines = content.mission.fields.map(field => {
+      const value = missionForm[field.id] || ''
+      // Skip file uploads (base64) for copy
+      if (field.type === 'url_or_file' && value.startsWith('data:')) {
+        return `[${field.label}]\n(이미지 첨부됨 - 파일로 직접 전송해주세요)`
+      }
+      return `[${field.label}]\n${value || '(미입력)'}`
+    })
+
+    const text = `=== Day ${day} 미션 제출 ===\n\n${lines.join('\n\n')}`
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const goToStep = (stepId: string) => {
@@ -746,9 +791,19 @@ export default function WorkbookDayPage() {
                           <span className="text-green-600 font-medium">제출 완료! (수정 가능)</span>
                         ) : saved ? (
                           <span className="text-gray-600">저장됨!</span>
+                        ) : copied ? (
+                          <span className="text-blue-600">복사됨!</span>
                         ) : null}
                       </div>
                       <div className="flex gap-2">
+                        <button
+                          onClick={handleCopyForm}
+                          className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-1.5"
+                          title="제출이 안 되면 복사해서 직접 전달해주세요"
+                        >
+                          <Copy className="w-4 h-4" />
+                          {copied ? '복사됨!' : '내용 복사'}
+                        </button>
                         <button
                           onClick={handleSaveDraft}
                           disabled={saving || uploading}
