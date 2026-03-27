@@ -232,7 +232,7 @@ export default function WorkbookDayPage() {
     // Check if using new structured fields
     const hasFields = content?.mission.fields && content.mission.fields.length > 0
 
-    if (hasFields) {
+    if (hasFields && content?.mission.fields) {
       // Validate required fields
       const requiredFields = content.mission.fields.filter(f => f.required)
       const allFilled = requiredFields.every(f => missionForm[f.id]?.trim())
@@ -531,9 +531,10 @@ export default function WorkbookDayPage() {
                     remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
                     components={{
                       pre: CodeBlock,
-                      a: ({ href, children }) => {
+                      a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
                         return <a href={href} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">{children}</a>
                       },
+                      // @ts-expect-error - custom element for modal image
                       'modal-img': ({ src, children }: { src?: string; children?: React.ReactNode }) => {
                         return (
                           <button

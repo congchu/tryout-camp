@@ -13,6 +13,16 @@ export interface StepContent {
   checkItems?: string[]
 }
 
+export interface MissionField {
+  id: string
+  label: string
+  type: 'text' | 'textarea' | 'select' | 'file' | 'url_or_file'
+  placeholder?: string
+  options?: string[]
+  required?: boolean
+  accept?: string
+}
+
 export interface DayContent {
   title: string
   subtitle: string
@@ -20,7 +30,8 @@ export interface DayContent {
   mission: {
     title: string
     description: string
-    placeholder: string
+    placeholder?: string
+    fields?: MissionField[]
   }
 }
 
