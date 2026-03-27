@@ -1,4 +1,28 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Prose table styles */
+.prose table {
+  width: auto;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.prose th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.prose tr:nth-child(even) {
+  background-color: #f9fafb;
+}
 
 @font-face {
   font-family: 'KyoboHandwriting2019';

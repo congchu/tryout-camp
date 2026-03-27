@@ -6,8 +6,8 @@ import { motion } from 'framer-motion'
 // 챌린지 목록 데이터
 const CHALLENGES = [
   {
-    id: 'ai-5days-porfolio',
-    slug: '/cc/ai-5days-porfolio',
+    id: 'ai-portfolio',
+    slug: '/cc/ai-portfolio',
     emoji: '✨',
     title: '포폴 없는 프리랜서 구출 챌린지',
     subtitle: '5일 만에 AI로 포트폴리오 만들기',

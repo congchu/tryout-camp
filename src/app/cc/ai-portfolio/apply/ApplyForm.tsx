@@ -656,7 +656,7 @@ export default function ApplyForm() {
 
       <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-white/10 px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <Link href="/cc/ai-5days-porfolio" className="text-white/60 hover:text-white transition-colors">←</Link>
+          <Link href="/cc/ai-portfolio" className="text-white/60 hover:text-white transition-colors">←</Link>
           <div className="flex items-center gap-2 flex-1 justify-center">
             <h1 className="text-[#c8ff00] font-black text-lg">문어쌤과 신청하기</h1>
           </div>
@@ -855,7 +855,7 @@ export default function ApplyForm() {
                   </div>
 
                   <Link
-                    href="/cc/ai-5days-porfolio"
+                    href="/cc/ai-portfolio"
                     className="inline-block mt-6 text-white/50 hover:text-white text-sm transition-colors"
                   >
                     ← 상세페이지로 돌아가기

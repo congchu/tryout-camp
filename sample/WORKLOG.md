@@ -311,3 +311,135 @@ contents/ai-5days-portfolio/
 - Day간 네비게이션
 
 ✅ 빌드 성공
+
+## 2026-03-26 - Firebase 워크북 시스템 구축
+WHY: 참여자가 구글 로그인해서 본인 워크북 진행 상황을 관리할 수 있게 하려고
+HOW: Firebase Auth (구글 로그인) + Firestore (진행 상황 저장)
+
+생성된 파일들:
+```
+src/lib/firebase.ts           - Firebase 초기화
+src/lib/auth-context.tsx      - 구글 로그인 Context
+src/lib/workbook-db.ts        - Firestore 진행상황 저장
+
+src/app/workbook/
+├── layout.tsx                - AuthProvider 래핑
+├── page.tsx                  - 메인 (로그인 + Day 목록)
+├── intro/page.tsx            - 인트로 페이지
+└── day/[day]/page.tsx        - Day 1~5 페이지
+```
+
+Firestore 구조:
+```
+workbook_progress/{userId}/
+  - day1: { status, submission, submittedAt }
+  - day2: ...
+  - day5: ...
+  - createdAt, updatedAt
+```
+
+랜딩 페이지 버튼 변경:
+- "지금 신청하기" → "시작하기" (→ /workbook)
+- 아래에 "챌린지 신청하기" 텍스트 링크 추가
+
+5일 커리큘럼 (랜딩 페이지 기준으로 맞춤):
+| Day | 주제 |
+|-----|------|
+| 1 | AI 툴 셋팅 + 타겟 분석 |
+| 2 | 작업물 정리 + 구성 초안 |
+| 3 | 레퍼런스 + UX 구성 |
+| 4 | 사이트 만들고 배포! |
+| 5 | 피드백 받으면서 개선 |
+
+✅ 빌드 성공
+
+## 2026-03-26 - 워크북 Day 페이지 UI 변경: 스크롤 → 단일 step 뷰
+WHY: 사용자 피드백 "목차에 해당하는 내용만 보여줘야지" - 모든 step이 다 보이면 집중이 안됨
+HOW: page.tsx 전체 재작성
+- 모든 step 동시 표시 → activeStep만 렌더링
+- scrollToStep() → goToStep(), goToPrev(), goToNext()
+- stepRefs 제거 (더이상 스크롤 안함)
+- 모바일: 상단 숫자 버튼 네비게이션
+- PC: 사이드바 목차 + 하단 이전/다음 버튼
+-> /cc/ai-portfolio/workbook/day/[day]/page.tsx 수정 완료
+
+## 2026-03-28 - 워크북 Day 1 콘텐츠 수정
+WHY: 콘텐츠가 흰글씨로 보이는 버그 + 콘텐츠 구조 개선
+HOW:
+1. 흰글씨 버그 수정: layout.tsx에 `text-gray-900` 추가
+   - 원인: globals.css에 `body { color: white }` 설정이 있어서 상속됨
+2. Day 1 콘텐츠 재구성:
+   - Step 1: "타겟 분석" → "목표 정하기" (왜 포트폴리오를 만드는지 먼저)
+   - Step 2: Lovable만 → Lovable + Bolt.new 둘 다 소개
+   - Step 3: 타겟 분석 (세부 - 누구를 설득할 것인지)
+-> /cc/ai-portfolio/workbook/layout.tsx 수정
+-> /cc/ai-portfolio/workbook/day/[day]/_content/day1.ts 수정
+✅ 완료
+
+## 2026-03-28 - Day 1/Day 2 콘텐츠 재구성
+WHY: Day 1에 너무 많은 내용이 있어서 간소화 필요
+HOW:
+1. "내 정보 정리" 섹션을 Day 1에서 Day 2로 이동
+2. Day 1은 AI로 웹사이트 만드는 방법 이해 → 바로 Lovable 실습으로 간소화
+3. Day 1 Lovable 실습은 예시 데이터로 진행 (맛보기)
+4. Day 2에서 내 정보 정리 후 진짜 포트폴리오 만들기
+
+Day 1 최종 구조:
+- intro: 왜 포트폴리오가 필요할까?
+- step-1: AI로 웹사이트 만드는 방법 (4단계 프롬프팅 설명)
+- step-2: Lovable로 만들어보기 (예시 데이터)
+
+Day 2 최종 구조:
+- step-1: 내 정보 정리하기
+- step-2: 내 정보로 포트폴리오 만들기
+- step-3: 결과 확인하고 수정하기
+
+## 2026-03-28 - 이미지 모달 기능 추가
+WHY: 프롬프트 실행 결과 스크린샷을 보여주고 싶음
+HOW:
+❌ 마크다운 링크 `[text](modal:path)` 방식 시도 → 클릭시 새로고침됨 (실패)
+❌ `e.preventDefault()`, `e.stopPropagation()` 추가 → 여전히 새로고침 (실패)
+✅ custom HTML 태그 `<modal-img src="path">text</modal-img>` + rehype-raw 플러그인 사용 → 성공!
+
+추가된 기능:
+- ImageModal 컴포넌트 (X 버튼, 배경 클릭으로 닫기)
+- 모달 열릴 때 배경 스크롤 방지 (`document.body.style.overflow = 'hidden'`)
+- 이미지 클릭 시 브라우저 기본 확대 가능
+
+사용법:
+```
+<modal-img src="/cc/images/day1-step2-1.png">프롬프트 실행 결과 보기</modal-img>
+```
+
+## 2026-03-28 - Day 1 프롬프팅 단계에 "디자인 지침 주기" 추가
+WHY: 2단계(목적)와 4단계(레퍼런스) 사이에 디자인 지침만 주는 단계가 있으면 더 이해하기 쉬움
+HOW: 3단계 추가 (토스 스타일 프롬프트 예시)
+-> day1.ts step-1 내용에 "3단계. 디자인 지침 주기" 추가
+
+현재 4단계:
+1. 내 정보 주기
+2. 목적까지 알려주기
+3. 디자인 지침 주기 (신규)
+4. 레퍼런스 보여주기 ⭐
+
+✅ 완료
+
+## 2026-03-28 - Day 1 미션 폼 개선 및 슬랙 연동
+WHY: 미션 제출 UX 개선 + 제출 알림 자동화
+HOW: 폼 필드 확장, 임시저장 기능, Slack webhook 연동
+
+변경사항:
+- 주관식 필드 (`likes`, `dislikes`, `feedback`)를 textarea로 변경 (더 길게 작성 가능)
+- `사용한 도구` select → text 입력으로 변경 (여러 도구 입력 가능)
+- 새 필드 추가: `참고한 사이트 URL`, `결과물 URL/스크린샷`
+- **미션 카드만 회색 배경으로 변경** (from-gray-700 to-gray-800), 나머지 UI는 주황색 유지
+- 임시 저장 기능 추가 (`saveMissionDraft` 함수 + "임시 저장" 버튼)
+- 제출 시 슬랙으로 알림 전송 (`/api/mission-slack` 엔드포인트 신규 생성)
+
+수정된 파일:
+- `day1.ts` - mission.fields 확장
+- `page.tsx` - missionForm 상태, 색상, 버튼
+- `workbook-db.ts` - MissionSubmission 타입, saveMissionDraft 함수
+- `api/mission-slack/route.ts` (신규) - 슬랙 알림
+
+✅ 완료

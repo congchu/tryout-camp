@@ -352,13 +352,24 @@ export default function AI5DayPortfolioChallenge() {
           <motion.button
             variants={pop}
             onClick={() => {
-              trackButtonClick('지금 신청하기', 'hero')
-              router.push('/cc/ai-5days-porfolio/apply')
+              trackButtonClick('시작하기', 'hero')
+              router.push('/cc/ai-portfolio/workbook')
             }}
             className="inline-block bg-black text-[#c8ff00] text-2xl font-black px-10 py-5 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform"
           >
-            지금 신청하기 🔥
+            시작하기 🚀
           </motion.button>
+          <motion.p variants={fadeInUp} className="mt-4">
+            <button
+              onClick={() => {
+                trackButtonClick('신청하기', 'hero')
+                router.push('/cc/ai-portfolio/apply')
+              }}
+              className="text-black/60 underline hover:text-black transition-colors cursor-pointer"
+            >
+              챌린지 신청하기
+            </button>
+          </motion.p>
         </motion.div>
       </section>
 
@@ -893,23 +904,34 @@ export default function AI5DayPortfolioChallenge() {
           <motion.button
             variants={pop}
             onClick={() => {
-              trackButtonClick('지금 신청하기', 'cta')
-              router.push('/cc/ai-5days-porfolio/apply')
+              trackButtonClick('시작하기', 'cta')
+              router.push('/cc/ai-portfolio/workbook')
             }}
             className="inline-block bg-[#c8ff00] text-black text-2xl font-black px-12 py-6 rounded-full shadow-xl cursor-pointer hover:scale-105 transition-transform"
           >
-            지금 신청하기 🔥
+            시작하기 🚀
           </motion.button>
+          <motion.p variants={fadeInUp} className="mt-4">
+            <button
+              onClick={() => {
+                trackButtonClick('신청하기', 'cta')
+                router.push('/cc/ai-portfolio/apply')
+              }}
+              className="text-white/60 underline hover:text-white transition-colors cursor-pointer"
+            >
+              챌린지 신청하기
+            </button>
+          </motion.p>
         </motion.div>
       </section>
 
       {/* Footer */}
       <footer className="bg-black border-t border-white/10 px-6 py-8 text-center" style={{ fontFamily: "'KyoboHandwriting2019', sans-serif" }}>
         <button
-          onClick={() => setShowPopup(true)}
+          onClick={() => router.push('/cc/ai-portfolio/workbook')}
           className="text-[#c8ff00]/60 hover:text-[#c8ff00] text-sm mb-4 inline-block transition-colors cursor-pointer"
         >
-          이미 신청했다면? 로그인하기 →
+          이미 시작했다면? 워크북으로 →
         </button>
         <p className="text-gray-500 text-sm">
           크크웍스 × 실험마켓 | 문의: cookie00421@gmail.com
@@ -959,15 +981,15 @@ export default function AI5DayPortfolioChallenge() {
             >
               ✕
             </button>
-            <p className="text-white/60 text-sm flex-1">3/28 시작 · 보증금 3만원</p>
+            <p className="text-white/60 text-sm flex-1">5일 만에 포트폴리오 완성!</p>
             <button
               onClick={() => {
-                trackButtonClick('지금 신청하기', 'bottom_bar')
-                router.push('/cc/ai-5days-porfolio/apply')
+                trackButtonClick('시작하기', 'bottom_bar')
+                router.push('/cc/ai-portfolio/workbook')
               }}
               className="bg-[#c8ff00] text-black text-sm font-black px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-transform"
             >
-              지금 신청하기 🔥
+              시작하기 🚀
             </button>
           </div>
         </motion.div>
