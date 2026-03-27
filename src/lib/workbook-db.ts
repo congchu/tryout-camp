@@ -1,5 +1,14 @@
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
-import { db } from './firebase'
+import { doc, getDoc, setDoc, updateDoc, Firestore } from 'firebase/firestore'
+import { getFirebaseDb } from './firebase'
+
+// Lazy get db instance
+let _db: Firestore | null = null
+function db(): Firestore {
+  if (!_db) {
+    _db = getFirebaseDb()
+  }
+  return _db
+}
 
 // ============================================
 // Content Types (for Admin)
@@ -43,7 +52,7 @@ const CONTENT_DOC_ID = 'ai-portfolio-workbook'
 
 // Get all day contents from Firestore
 export async function getWorkbookContent(): Promise<Record<number, DayContent> | null> {
-  const docRef = doc(db, 'workbook_content', CONTENT_DOC_ID)
+  const docRef = doc(db(), 'workbook_content', CONTENT_DOC_ID)
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
@@ -63,7 +72,7 @@ export async function getDayContent(day: number): Promise<DayContent | null> {
 
 // Save single day content
 export async function saveDayContent(day: number, content: DayContent): Promise<void> {
-  const docRef = doc(db, 'workbook_content', CONTENT_DOC_ID)
+  const docRef = doc(db(), 'workbook_content', CONTENT_DOC_ID)
   const existing = await getWorkbookContent()
 
   await setDoc(docRef, {
@@ -108,7 +117,7 @@ export interface UserProfile {
 
 // Get user profile
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
-  const docRef = doc(db, 'user_profiles', userId)
+  const docRef = doc(db(), 'user_profiles', userId)
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
@@ -119,7 +128,7 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
 
 // Save user profile
 export async function saveUserProfile(userId: string, profile: { name: string; email: string }): Promise<void> {
-  const docRef = doc(db, 'user_profiles', userId)
+  const docRef = doc(db(), 'user_profiles', userId)
   await setDoc(docRef, {
     ...profile,
     createdAt: new Date(),
@@ -129,7 +138,7 @@ export async function saveUserProfile(userId: string, profile: { name: string; e
 
 // Get user's workbook progress
 export async function getWorkbookProgress(userId: string): Promise<WorkbookProgress | null> {
-  const docRef = doc(db, 'workbook_progress', userId)
+  const docRef = doc(db(), 'workbook_progress', userId)
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
@@ -140,7 +149,7 @@ export async function getWorkbookProgress(userId: string): Promise<WorkbookProgr
 
 // Initialize workbook progress for new user
 export async function initWorkbookProgress(userId: string): Promise<void> {
-  const docRef = doc(db, 'workbook_progress', userId)
+  const docRef = doc(db(), 'workbook_progress', userId)
   await setDoc(docRef, {
     day1: { status: 'not_started' },
     day2: { status: 'not_started' },
@@ -158,7 +167,7 @@ export async function updateDayProgress(
   day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
   progress: Partial<DayProgress>
 ): Promise<void> {
-  const docRef = doc(db, 'workbook_progress', userId)
+  const docRef = doc(db(), 'workbook_progress', userId)
   await updateDoc(docRef, {
     [day]: {
       ...progress,
@@ -174,7 +183,7 @@ export async function saveMissionDraft(
   day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
   draft: Record<string, string>
 ): Promise<void> {
-  const docRef = doc(db, 'workbook_progress', userId)
+  const docRef = doc(db(), 'workbook_progress', userId)
   await updateDoc(docRef, {
     [day]: {
       status: 'in_progress',
@@ -191,7 +200,7 @@ export async function submitDayMission(
   day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
   submission: string
 ): Promise<void> {
-  const docRef = doc(db, 'workbook_progress', userId)
+  const docRef = doc(db(), 'workbook_progress', userId)
   await updateDoc(docRef, {
     [day]: {
       status: 'completed',
@@ -263,7 +272,7 @@ export async function submitMission(
 
   // Check if submission already exists for this user/day
   const existingQuery = query(
-    collection(db, 'mission_submissions'),
+    collection(db(), 'mission_submissions'),
     where('userId', '==', userId),
     where('day', '==', day),
     limit(1)
@@ -276,19 +285,19 @@ export async function submitMission(
     // Update existing submission
     const existingDoc = existingSnapshot.docs[0]
     docId = existingDoc.id
-    await updateDocument(doc(db, 'mission_submissions', docId), {
+    await updateDocument(doc(db(), 'mission_submissions', docId), {
       ...submission,
       updatedAt: new Date(),
     })
   } else {
     // Create new submission
     submission.submittedAt = new Date()
-    const docRef = await addDoc(collection(db, 'mission_submissions'), submission)
+    const docRef = await addDoc(collection(db(), 'mission_submissions'), submission)
     docId = docRef.id
   }
 
   // Also update user's progress
-  const progressDocRef = doc(db, 'workbook_progress', userId)
+  const progressDocRef = doc(db(), 'workbook_progress', userId)
   await updateDoc(progressDocRef, {
     [`day${day}`]: {
       status: 'completed',
@@ -307,7 +316,7 @@ export async function getDaySubmissions(day: number): Promise<MissionSubmission[
   const { collection, query, where, orderBy, getDocs } = await import('firebase/firestore')
 
   const q = query(
-    collection(db, 'mission_submissions'),
+    collection(db(), 'mission_submissions'),
     where('day', '==', day),
     orderBy('submittedAt', 'desc')
   )
@@ -324,7 +333,7 @@ export async function getUserSubmission(userId: string, day: number): Promise<Mi
   const { collection, query, where, getDocs, limit } = await import('firebase/firestore')
 
   const q = query(
-    collection(db, 'mission_submissions'),
+    collection(db(), 'mission_submissions'),
     where('userId', '==', userId),
     where('day', '==', day),
     limit(1)
@@ -356,10 +365,10 @@ export async function getAllUsersProgress(): Promise<UserProgressWithInfo[]> {
   const { collection, getDocs } = await import('firebase/firestore')
 
   // Get all progress
-  const progressSnapshot = await getDocs(collection(db, 'workbook_progress'))
+  const progressSnapshot = await getDocs(collection(db(), 'workbook_progress'))
 
   // Get all profiles
-  const profilesSnapshot = await getDocs(collection(db, 'user_profiles'))
+  const profilesSnapshot = await getDocs(collection(db(), 'user_profiles'))
   const profiles = new Map<string, UserProfile>()
   profilesSnapshot.docs.forEach(doc => {
     profiles.set(doc.id, doc.data() as UserProfile)
@@ -381,7 +390,7 @@ export async function getAllSubmissions(): Promise<MissionSubmission[]> {
   const { collection, query, orderBy, getDocs } = await import('firebase/firestore')
 
   const q = query(
-    collection(db, 'mission_submissions'),
+    collection(db(), 'mission_submissions'),
     orderBy('submittedAt', 'desc')
   )
 

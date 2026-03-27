@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { User, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
-import { auth, googleProvider } from './firebase'
+import { getFirebaseAuth, getGoogleProvider } from './firebase'
 
 interface AuthContextType {
   user: User | null
@@ -18,6 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const auth = getFirebaseAuth()
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
@@ -27,6 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithGoogle = async () => {
     try {
+      const auth = getFirebaseAuth()
+      const googleProvider = getGoogleProvider()
       await signInWithPopup(auth, googleProvider)
     } catch (error) {
       console.error('Google sign in error:', error)
@@ -36,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
+      const auth = getFirebaseAuth()
       await firebaseSignOut(auth)
     } catch (error) {
       console.error('Sign out error:', error)

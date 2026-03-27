@@ -443,3 +443,13 @@ HOW: 폼 필드 확장, 임시저장 기능, Slack webhook 연동
 - `api/mission-slack/route.ts` (신규) - 슬랙 알림
 
 ✅ 완료
+
+## 2026-03-28 - 빌드 오류 수정 및 미사용 파일 정리
+WHY: Vercel 배포를 위해 빌드 오류 해결 필요
+
+❌ gray-matter 모듈 없음 오류 → file-content.ts, content.types.ts 확인 → 미사용 파일 삭제
+❌ Firebase Admin 설정 오류 → api/upload 라우트 확인 → 미사용 (Base64 방식으로 전환) → 삭제
+❌ eo-Brutalist-portfolio 폴더 빌드 오류 → tsconfig.json exclude에 추가
+❌ modal-img 커스텀 컴포넌트 타입 오류 → @ts-expect-error 추가
+
+✅ 빌드 성공 및 배포 완료

@@ -1,7 +1,7 @@
-import { initializeApp, getApps } from 'firebase/app'
-import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider, Auth } from 'firebase/auth'
+import { getFirestore, Firestore } from 'firebase/firestore'
+import { getStorage, FirebaseStorage } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,10 +12,48 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
-// Initialize Firebase (prevent duplicate initialization)
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
+// Lazy initialization for client-side only
+let app: FirebaseApp | undefined
+let auth: Auth | undefined
+let db: Firestore | undefined
+let storage: FirebaseStorage | undefined
+let googleProvider: GoogleAuthProvider | undefined
 
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
-export const googleProvider = new GoogleAuthProvider()
+function getApp(): FirebaseApp {
+  if (typeof window === 'undefined') {
+    throw new Error('Firebase should only be initialized on the client side')
+  }
+  if (!app) {
+    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
+  }
+  return app
+}
+
+export function getFirebaseAuth(): Auth {
+  if (!auth) {
+    auth = getAuth(getApp())
+  }
+  return auth
+}
+
+export function getFirebaseDb(): Firestore {
+  if (!db) {
+    db = getFirestore(getApp())
+  }
+  return db
+}
+
+export function getFirebaseStorage(): FirebaseStorage {
+  if (!storage) {
+    storage = getStorage(getApp())
+  }
+  return storage
+}
+
+export function getGoogleProvider(): GoogleAuthProvider {
+  if (!googleProvider) {
+    googleProvider = new GoogleAuthProvider()
+  }
+  return googleProvider
+}
+
