@@ -306,7 +306,7 @@ export default function WorkbookAdminPage() {
                           {/* Day Progress */}
                           <div className="flex items-center gap-1">
                             {DAYS.map(day => {
-                              const dayKey = `day${day}` as keyof typeof progress
+                              const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
                               const dayProgress = progress[dayKey]
                               const status = dayProgress?.status || 'not_started'
 
