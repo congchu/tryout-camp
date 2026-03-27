@@ -259,18 +259,29 @@ export default function WorkbookDayPage() {
         submissionData
       )
 
-      // 슬랙으로 전송
+      // 슬랙으로 전송 (이미지 base64는 제외하고 URL만 전송)
       try {
-        await fetch('/api/mission-slack', {
+        const slackData = {
+          userName: user.displayName || '익명',
+          userEmail: user.email || '',
+          day,
+          prompt: submissionData.prompt,
+          tool: submissionData.tool,
+          reference: submissionData.reference?.startsWith('data:') ? '(이미지 첨부됨)' : submissionData.reference,
+          result: submissionData.result?.startsWith('data:') ? '(이미지 첨부됨)' : submissionData.result,
+          rating: submissionData.rating,
+          likes: submissionData.likes,
+          dislikes: submissionData.dislikes,
+          feedback: submissionData.feedback,
+        }
+        const slackRes = await fetch('/api/mission-slack', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userName: user.displayName || '익명',
-            userEmail: user.email || '',
-            day,
-            ...submissionData
-          })
+          body: JSON.stringify(slackData)
         })
+        if (!slackRes.ok) {
+          console.error('Slack response not ok:', await slackRes.text())
+        }
       } catch (e) {
         console.error('Slack notification failed:', e)
       }
