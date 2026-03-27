@@ -29,7 +29,8 @@
       "Bash(xargs kill:*)",
       "Bash(kill:*)",
       "Bash(node -e:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "mcp__notion__notion-fetch"
     ]
   }
 }

@@ -359,7 +359,7 @@ export default function WorkbookAdminPage() {
                                       Day {sub.day}
                                     </span>
                                     <span className="text-xs text-gray-400">
-                                      {sub.submittedAt && new Date(sub.submittedAt.seconds ? sub.submittedAt.seconds * 1000 : sub.submittedAt).toLocaleString('ko-KR')}
+                                      {sub.submittedAt && new Date((sub.submittedAt as unknown as { seconds?: number }).seconds ? (sub.submittedAt as unknown as { seconds: number }).seconds * 1000 : sub.submittedAt as unknown as number).toLocaleString('ko-KR')}
                                     </span>
                                   </div>
 
