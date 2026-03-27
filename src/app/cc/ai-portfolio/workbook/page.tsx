@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
 import { getWorkbookProgress, initWorkbookProgress, WorkbookProgress, DayProgress, getUserProfile, saveUserProfile, UserProfile } from '@/lib/workbook-db'
-import { ArrowLeft, Clock, CheckCircle2, PlayCircle, Circle, Lock, Loader2 } from 'lucide-react'
+import { ArrowLeft, Clock, CheckCircle2, PlayCircle, Circle, Lock, Loader2, Pencil } from 'lucide-react'
 import Link from 'next/link'
 
 const CHALLENGE_INFO = {
@@ -54,6 +54,7 @@ export default function WorkbookPage() {
   const [loadingProgress, setLoadingProgress] = useState(false)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [showNameModal, setShowNameModal] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
   const [nameInput, setNameInput] = useState('')
   const [savingName, setSavingName] = useState(false)
   const router = useRouter()
@@ -206,9 +207,13 @@ export default function WorkbookPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <div className="text-center mb-6">
-              <div className="text-4xl mb-3">👋</div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">환영합니다!</h2>
-              <p className="text-gray-500 text-sm">챌린지에서 사용할 이름을 알려주세요</p>
+              <div className="text-4xl mb-3">{isEditingName ? '✏️' : '👋'}</div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {isEditingName ? '이름 수정' : '환영합니다!'}
+              </h2>
+              <p className="text-gray-500 text-sm">
+                {isEditingName ? '새로운 이름을 입력해주세요' : '챌린지에서 사용할 이름을 알려주세요'}
+              </p>
             </div>
 
             <div className="mb-6">
@@ -224,20 +229,38 @@ export default function WorkbookPage() {
               <p className="mt-2 text-xs text-gray-400">다른 참가자와 운영자에게 보여지는 이름이에요</p>
             </div>
 
-            <button
-              onClick={handleSaveName}
-              disabled={!nameInput.trim() || savingName}
-              className="w-full py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {savingName ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  저장 중...
-                </>
-              ) : (
-                '시작하기'
+            <div className="flex gap-3">
+              {isEditingName && (
+                <button
+                  onClick={() => {
+                    setShowNameModal(false)
+                    setIsEditingName(false)
+                  }}
+                  className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                >
+                  취소
+                </button>
               )}
-            </button>
+              <button
+                onClick={() => {
+                  handleSaveName()
+                  setIsEditingName(false)
+                }}
+                disabled={!nameInput.trim() || savingName}
+                className="flex-1 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {savingName ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    저장 중...
+                  </>
+                ) : isEditingName ? (
+                  '저장'
+                ) : (
+                  '시작하기'
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -254,7 +277,17 @@ export default function WorkbookPage() {
               챌린지 홈
             </Link>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500">{displayName}</span>
+              <button
+                onClick={() => {
+                  setNameInput(profile?.name || user.displayName || '')
+                  setIsEditingName(true)
+                  setShowNameModal(true)
+                }}
+                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-600 transition-colors"
+              >
+                {displayName}
+                <Pencil className="w-3 h-3" />
+              </button>
               <button
                 onClick={signOut}
                 className="text-sm text-gray-400 hover:text-gray-600"
