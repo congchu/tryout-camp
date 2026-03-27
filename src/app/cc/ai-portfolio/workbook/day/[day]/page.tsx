@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth-context'
-import { getWorkbookProgress, updateDayProgress, submitDayMission, submitMission, saveMissionDraft, getUserSubmission, DayProgress } from '@/lib/workbook-db'
+import { getWorkbookProgress, updateDayProgress, submitDayMission, submitMission, saveMissionDraft, getUserSubmission, getUserProfile, DayProgress, UserProfile } from '@/lib/workbook-db'
 import type { DayContent, Step as StepContent } from './_content'
 import { ArrowLeft, Clock, CheckCircle2, ChevronLeft, ChevronRight, Copy, Check, X, Image as ImageIcon } from 'lucide-react'
 import { DAY_CONTENT } from './_content'
@@ -95,6 +95,7 @@ export default function WorkbookDayPage() {
   const [content, setContent] = useState<DayContent | null>(null)
   const [contentLoading, setContentLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
 
   const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
 
@@ -170,6 +171,10 @@ export default function WorkbookDayPage() {
       }
 
       if (user) {
+        // 사용자 프로필 불러오기
+        const profile = await getUserProfile(user.uid)
+        setUserProfile(profile)
+
         const data = await getWorkbookProgress(user.uid)
         if (data && data[dayKey]) {
           const dayData = data[dayKey] as DayProgress
@@ -294,7 +299,7 @@ export default function WorkbookDayPage() {
       await submitMission(
         user.uid,
         user.email || '',
-        user.displayName || '익명',
+        userProfile?.name || user.displayName || '익명',
         day,
         submissionData
       )
@@ -302,7 +307,7 @@ export default function WorkbookDayPage() {
       // 슬랙으로 전송 (이미지 base64는 제외하고 URL만 전송)
       try {
         const slackData = {
-          userName: user.displayName || '익명',
+          userName: userProfile?.name || user.displayName || '익명',
           userEmail: user.email || '',
           day,
           prompt: submissionData.prompt,

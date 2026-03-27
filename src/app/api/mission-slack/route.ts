@@ -47,14 +47,24 @@ ${tool || '-'}
 
     // 두 개의 webhook으로 동시 전송
     const webhooks = [webhookUrl, webhookUrl2].filter(Boolean) as string[]
+    console.log(`Sending to ${webhooks.length} webhooks`)
+
     const results = await Promise.allSettled(
-      webhooks.map(url =>
-        fetch(url, {
+      webhooks.map(async (url, index) => {
+        console.log(`Sending to webhook ${index + 1}...`)
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(message)
         })
-      )
+        if (!res.ok) {
+          const text = await res.text()
+          console.error(`Webhook ${index + 1} failed:`, res.status, text)
+        } else {
+          console.log(`Webhook ${index + 1} success`)
+        }
+        return res
+      })
     )
 
     const failed = results.filter(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.ok))
