@@ -341,7 +341,7 @@ export default function WorkbookPage() {
                 const status = getDayStatus(mission.day)
                 const isCompleted = status === 'completed'
                 const isFirst = mission.day === firstIncomplete
-                const isLocked = mission.day > 1 // Day 2부터는 잠금
+                const isLocked = mission.day > 2 // Day 3부터는 잠금
 
                 return (
                   <button

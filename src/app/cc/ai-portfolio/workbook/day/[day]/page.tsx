@@ -285,16 +285,11 @@ export default function WorkbookDayPage() {
 
       setUploading(false)
 
-      const submissionData = {
-        prompt: missionForm.prompt || '',
-        tool: missionForm.tool || '',
-        reference: referenceValue,
-        result: resultValue,
-        rating: missionForm.rating || '',
-        likes: missionForm.likes || '',
-        dislikes: missionForm.dislikes || '',
-        feedback: missionForm.feedback || '',
-      }
+      // 동적으로 모든 폼 필드 수집
+      const submissionData: Record<string, string> = { ...missionForm }
+      // 파일 업로드 필드 덮어쓰기
+      if (referenceValue) submissionData.reference = referenceValue
+      if (resultValue) submissionData.result = resultValue
 
       await submitMission(
         user.uid,
@@ -306,19 +301,20 @@ export default function WorkbookDayPage() {
 
       // 슬랙으로 전송 (이미지 base64는 제외하고 URL만 전송)
       try {
-        const slackData = {
+        const slackData: Record<string, string | number> = {
           userName: userProfile?.name || user.displayName || '익명',
           userEmail: user.email || '',
           day,
-          prompt: submissionData.prompt,
-          tool: submissionData.tool,
-          reference: submissionData.reference?.startsWith('data:') ? '(이미지 첨부됨)' : submissionData.reference,
-          result: submissionData.result?.startsWith('data:') ? '(이미지 첨부됨)' : submissionData.result,
-          rating: submissionData.rating,
-          likes: submissionData.likes,
-          dislikes: submissionData.dislikes,
-          feedback: submissionData.feedback,
         }
+        // 모든 폼 필드를 슬랙 데이터에 추가
+        Object.entries(submissionData).forEach(([key, value]) => {
+          if (typeof value === 'string' && value.startsWith('data:')) {
+            slackData[key] = '(이미지 첨부됨)'
+          } else {
+            slackData[key] = value || ''
+          }
+        })
+
         const slackRes = await fetch('/api/mission-slack', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -702,6 +698,22 @@ export default function WorkbookDayPage() {
                                   <option key={opt} value={opt}>{opt}</option>
                                 ))}
                               </select>
+                            ) : field.type === 'radio' ? (
+                              <div className="flex flex-col gap-2">
+                                {field.options?.map(opt => (
+                                  <label key={opt} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer transition-colors has-[:checked]:border-orange-400 has-[:checked]:bg-orange-50">
+                                    <input
+                                      type="radio"
+                                      name={field.id}
+                                      value={opt}
+                                      checked={missionForm[field.id] === opt}
+                                      onChange={(e) => setMissionForm(prev => ({ ...prev, [field.id]: e.target.value }))}
+                                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
+                                    />
+                                    <span className="text-gray-700">{opt}</span>
+                                  </label>
+                                ))}
+                              </div>
                             ) : field.type === 'file' ? (
                               <div className="space-y-2">
                                 <input

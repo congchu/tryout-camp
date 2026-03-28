@@ -222,15 +222,23 @@ export interface MissionSubmission {
   userEmail: string
   userName: string
   day: number
-  prompt: string        // ChatGPT로 완성한 프롬프트
-  tool: string          // 사용한 도구 (여러 개 가능)
+  // Day 1 필드
+  prompt?: string       // ChatGPT로 완성한 프롬프트
+  tool?: string         // 사용한 도구 (여러 개 가능)
   reference?: string    // 참고한 사이트 (URL 또는 스크린샷)
   result?: string       // 결과물 (URL 또는 스크린샷)
   rating?: string       // 결과물 첫인상 (1~10점)
   likes?: string        // 마음에 드는 부분
   dislikes?: string     // 아쉬운 부분
-  feedback: string      // 소감
+  feedback?: string     // 소감
+  // Day 2 필드
+  success?: string      // 미션 성공 여부
+  good?: string         // 좋았던 점
+  bad?: string          // 아쉬웠던 점
+  question?: string     // 궁금한 점
+  // 공통
   submittedAt: Date
+  [key: string]: unknown  // 동적 필드 허용
 }
 
 // Submit structured mission
@@ -239,16 +247,7 @@ export async function submitMission(
   userEmail: string,
   userName: string,
   day: number,
-  data: {
-    prompt: string
-    tool: string
-    reference?: string
-    result?: string
-    rating?: string
-    likes?: string
-    dislikes?: string
-    feedback: string
-  }
+  data: Record<string, string>
 ): Promise<string> {
   const { addDoc, collection, query, where, getDocs, updateDoc: updateDocument, limit } = await import('firebase/firestore')
 
@@ -258,17 +257,14 @@ export async function submitMission(
     userEmail,
     userName,
     day,
-    prompt: data.prompt,
-    tool: data.tool,
-    feedback: data.feedback,
   }
 
-  // Only add optional fields if they have values
-  if (data.reference) submission.reference = data.reference
-  if (data.result) submission.result = data.result
-  if (data.rating) submission.rating = data.rating
-  if (data.likes) submission.likes = data.likes
-  if (data.dislikes) submission.dislikes = data.dislikes
+  // 동적으로 모든 필드 추가 (빈 값 제외)
+  Object.entries(data).forEach(([key, value]) => {
+    if (value && value.trim()) {
+      submission[key] = value
+    }
+  })
 
   // Check if submission already exists for this user/day
   const existingQuery = query(

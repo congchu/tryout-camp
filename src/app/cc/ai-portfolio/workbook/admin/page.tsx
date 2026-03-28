@@ -272,7 +272,7 @@ export default function WorkbookAdminPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                {usersProgress.map((userProgress) => {
+                {usersProgress.map((userProgress, index) => {
                   const visitorId = userProgress.visitorId
                   const userSubs = getUserSubmissions(visitorId)
                   const isExpanded = expandedUser === visitorId
@@ -289,6 +289,9 @@ export default function WorkbookAdminPage() {
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center gap-4">
+                          <div className="w-6 text-sm font-bold text-gray-400">
+                            {index + 1}
+                          </div>
                           <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">
                             {(userProgress.name || visitorId).slice(0, 2).toUpperCase()}
                           </div>
@@ -365,6 +368,7 @@ export default function WorkbookAdminPage() {
 
                                   {/* 상단 요약 정보 */}
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-4">
+                                    {/* Day 1 필드 */}
                                     {sub.tool && (
                                       <div className="bg-gray-50 rounded-lg px-3 py-2">
                                         <div className="text-xs text-gray-500">도구</div>
@@ -375,6 +379,13 @@ export default function WorkbookAdminPage() {
                                       <div className="bg-gray-50 rounded-lg px-3 py-2">
                                         <div className="text-xs text-gray-500">만족도</div>
                                         <div className="font-medium text-gray-800">{sub.rating}</div>
+                                      </div>
+                                    )}
+                                    {/* Day 2 필드 */}
+                                    {sub.success && (
+                                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                                        <div className="text-xs text-gray-500">미션 결과</div>
+                                        <div className="font-medium text-gray-800">{sub.success}</div>
                                       </div>
                                     )}
                                     {sub.reference && (
@@ -415,6 +426,7 @@ export default function WorkbookAdminPage() {
 
                                   {/* 상세 내용 */}
                                   <div className="space-y-3 text-sm">
+                                    {/* Day 1: 프롬프트 */}
                                     {sub.prompt && (
                                       <div>
                                         <div className="text-xs text-gray-500 mb-1">프롬프트</div>
@@ -424,6 +436,7 @@ export default function WorkbookAdminPage() {
                                       </div>
                                     )}
 
+                                    {/* Day 1: 좋아요/싫어요 */}
                                     {(sub.likes || sub.dislikes) && (
                                       <div className="grid grid-cols-2 gap-3">
                                         {sub.likes && (
@@ -438,6 +451,31 @@ export default function WorkbookAdminPage() {
                                             <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.dislikes}</p>
                                           </div>
                                         )}
+                                      </div>
+                                    )}
+
+                                    {/* Day 2: 좋았던/아쉬웠던/궁금한 */}
+                                    {(sub.good || sub.bad) && (
+                                      <div className="grid grid-cols-2 gap-3">
+                                        {sub.good && (
+                                          <div>
+                                            <div className="text-xs text-gray-500 mb-1">👍 좋았던 점</div>
+                                            <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.good}</p>
+                                          </div>
+                                        )}
+                                        {sub.bad && (
+                                          <div>
+                                            <div className="text-xs text-gray-500 mb-1">👎 아쉬웠던 점</div>
+                                            <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.bad}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+
+                                    {sub.question && (
+                                      <div>
+                                        <div className="text-xs text-gray-500 mb-1">❓ 궁금한 점</div>
+                                        <p className="text-gray-700 bg-gray-50 rounded-lg p-2">{sub.question}</p>
                                       </div>
                                     )}
 

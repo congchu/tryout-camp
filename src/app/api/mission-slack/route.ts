@@ -10,24 +10,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Slack not configured' }, { status: 500 })
     }
 
-    const webhookUrl2 = process.env.SLACK_WEBHOOK_URL_2
-    const { userName, day, tool, reference, result, rating, likes, dislikes, feedback } = data
+    // const webhookUrl2 = process.env.SLACK_WEBHOOK_URL_2
+    const webhookUrl2 = null // 임시 비활성화
+    const { userName, day } = data
 
     // 결과물 링크 처리
-    let resultText = ''
-    if (result && result !== '(이미지 첨부됨)') {
-      resultText = result
-    } else if (result === '(이미지 첨부됨)') {
-      resultText = '📎 이미지 첨부됨'
+    const formatResult = (result: string) => {
+      if (!result) return ''
+      if (result === '(이미지 첨부됨)') return '📎 이미지 첨부됨'
+      return result
     }
 
-    // 참고 사이트 링크 처리
-    let refText = ''
-    if (reference && reference !== '(이미지 첨부됨)') {
-      refText = reference
-    }
+    let text = ''
 
-    const text = `🎉 *Day ${day} 미션을 제출했어요!*
+    if (day === 1) {
+      // Day 1: 프롬프트 + AI 빌더 결과
+      const { tool, reference, result, rating, likes, dislikes, feedback } = data
+      const resultText = formatResult(result)
+      const refText = reference && reference !== '(이미지 첨부됨)' ? reference : ''
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
 
 *제출자*
 ${userName}
@@ -42,6 +44,38 @@ ${tool || '-'}
 • 소감: ${feedback || '-'}
 
 *링크*${refText ? `\n• 참고: ${refText}` : ''}${resultText ? `\n• 결과물: ${resultText}` : ''}${!refText && !resultText ? '\n없음' : ''}`
+
+    } else if (day === 2) {
+      // Day 2: Codex 레퍼런스 따라만들기
+      const { success, result, good, bad, question } = data
+      const resultText = formatResult(result)
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*미션 결과*
+${success || '-'}
+
+*피드백*
+• 좋았던 점: ${good || '-'}
+• 아쉬웠던 점: ${bad || '-'}
+• 궁금한 점: ${question || '-'}
+
+*결과물*
+${resultText || '없음'}`
+
+    } else {
+      // Day 3~5: 기본 포맷
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*제출 내용*
+${JSON.stringify(data, null, 2)}`
+    }
 
     const message = { text }
 
