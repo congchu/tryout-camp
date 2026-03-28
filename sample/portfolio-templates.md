@@ -15,6 +15,10 @@
 | 7 | Mohit Virli Portfolio | Mohit Virli | https://mohitvirli.github.io/ | https://github.com/mohitvirli/mohitvirli.github.io | - |
 | 8 | Vara Portfolio | Vara | https://vara-s-portfolio.vercel.app/ | https://github.com/VARA4u-tech/Vara-s--Portfolio | - |
 | 9 | Web Development Portfolio | Prashant Koirala | https://web-development-portfolio-blond.vercel.app/ | https://github.com/prashantkoirala465/web-development-portfolio | - |
+| 10 | 3D Portfolio | Shubam | https://shubam.netlify.app/ | https://github.com/sanidhyy/3d-portfolio | 3D |
+| 11 | Modern Portfolio | Sanidhyy | https://awersome-portfolio.netlify.app/ | https://github.com/sanidhyy/modern-portfolio | Modern |
+| 12 | AW 2025 Portfolio | Antoine Wodniack | https://wodniack.dev/ | https://github.com/AntoineW/AW-2025-Portfolio | - |
+| 13 | Personal Portfolio | Veridiite | https://personal-portfolio-sage-theta-40.vercel.app/ | https://github.com/VERIDIITE/Personal-Portfolio | - |
 
 ## 추가 예정 (목표: 20개)
 

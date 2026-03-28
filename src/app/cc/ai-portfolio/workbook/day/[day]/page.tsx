@@ -592,6 +592,19 @@ export default function WorkbookDayPage() {
                             {children}
                           </button>
                         )
+                      },
+                      // @ts-expect-error - custom element for button link
+                      'button-link': ({ href, children }: { href?: string; children?: React.ReactNode }) => {
+                        return (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block px-6 py-3 bg-orange-500 !text-white font-bold rounded-lg hover:bg-orange-600 transition-colors !no-underline"
+                          >
+                            {children}
+                          </a>
+                        )
                       }
                     }}
                   >{currentStep.content}</ReactMarkdown>
