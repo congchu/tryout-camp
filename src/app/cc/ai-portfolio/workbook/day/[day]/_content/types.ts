@@ -9,7 +9,7 @@ export interface Step {
 export interface MissionField {
   id: string
   label: string
-  type: 'text' | 'textarea' | 'select' | 'file' | 'url_or_file'
+  type: 'text' | 'textarea' | 'select' | 'radio' | 'file' | 'url_or_file'
   placeholder?: string
   options?: string[]
   required?: boolean
