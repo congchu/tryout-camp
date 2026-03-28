@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "node_modules",
-    "eo-Brutalist-portfolio"
+    "eo-Brutalist-portfolio",
+    "Dexter-Morgan-Portfolio",
+    "text-image-line-reveal"
   ]
 }

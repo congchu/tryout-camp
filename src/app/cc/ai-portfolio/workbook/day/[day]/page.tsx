@@ -593,7 +593,6 @@ export default function WorkbookDayPage() {
                           </button>
                         )
                       },
-                      // @ts-expect-error - custom element for button link
                       'button-link': ({ href, children }: { href?: string; children?: React.ReactNode }) => {
                         return (
                           <a
