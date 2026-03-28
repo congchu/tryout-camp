@@ -453,3 +453,43 @@ WHY: Vercel 배포를 위해 빌드 오류 해결 필요
 ❌ modal-img 커스텀 컴포넌트 타입 오류 → @ts-expect-error 추가
 
 ✅ 빌드 성공 및 배포 완료
+
+## 2026-03-29 - Day 2 워크북 콘텐츠 작성
+WHY: 캠프 2일차 콘텐츠 필요
+
+Day 2 핵심 메시지:
+- Day 1의 한계: 평면적, 스크린샷으로 "똑같이"는 안 됨, 애니메이션 어색
+- Day 2의 가치: GitHub 링크로 완벽 복사, 코딩의 시작점, 바이브코딩 확장
+- 톤: "무조건 좋다"가 아니라 "이런 방법도 알면 더 재밌다"
+
+구조:
+| Step | 제목 |
+|------|------|
+| intro | Day 2에서 할 일 |
+| step-1 | Day 1 방식의 한계 |
+| step-2 | 이 방법이 다른 점 |
+| step-3 | 도구 & 비용 안내 (Mac: Claude Code / Win: Codex) |
+| step-4 | 셋팅하기 |
+| step-5 | 레퍼런스 따라만들기 |
+| step-6 | 결과 확인 + 수정 |
+
+비용 안내:
+- Claude Pro / ChatGPT Plus 각 $20/월
+- 무료 대안: ChatGPT 무료 버전으로 Day 1 방식 유지
+
+-> day2.ts 작성 완료
+
+## 2026-03-29 - Day 2 레퍼런스 수집
+WHY: 워크북에서 사용할 실제 GitHub 레퍼런스 필요
+HOW: 실제 오픈소스 포트폴리오 사이트 수집
+
+수집된 레퍼런스:
+- Hamish Williams: https://hamishw.com/ | https://github.com/HamishMW/portfolio
+
+참고 사이트:
+- https://portfolio-ideas.vercel.app/portfolio.html (600+ 포폴 큐레이션)
+  - 형식: Author / Screenshot / Live URL / Repo / Tech Stack
+
+✅ 둘 다 진행:
+1. sample/portfolio-references.md 생성 (portfolio-ideas 형식 표)
+2. day2.ts step-4 예시 레포 → 실제 Hamish 링크로 교체
