@@ -25,7 +25,7 @@ const MISSIONS = [
   {
     day: 2,
     title: '화려한 포폴 따라만들기',
-    mission: 'Codex / Claude Code로 레벨업',
+    mission: 'Codex로 레벨업',
     duration: '40분',
   },
   {
@@ -334,7 +334,21 @@ export default function WorkbookPage() {
           </h2>
 
           {loadingProgress ? (
-            <div className="text-center py-8 text-gray-400">로딩 중...</div>
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="w-full rounded-xl border border-gray-100 bg-white p-4 animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gray-200 shrink-0"></div>
+                    <div className="flex-1">
+                      <div className="h-5 bg-gray-200 rounded w-1/3 mb-2"></div>
+                      <div className="h-4 bg-gray-100 rounded w-2/3 mb-2"></div>
+                      <div className="h-3 bg-gray-100 rounded w-16"></div>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-gray-200 shrink-0"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="space-y-3">
               {MISSIONS.map((mission) => {

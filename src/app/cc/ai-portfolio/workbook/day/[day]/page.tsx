@@ -193,16 +193,16 @@ export default function WorkbookDayPage() {
         if (!savedSession) {
           const existingSubmission = await getUserSubmission(user.uid, day)
           if (existingSubmission) {
+            // 동적으로 모든 필드 불러오기
+            const loadedData: Record<string, string> = {}
+            Object.entries(existingSubmission).forEach(([key, value]) => {
+              if (typeof value === 'string') {
+                loadedData[key] = value
+              }
+            })
             setMissionForm(prev => ({
               ...prev,
-              prompt: existingSubmission.prompt || '',
-              tool: existingSubmission.tool || '',
-              reference: existingSubmission.reference || '',
-              result: existingSubmission.result || '',
-              rating: existingSubmission.rating || '',
-              likes: existingSubmission.likes || '',
-              dislikes: existingSubmission.dislikes || '',
-              feedback: existingSubmission.feedback || '',
+              ...loadedData
             }))
           }
         }
@@ -572,7 +572,7 @@ export default function WorkbookDayPage() {
 
               {/* Step Content */}
               <div className="mt-6">
-                <div className="prose prose-gray max-w-none leading-snug prose-h2:text-orange-600 prose-h3:text-gray-900 prose-p:text-gray-600 prose-p:leading-normal prose-p:my-2 prose-hr:my-8 prose-strong:text-gray-900 prose-table:text-sm prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2 prose-blockquote:bg-orange-50 prose-blockquote:border-l-orange-500 prose-blockquote:not-italic prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-gray-800 prose-code:before:content-none prose-code:after:content-none prose-pre:bg-gray-100 prose-pre:text-gray-800 prose-a:text-orange-600 prose-a:no-underline hover:prose-a:underline">
+                <div className="prose prose-gray max-w-none leading-snug prose-h2:text-orange-600 prose-h3:text-gray-900 prose-p:text-gray-600 prose-p:leading-normal prose-p:my-2 prose-hr:my-8 prose-strong:text-gray-900 prose-table:text-sm prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2 prose-blockquote:bg-orange-50 prose-blockquote:border-l-orange-500 prose-blockquote:not-italic prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-gray-800 prose-code:before:content-none prose-code:after:content-none prose-pre:bg-gray-100 prose-pre:text-gray-800 prose-a:text-orange-600 prose-a:no-underline hover:prose-a:underline prose-img:mt-0">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
                     components={{

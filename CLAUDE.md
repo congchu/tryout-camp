@@ -67,3 +67,66 @@ HOW: 어떻게 했는지 (선택)
 - 위 구조 외 새로운 라우트 생성 금지
 - 기존 라우트 이동/삭제 시 사용자 확인 필수
 - API 라우트: `/api/*` (chat, inquiry, submit 등)
+
+---
+
+## 워크북 콘텐츠 작성 규칙
+
+### Day 콘텐츠 구조
+파일 위치: `src/app/cc/ai-portfolio/workbook/day/[day]/_content/day{n}.ts`
+
+```typescript
+export const day1: DayContent = {
+  title: '제목',
+  subtitle: '부제목',
+  steps: [
+    {
+      id: 'step-1',
+      title: '스텝 제목',
+      duration: '5분',
+      content: `마크다운 내용`,
+      checkItems: []  // 체크리스트 (빈 배열 허용)
+    }
+  ],
+  mission: {
+    title: '미션 제목',
+    description: '미션 설명',
+    fields: [...]  // 미션 입력 필드
+  }
+}
+```
+
+### 미션 필드 타입
+```typescript
+// 라디오 버튼 (단일 선택)
+{ id: 'success', label: '미션 성공 여부', type: 'radio', options: ['옵션1', '옵션2'], required: true }
+
+// 드롭다운 (단일 선택)
+{ id: 'rating', label: '만족도', type: 'select', options: ['1점', '2점', ...], required: true }
+
+// 텍스트 입력
+{ id: 'name', label: '이름', type: 'text', placeholder: '이름 입력', required: true }
+
+// 긴 텍스트
+{ id: 'feedback', label: '소감', type: 'textarea', placeholder: '자유롭게 작성', required: false }
+
+// URL 또는 파일 업로드
+{ id: 'result', label: '결과물', type: 'url_or_file', accept: 'image/*', required: false }
+```
+
+### 마크다운 커스텀 컴포넌트
+```markdown
+<!-- 이미지 모달 -->
+<modal-img src="/cc/images/example.png">버튼 텍스트</modal-img>
+
+<!-- 버튼 링크 -->
+<button-link href="/cc/ai-portfolio/templates">👉 템플릿 보기</button-link>
+```
+
+### 슬랙 알림 (Day별 분기)
+- `/api/mission-slack/route.ts`에서 Day별 다른 포맷 적용
+- 새 Day 추가 시 해당 파일에 분기 추가 필요
+
+### 잠금 설정
+- `workbook/page.tsx`의 `isLocked` 변수로 Day별 잠금 제어
+- 예: `mission.day > 2` → Day 3부터 잠금
