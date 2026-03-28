@@ -10,8 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Slack not configured' }, { status: 500 })
     }
 
-    // const webhookUrl2 = process.env.SLACK_WEBHOOK_URL_2
-    const webhookUrl2 = null // 임시 비활성화
+    const webhookUrl2 = process.env.SLACK_WEBHOOK_URL_2
     const { userName, day } = data
 
     // 결과물 링크 처리
