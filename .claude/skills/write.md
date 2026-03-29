@@ -13,9 +13,9 @@ Day 콘텐츠를 작성하는 스킬
 ## 실행 절차
 
 1. `.claude/agents/writer.md` 가이드 읽기
-2. **⚠️ 스펙 확인: `_content/specs/day-{n}.md` 읽기** ← 필수!
+2. **⚠️ 스펙 확인: `documents/lesson-plans/day-{n}.md` 읽기** ← 필수!
 3. 스펙이 없으면 → 사용자에게 방향 확인 (추측으로 작성 금지)
-4. `CLAUDE.md`에서 해당 Day 주제 확인
+4. `documents/syllabus.md`에서 해당 Day 의도 확인 (필요시)
 5. `sample/research-day{n}.md` 리서치 자료 읽기 (있으면)
 6. 이전 Day 콘텐츠 확인 (day{n-1}.ts)
 7. 콘텐츠 작성

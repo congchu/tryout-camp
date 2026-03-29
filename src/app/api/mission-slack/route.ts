@@ -65,8 +65,32 @@ ${success || '-'}
 *결과물*
 ${resultText || '없음'}`
 
+    } else if (day === 3) {
+      // Day 3: 콘텐츠 완성하기
+      const { success, purpose, feedback, materials, nextGoal } = data
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*미션 결과*
+${success || '-'}
+
+*포트폴리오 목적*
+${purpose || '-'}
+
+*올린 자료*
+${materials || '-'}
+
+*어렵거나 아쉬웠던 점*
+${feedback || '-'}
+
+*포폴에서 개선하고 싶은 것*
+${nextGoal || '-'}`
+
     } else {
-      // Day 3~5: 기본 포맷
+      // Day 4~5: 기본 포맷
       text = `🎉 *Day ${day} 미션을 제출했어요!*
 
 *제출자*

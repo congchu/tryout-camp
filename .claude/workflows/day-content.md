@@ -5,20 +5,20 @@
 ## 워크플로우 다이어그램
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  리서쳐     │ ──▶ │ 워크북제작자 │ ──▶ │   편집자    │ ──▶ │ 유저테스터  │
-│ /research   │     │   /write    │     │   /edit     │     │   /test     │
-└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
-       │                   │                   │                   │
-       ▼                   ▼                   ▼                   ▼
-research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
-                                                                   │
-                                                                   ▼
-                                                        ┌──────────────────┐
-                                                        │ 문제 있으면      │
-                                                        │ /write 또는 /edit│
-                                                        │ 로 돌아감        │
-                                                        └──────────────────┘
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  리서쳐     │ ──▶ │   기획자    │ ──▶ │ 워크북제작자 │ ──▶ │   편집자    │ ──▶ │ 유저테스터  │
+│ /research   │     │   /plan     │     │   /write    │     │   /edit     │     │   /test     │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+       │                   │                   │                   │                   │
+       ▼                   ▼                   ▼                   ▼                   ▼
+research-day{n}.md   day-{n}.md          day{n}.ts         day{n}.ts 수정     test-day{n}.md
+                    (스펙 문서)                                                        │
+                         │                                                             ▼
+                         ▼                                              ┌──────────────────┐
+                  ┌─────────────┐                                       │ 문제 있으면      │
+                  │ 사용자 피드백│                                       │ /write 또는 /edit│
+                  │ (필수!)     │                                       │ 로 돌아감        │
+                  └─────────────┘                                       └──────────────────┘
 ```
 
 ## 단계별 상세
@@ -26,7 +26,7 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 ### 1단계: 리서치 (`/research day{n}`)
 
 **입력:**
-- CLAUDE.md의 5일 로드맵
+- `documents/syllabus.md`의 Day별 의도
 
 **출력:**
 - `sample/research-day{n}.md`
@@ -37,12 +37,29 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 
 ---
 
-### 2단계: 콘텐츠 작성 (`/write day{n}`)
+### 2단계: 기획 (`/plan day{n}`)
 
 **입력:**
 - 리서치 파일: `sample/research-day{n}.md`
+- 이전 Day 스펙: `documents/lesson-plans/day-{n-1}.md`
+- 실라버스: `documents/syllabus.md`
+
+**출력:**
+- `documents/lesson-plans/day-{n}.md` (스펙 문서)
+
+**핸드오프:**
+- 스펙 초안 요약 공유
+- **사용자 피드백 요청 (필수!)**
+- 승인 후 → `/write day{n}` 실행
+
+---
+
+### 3단계: 콘텐츠 작성 (`/write day{n}`)
+
+**입력:**
+- **스펙 문서: `documents/lesson-plans/day-{n}.md`** ← 필수!
+- 리서치 파일: `sample/research-day{n}.md`
 - 이전 Day: `day{n-1}.ts`
-- 로드맵: CLAUDE.md
 
 **출력:**
 - `day{n}.ts`
@@ -53,7 +70,7 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 
 ---
 
-### 3단계: 편집 (`/edit day{n}`)
+### 4단계: 편집 (`/edit day{n}`)
 
 **입력:**
 - 대상 파일: `day{n}.ts`
@@ -68,7 +85,7 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 
 ---
 
-### 4단계: 유저 테스트 (`/test day{n}`)
+### 5단계: 유저 테스트 (`/test day{n}`)
 
 **입력:**
 - 대상 파일: `day{n}.ts`
@@ -91,6 +108,10 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 /research day3
 # → sample/research-day3.md 생성
 
+/plan day3
+# → documents/lesson-plans/day-3.md 생성
+# → 사용자 피드백 후 승인
+
 /write day3
 # → day3.ts 생성
 
@@ -104,9 +125,10 @@ research-day{n}.md    day{n}.ts         day{n}.ts 수정     test-day{n}.md
 
 ## 빠른 실행 (리서치 스킵)
 
-이미 주제가 명확하면:
+스펙만 있으면:
 
 ```bash
+/plan day3   # 스펙 작성 → 사용자 승인
 /write day3
 /edit day3
 /test day3

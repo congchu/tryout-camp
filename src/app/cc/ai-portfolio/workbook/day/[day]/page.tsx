@@ -96,6 +96,7 @@ export default function WorkbookDayPage() {
   const [contentLoading, setContentLoading] = useState(true)
   const [copied, setCopied] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [completedDays, setCompletedDays] = useState(0)
 
   const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
 
@@ -176,16 +177,28 @@ export default function WorkbookDayPage() {
         setUserProfile(profile)
 
         const data = await getWorkbookProgress(user.uid)
-        if (data && data[dayKey]) {
-          const dayData = data[dayKey] as DayProgress
-          setProgress(dayData)
-          setSubmission(dayData.submission || '')
-          // 임시 저장된 드래프트 불러오기 (세션 스토리지가 없을 때만)
-          if (dayData.draft && !savedSession) {
-            setMissionForm(prev => ({
-              ...prev,
-              ...dayData.draft
-            }))
+        if (data) {
+          // 완료된 Day 수 계산
+          let completed = 0
+          for (let i = 1; i <= 5; i++) {
+            const key = `day${i}` as keyof typeof data
+            if (data[key] && (data[key] as DayProgress).status === 'completed') {
+              completed++
+            }
+          }
+          setCompletedDays(completed)
+
+          if (data[dayKey]) {
+            const dayData = data[dayKey] as DayProgress
+            setProgress(dayData)
+            setSubmission(dayData.submission || '')
+            // 임시 저장된 드래프트 불러오기 (세션 스토리지가 없을 때만)
+            if (dayData.draft && !savedSession) {
+              setMissionForm(prev => ({
+                ...prev,
+                ...dayData.draft
+              }))
+            }
           }
         }
 
@@ -327,6 +340,10 @@ export default function WorkbookDayPage() {
         console.error('Slack notification failed:', e)
       }
 
+      // 처음 완료하는 경우만 completedDays 증가
+      if (progress?.status !== 'completed') {
+        setCompletedDays(prev => prev + 1)
+      }
       setProgress({ status: 'completed' })
       // 제출 성공 시 세션 스토리지 비우기
       sessionStorage.removeItem(sessionKey)
@@ -335,6 +352,10 @@ export default function WorkbookDayPage() {
       if (!submission.trim()) return
       setSaving(true)
       await submitDayMission(user.uid, dayKey, submission)
+      // 처음 완료하는 경우만 completedDays 증가
+      if (progress?.status !== 'completed') {
+        setCompletedDays(prev => prev + 1)
+      }
       setProgress({ status: 'completed', submission })
       sessionStorage.removeItem(sessionKey)
     }
@@ -401,9 +422,7 @@ export default function WorkbookDayPage() {
     return step.checkItems.every((_, idx) => checkedItems[`${step.id}-${idx}`])
   }
 
-  const totalCheckItems = content?.steps.reduce((acc, step) => acc + (step.checkItems?.length || 0), 0) || 0
-  const checkedCount = Object.values(checkedItems).filter(Boolean).length
-  const progressPercent = totalCheckItems > 0 ? Math.round((checkedCount / totalCheckItems) * 100) : 0
+  const progressPercent = Math.round((completedDays / 5) * 100)
 
   if (contentLoading) {
     return (
@@ -711,9 +730,9 @@ export default function WorkbookDayPage() {
                                 ))}
                               </select>
                             ) : field.type === 'radio' ? (
-                              <div className="flex flex-col gap-2">
+                              <div className="flex flex-col md:flex-row md:flex-wrap gap-2">
                                 {field.options?.map(opt => (
-                                  <label key={opt} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer transition-colors has-[:checked]:border-orange-400 has-[:checked]:bg-orange-50">
+                                  <label key={opt} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition-colors has-[:checked]:border-orange-400 has-[:checked]:bg-orange-50 md:flex-1">
                                     <input
                                       type="radio"
                                       name={field.id}

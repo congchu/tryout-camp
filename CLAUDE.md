@@ -145,7 +145,7 @@ export const day1: DayContent = {
 | 1 | AI로 웹사이트 만드는 법 | AI 도구 이해 + 첫 결과물 | Lovable/v0/Bolt |
 | 2 | 화려한 포폴 따라만들기 | GitHub 레포 복사 | Codex |
 | 3 | 콘텐츠 완성하기 | 내 정보 + 이미지 채우기 | Codex |
-| 4 | 배포하기 | 실제 URL로 공개 | Vercel |
+| 4 | 배포하기 | 실제 URL로 공개 | Netlify |
 | 5 | 방문자 확인 | 분석 연동 | Mixpanel |
 
 ---
