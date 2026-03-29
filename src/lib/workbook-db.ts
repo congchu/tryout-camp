@@ -100,6 +100,7 @@ export interface WorkbookProgress {
   day3?: DayProgress
   day4?: DayProgress
   day5?: DayProgress
+  day6?: DayProgress
   createdAt?: Date
   updatedAt?: Date
 }
@@ -156,6 +157,7 @@ export async function initWorkbookProgress(userId: string): Promise<void> {
     day3: { status: 'not_started' },
     day4: { status: 'not_started' },
     day5: { status: 'not_started' },
+    day6: { status: 'not_started' },
     createdAt: new Date(),
     updatedAt: new Date(),
   })
@@ -164,7 +166,7 @@ export async function initWorkbookProgress(userId: string): Promise<void> {
 // Update specific day progress
 export async function updateDayProgress(
   userId: string,
-  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
+  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6',
   progress: Partial<DayProgress>
 ): Promise<void> {
   const docRef = doc(db(), 'workbook_progress', userId)
@@ -180,7 +182,7 @@ export async function updateDayProgress(
 // Save mission draft
 export async function saveMissionDraft(
   userId: string,
-  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
+  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6',
   draft: Record<string, string>
 ): Promise<void> {
   const docRef = doc(db(), 'workbook_progress', userId)
@@ -197,7 +199,7 @@ export async function saveMissionDraft(
 // Submit day mission (legacy - simple text)
 export async function submitDayMission(
   userId: string,
-  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5',
+  day: 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6',
   submission: string
 ): Promise<void> {
   const docRef = doc(db(), 'workbook_progress', userId)

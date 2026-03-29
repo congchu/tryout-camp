@@ -71,6 +71,7 @@ export default function WorkbookDayPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const day = Number(params.day)
+  const isBonus = day === 6
   const { user } = useAuth()
   const [progress, setProgress] = useState<DayProgress | null>(null)
   const [submission, setSubmission] = useState('')
@@ -98,7 +99,7 @@ export default function WorkbookDayPage() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [completedDays, setCompletedDays] = useState(0)
 
-  const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
+  const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6'
 
   // 모달 열릴 때 배경 스크롤 방지
   useEffect(() => {
@@ -119,12 +120,12 @@ export default function WorkbookDayPage() {
 
   // Load content from static file
   useEffect(() => {
-    if (isNaN(day) || day < 1 || day > 5) {
+    if (!isNaN(day) && day >= 1 && day <= 6) {
+      setContent(DAY_CONTENT[day])
       setContentLoading(false)
-      return
+    } else {
+      setContentLoading(false)
     }
-    setContent(DAY_CONTENT[day])
-    setContentLoading(false)
   }, [day])
 
   useEffect(() => {
@@ -178,7 +179,7 @@ export default function WorkbookDayPage() {
 
         const data = await getWorkbookProgress(user.uid)
         if (data) {
-          // 완료된 Day 수 계산
+          // 완료된 Day 수 계산 (Day 1-5만)
           let completed = 0
           for (let i = 1; i <= 5; i++) {
             const key = `day${i}` as keyof typeof data
@@ -188,8 +189,10 @@ export default function WorkbookDayPage() {
           }
           setCompletedDays(completed)
 
-          if (data[dayKey]) {
-            const dayData = data[dayKey] as DayProgress
+          // 현재 Day 진행 상황 로드
+          const dayDataKey = `day${day}` as keyof typeof data
+          if (data[dayDataKey]) {
+            const dayData = data[dayDataKey] as DayProgress
             setProgress(dayData)
             setSubmission(dayData.submission || '')
             // 임시 저장된 드래프트 불러오기 (세션 스토리지가 없을 때만)
@@ -432,7 +435,7 @@ export default function WorkbookDayPage() {
     )
   }
 
-  if (!content || isNaN(day) || day < 1 || day > 5) {
+  if (!content || isNaN(day) || day < 1 || day > 6) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>잘못된 페이지입니다.</p>
@@ -464,18 +467,21 @@ export default function WorkbookDayPage() {
             )}
           </div>
           <div className="flex items-center justify-between">
-            <span className="font-medium text-orange-600">
-              Day {day} <span className="text-gray-400">/ 5</span>
+            <span className={`font-medium ${isBonus ? 'text-purple-600' : 'text-orange-600'}`}>
+              {isBonus ? '🎁 보너스' : <>Day {day} <span className="text-gray-400">/ 5</span></>}
             </span>
-            <span className="text-xs">{progressPercent}% 완료</span>
+            {!isBonus && <span className="text-xs">{progressPercent}% 완료</span>}
+            {isBonus && <span className="text-xs text-purple-500">선택 과정</span>}
           </div>
-          {/* Progress bar */}
-          <div className="mt-1.5 h-1.5 w-full rounded-full bg-gray-100">
-            <div
-              className="h-full rounded-full bg-orange-500 transition-all duration-500"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
+          {/* Progress bar (보너스에서는 숨김) */}
+          {!isBonus && (
+            <div className="mt-1.5 h-1.5 w-full rounded-full bg-gray-100">
+              <div
+                className="h-full rounded-full bg-orange-500 transition-all duration-500"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          )}
         </div>
       </header>
 

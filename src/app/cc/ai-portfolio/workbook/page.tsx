@@ -48,6 +48,16 @@ const MISSIONS = [
   },
 ]
 
+const BONUS_MISSIONS = [
+  {
+    day: 6,
+    title: '커스텀 도메인 연결',
+    mission: 'hongildong.com 같은 나만의 주소 만들기',
+    duration: '20분',
+    isLocked: true, // 잠금 상태
+  },
+]
+
 export default function WorkbookPage() {
   const { user, loading, signInWithGoogle, signOut } = useAuth()
   const [progress, setProgress] = useState<WorkbookProgress | null>(null)
@@ -430,6 +440,78 @@ export default function WorkbookPage() {
                   </button>
                 )
               })}
+
+              {/* 보너스 미션 */}
+              {BONUS_MISSIONS.length > 0 && (
+                <>
+                  <h3 className="text-md font-bold text-gray-600 mt-8 mb-3 flex items-center gap-2">
+                    🎁 보너스
+                  </h3>
+                  {BONUS_MISSIONS.map((bonus) => {
+                    const status = getDayStatus(bonus.day)
+                    const isCompleted = status === 'completed'
+
+                    return (
+                      <button
+                        key={bonus.day}
+                        onClick={() => !bonus.isLocked && router.push(`/cc/ai-portfolio/workbook/day/${bonus.day}`)}
+                        disabled={bonus.isLocked}
+                        className={`w-full block rounded-xl border p-4 text-left transition-all ${
+                          bonus.isLocked
+                            ? "bg-gray-100 border-gray-200 cursor-not-allowed"
+                            : "bg-white border-gray-100 hover:border-purple-300 hover:shadow-md cursor-pointer"
+                        }`}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+                            bonus.isLocked
+                              ? "bg-gray-200 text-gray-500"
+                              : isCompleted
+                                ? "bg-emerald-100 text-emerald-600"
+                                : "bg-purple-100 text-purple-600"
+                          }`}>
+                            {bonus.isLocked ? (
+                              <Lock className="w-5 h-5" />
+                            ) : isCompleted ? (
+                              <CheckCircle2 className="w-6 h-6" />
+                            ) : (
+                              <span className="text-lg">🎁</span>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className={`font-semibold truncate ${bonus.isLocked ? "text-gray-500" : "text-gray-800"}`}>
+                                {bonus.title}
+                              </h3>
+                              <span className={`px-2 py-0.5 text-xs font-medium rounded-full shrink-0 ${
+                                bonus.isLocked ? "bg-gray-200 text-gray-500" : "bg-purple-100 text-purple-600"
+                              }`}>
+                                보너스
+                              </span>
+                            </div>
+                            <p className="text-sm line-clamp-2 text-gray-500">
+                              {bonus.mission}
+                            </p>
+                            <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
+                              <Clock className="w-3.5 h-3.5" />
+                              {bonus.duration}
+                            </div>
+                          </div>
+                          <div className="shrink-0">
+                            {bonus.isLocked ? (
+                              <Lock className="w-5 h-5 text-gray-400" />
+                            ) : isCompleted ? (
+                              <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                            ) : (
+                              <PlayCircle className="w-6 h-6 text-purple-300" />
+                            )}
+                          </div>
+                        </div>
+                      </button>
+                    )
+                  })}
+                </>
+              )}
             </div>
           )}
 

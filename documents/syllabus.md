@@ -273,3 +273,16 @@ Day 4-5: 마무리 (세상에 공개 + 확인)
 | `lesson-plans/day-{n}.md` | Day별 상세 레슨 플랜 |
 | `logs/WORKLOG.md` | 기획 과정 히스토리 |
 | `sample-web-portfolio/` | 샘플 포트폴리오 자료 |
+
+---
+
+## 보너스 코스
+
+5일 챌린지 완료 후 선택적으로 진행할 수 있는 추가 콘텐츠.
+
+### 보너스 1: 커스텀 도메인 연결
+> `hongildong.netlify.app` → `hongildong.com`
+
+- 나만의 도메인 구매 방법
+- Netlify에 연결하기
+- 더 전문적인 URL로 업그레이드
