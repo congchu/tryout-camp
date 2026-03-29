@@ -89,8 +89,26 @@ ${feedback || '-'}
 *포폴에서 개선하고 싶은 것*
 ${nextGoal || '-'}`
 
+    } else if (day === 4) {
+      // Day 4: 공유링크 만들기 (배포)
+      const { success, url, feedback } = data
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*미션 결과*
+${success || '-'}
+
+*포트폴리오 URL*
+${url || '-'}
+
+*느낀 점*
+${feedback || '-'}`
+
     } else {
-      // Day 4~5: 기본 포맷
+      // Day 5: 기본 포맷
       text = `🎉 *Day ${day} 미션을 제출했어요!*
 
 *제출자*

@@ -730,9 +730,9 @@ export default function WorkbookDayPage() {
                                 ))}
                               </select>
                             ) : field.type === 'radio' ? (
-                              <div className="flex flex-col md:flex-row md:flex-wrap gap-2">
+                              <div className="flex flex-col gap-2">
                                 {field.options?.map(opt => (
-                                  <label key={opt} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition-colors has-[:checked]:border-orange-400 has-[:checked]:bg-orange-50 md:flex-1">
+                                  <label key={opt} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-gray-300 cursor-pointer transition-colors has-[:checked]:border-orange-400 has-[:checked]:bg-orange-50">
                                     <input
                                       type="radio"
                                       name={field.id}

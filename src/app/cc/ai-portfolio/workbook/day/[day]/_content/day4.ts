@@ -363,14 +363,6 @@ Codex가 알아서 해줄 거예요.`
         required: false
       },
       {
-        id: 'preview',
-        label: '카톡 미리보기 스크린샷',
-        type: 'url_or_file',
-        placeholder: '카톡에 링크 붙여넣은 화면 캡처',
-        accept: 'image/*',
-        required: false
-      },
-      {
         id: 'feedback',
         label: '느낀 점',
         type: 'textarea',
