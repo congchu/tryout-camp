@@ -35,7 +35,7 @@
   - [ ] 개발자용 프롬프트
 - [x] 스타일 가이드 (portfolio-style-guide.md)
 - [x] 이미지 에셋 (images/)
-- [x] 작업 로그 (WORKLOG.md)
+- 작업 로그: `/logs/WORKLOG.md` (별도 폴더로 분리됨)
 
 ---
 
@@ -94,14 +94,16 @@ Step 4. 프롬프트 → 재현 가능하게 고정
 ## 파일 구조
 
 ```
-sample/
-├── README.md              ← 지금 이 문서
-├── WORKLOG.md             ← 작업 로그 (시행착오 기록)
+sample-web-portfolio/
+├── README.md                    ← 지금 이 문서
 ├── portfolio-style-guide.md
-├── images/
-│   ├── profile-*.png/jpg
-│   ├── project-*.webp
-│   └── mockup-*.webp
-└── prompts/               ← (예정)
-    └── designer-v1.md
+├── portfolio-structure.md
+├── portfolio-templates.md
+├── prompt-engineering-workflow.md
+├── data/                        ← 샘플 데이터 (디자이너 정보 등)
+├── images/                      ← 샘플 이미지
+├── output/                      ← 생성된 포트폴리오 결과물
+└── prompts/                     ← 프롬프트 모음
 ```
+
+> 작업 로그는 `/logs/` 폴더에 별도 관리

@@ -2,7 +2,7 @@
 
 ## 자동 로그 기록
 
-작업 시 `sample/WORKLOG.md`에 날것의 히스토리 로그를 남긴다.
+작업 시 `documents/logs/WORKLOG.md`에 날것의 히스토리 로그를 남긴다.
 
 ### 기록 시점
 - 새로운 목표/방향이 정해졌을 때
@@ -72,6 +72,12 @@ HOW: 어떻게 했는지 (선택)
 
 ## 워크북 콘텐츠 작성 규칙
 
+### ⚠️ 필수: 콘텐츠 작성 전 레슨 플랜 확인
+Day 콘텐츠 작성/수정 전 반드시 해당 Day의 레슨 플랜을 먼저 읽을 것:
+- 위치: `documents/lesson-plans/day-{n}.md`
+- 레슨 플랜에 정의된 방향/흐름/핵심 메시지를 따를 것
+- 레슨 플랜이 없으면 사용자에게 먼저 방향 확인할 것
+
 ### Day 콘텐츠 구조
 파일 위치: `src/app/cc/ai-portfolio/workbook/day/[day]/_content/day{n}.ts`
 
@@ -84,8 +90,7 @@ export const day1: DayContent = {
       id: 'step-1',
       title: '스텝 제목',
       duration: '5분',
-      content: `마크다운 내용`,
-      checkItems: []  // 체크리스트 (빈 배열 허용)
+      content: `마크다운 내용`
     }
   ],
   mission: {
@@ -130,3 +135,47 @@ export const day1: DayContent = {
 ### 잠금 설정
 - `workbook/page.tsx`의 `isLocked` 변수로 Day별 잠금 제어
 - 예: `mission.day > 2` → Day 3부터 잠금
+
+---
+
+## 5일 챌린지 로드맵
+
+| Day | 주제 | 목표 | 핵심 도구 |
+|-----|------|------|----------|
+| 1 | AI로 웹사이트 만드는 법 | AI 도구 이해 + 첫 결과물 | Lovable/v0/Bolt |
+| 2 | 화려한 포폴 따라만들기 | GitHub 레포 복사 | Codex |
+| 3 | 콘텐츠 완성하기 | 내 정보 + 이미지 채우기 | Codex |
+| 4 | 배포하기 | 실제 URL로 공개 | Vercel |
+| 5 | 방문자 확인 | 분석 연동 | Mixpanel |
+
+---
+
+## 에이전트 시스템
+
+Day 콘텐츠 제작을 위한 4개의 에이전트와 워크플로우
+
+### 에이전트 역할
+
+| 에이전트 | 스킬 | 역할 | 산출물 |
+|----------|------|------|--------|
+| 리서쳐 | `/research` | 자료 수집, 도구 조사 | `documents/logs/research-day{n}.md` |
+| 워크북 제작자 | `/write` | Day 콘텐츠 작성 | `day{n}.ts` |
+| 편집자 | `/edit` | 톤앤매너, 흐름 검토 | `day{n}.ts` 수정 |
+| 유저 테스터 | `/test` | UX 검증, 문제 발견 | `documents/logs/test-day{n}.md` |
+
+### 워크플로우
+
+```
+/research day{n} → /write day{n} → /edit day{n} → /test day{n}
+```
+
+상세 가이드: `.claude/workflows/day-content.md`
+
+### 파일 구조
+
+```
+.claude/
+├── skills/      # 스킬 호출 정의
+├── agents/      # 에이전트 상세 가이드
+└── workflows/   # 워크플로우 정의
+```

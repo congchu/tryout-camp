@@ -31,7 +31,14 @@
       "Bash(node -e:*)",
       "Bash(rm:*)",
       "mcp__notion__notion-fetch",
-      "mcp__notion__notion-update-page"
+      "mcp__notion__notion-update-page",
+      "Bash(grep:*)",
+      "WebFetch(domain:portfolio-ideas.vercel.app)",
+      "WebFetch(domain:help.openai.com)",
+      "Bash(git rm:*)",
+      "mcp__notion__notion-search",
+      "Bash(git mv:*)",
+      "Bash(ls:*)"
     ]
   }
 }
