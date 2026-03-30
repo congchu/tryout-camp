@@ -32,6 +32,7 @@ interface Template {
   repoUrl: string
   thumbnail: string
   tags: string[]
+  category?: string
 }
 
 const templates: Template[] = [
@@ -165,9 +166,152 @@ const templates: Template[] = [
     thumbnail: '/cc/templates/13-veridiite.jpeg',
     tags: ['Simple', 'Beginner'],
   },
+  // Builder 스타일 (2/14)
+  {
+    id: 14,
+    name: 'Mr. Panda\'s Portfolio',
+    author: 'Mr. Panda',
+    description: '심리적으로 안전한 공간을 강조하는 독특한 컨셉 포트폴리오',
+    siteUrl: 'https://mr-pandas-psychologically-safe-portfolio.com/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Builder', 'Unique', 'Concept'],
+    category: 'Builder',
+  },
+  {
+    id: 15,
+    name: 'Chloe Yan Portfolio',
+    author: 'Chloe Yan',
+    description: '깔끔하고 세련된 디자이너 포트폴리오',
+    siteUrl: 'https://chloeyan.me/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Builder', 'Clean', 'Designer'],
+    category: 'Builder',
+  },
+  {
+    id: 16,
+    name: 'Wora Work',
+    author: 'Wora',
+    description: '작업물 중심의 포트폴리오, 깔끔한 레이아웃',
+    siteUrl: 'https://worawork.vercel.app/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Builder', 'Work-focused'],
+    category: 'Builder',
+  },
+  {
+    id: 17,
+    name: 'Fiona Fang Portfolio',
+    author: 'Fiona Fang',
+    description: '캐나다 기반 디자이너의 감각적인 포트폴리오',
+    siteUrl: 'https://fionafang.ca/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Builder', 'Designer', 'Creative'],
+    category: 'Builder',
+  },
+  // Hybrid 스타일 (4/14)
+  {
+    id: 18,
+    name: 'Jackie Zhang Portfolio',
+    author: 'Jackie Zhang',
+    description: '개발+디자인 하이브리드 스타일의 포트폴리오',
+    siteUrl: 'https://jackiezhang.co.za/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Hybrid', 'Developer', 'Designer'],
+    category: 'Hybrid',
+  },
+  {
+    id: 19,
+    name: 'Bohdan Design',
+    author: 'Bohdan',
+    description: '디자인에 집중한 하이브리드 포트폴리오',
+    siteUrl: 'https://bohdan.design/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Hybrid', 'Design-focused'],
+    category: 'Hybrid',
+  },
+  {
+    id: 20,
+    name: 'Sebastian Martinez',
+    author: 'Sebastian Martinez',
+    description: '스토리텔링이 강한 하이브리드 포트폴리오',
+    siteUrl: 'https://sebastian-martinez.com/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Hybrid', 'Storytelling'],
+    category: 'Hybrid',
+  },
+  {
+    id: 21,
+    name: 'Wildy Riftian',
+    author: 'Wildy Riftian',
+    description: '개성 있는 비주얼과 인터랙션의 하이브리드 포트폴리오',
+    siteUrl: 'https://wildyriftian.com/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Hybrid', 'Interactive', 'Visual'],
+    category: 'Hybrid',
+  },
+  // Nostalgia 스타일 (6/14)
+  {
+    id: 22,
+    name: 'Renee Wiki',
+    author: 'Renee',
+    description: '위키 스타일의 개성 있는 노스탤지아 포트폴리오',
+    siteUrl: 'https://renee.wiki/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Nostalgia', 'Wiki', 'Unique'],
+    category: 'Nostalgia',
+  },
+  {
+    id: 23,
+    name: 'Ryo OS Portfolio',
+    author: 'Ryo',
+    description: 'OS 인터페이스를 모방한 독특한 노스탤지아 포트폴리오',
+    siteUrl: 'https://os.ryo.lu/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Nostalgia', 'OS-style', 'Interactive'],
+    category: 'Nostalgia',
+  },
+  {
+    id: 24,
+    name: 'Dave OS',
+    author: 'Dave',
+    description: '재미있고 창의적인 OS 테마 포트폴리오',
+    siteUrl: 'https://daveos.fun/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Nostalgia', 'Fun', 'Creative'],
+    category: 'Nostalgia',
+  },
+  {
+    id: 25,
+    name: 'Adam C Lambert',
+    author: 'Adam C Lambert',
+    description: '클래식하고 세련된 노스탤지아 감성 포트폴리오',
+    siteUrl: 'https://adamclambert.com/',
+    repoUrl: '',
+    thumbnail: '',
+    tags: ['Nostalgia', 'Classic', 'Elegant'],
+    category: 'Nostalgia',
+  },
 ]
 
+const CATEGORIES = ['전체', 'Builder', 'Hybrid', 'Nostalgia']
+
 export default function TemplatesPage() {
+  const [activeCategory, setActiveCategory] = useState<string>('전체')
+
+  const filtered = activeCategory === '전체'
+    ? templates
+    : templates.filter(t => t.category === activeCategory || (!t.category && activeCategory === '전체'))
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -188,12 +332,28 @@ export default function TemplatesPage() {
 
       {/* Template Grid */}
       <main className="max-w-6xl mx-auto px-4 py-8">
+        {/* 카테고리 필터 */}
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                activeCategory === cat
+                  ? 'bg-[#c8ff00] text-black'
+                  : 'bg-white border border-gray-300 text-gray-600 hover:border-gray-400'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
         <div className="mb-4 text-sm text-gray-500">
-          총 {templates.length}개 템플릿
+          총 {filtered.length}개 템플릿
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {templates.map((template) => (
+          {filtered.map((template) => (
             <div
               key={template.id}
               className="bg-white rounded-lg border overflow-hidden hover:shadow-lg transition-shadow"
