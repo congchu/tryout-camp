@@ -581,3 +581,7 @@ Day 3 흐름 확정:
 ```
 
 용어: "위키" 채택 (비개발자도 이해하기 쉬움, 위키피디아 연상)
+
+## 2026-03-31 02:28 - Day 4 잠금 해제
+WHY: 4일차 콘텐츠 오픈
+-> workbook/page.tsx: isLocked 조건 mission.day > 3 → mission.day > 4로 변경
