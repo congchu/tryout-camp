@@ -33,6 +33,7 @@ interface Template {
   thumbnail: string
   tags: string[]
   category?: string
+  type?: 'template' | 'reference'
 }
 
 const templates: Template[] = [
@@ -45,6 +46,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/HamishMW/portfolio',
     thumbnail: '/cc/templates/01-hamish.png',
     tags: ['3D', 'Dark', 'Next.js'],
+    type: 'template',
   },
   {
     id: 2,
@@ -55,6 +57,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/hatimhtm/luxury-engineering-portfolio',
     thumbnail: '/cc/templates/02-hatim.jpeg',
     tags: ['Luxury', 'Elegant'],
+    type: 'template',
   },
   {
     id: 3,
@@ -65,6 +68,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/Karthigaiselvam-R-official/Karthigaiselvam-dev',
     thumbnail: '/cc/templates/03-karthigai.jpeg',
     tags: ['Clean', 'Grid'],
+    type: 'template',
   },
   {
     id: 4,
@@ -75,6 +79,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/sauravsingh6568/Saurav-Portfolio',
     thumbnail: '/cc/templates/04-saurav.jpeg',
     tags: ['Modern', 'Developer'],
+    type: 'template',
   },
   {
     id: 5,
@@ -85,6 +90,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/syednoor058/AWWWARDS-Standard_Portfolio-Website',
     thumbnail: '/cc/templates/05-syednoor.jpeg',
     tags: ['AWWWARDS', 'Trendy'],
+    type: 'template',
   },
   {
     id: 6,
@@ -95,6 +101,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/MoncyDev/Portfolio-Website',
     thumbnail: '/cc/templates/06-moncy.jpeg',
     tags: ['Minimal'],
+    type: 'template',
   },
   {
     id: 7,
@@ -105,6 +112,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/mohitvirli/mohitvirli.github.io',
     thumbnail: '/cc/templates/07-mohitvirli.jpeg',
     tags: ['Colorful', 'Creative'],
+    type: 'template',
   },
   {
     id: 8,
@@ -115,6 +123,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/VARA4u-tech/Vara-s--Portfolio',
     thumbnail: '/cc/templates/08-vara.jpeg',
     tags: ['Dark', 'Neon'],
+    type: 'template',
   },
   {
     id: 9,
@@ -125,6 +134,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/prashantkoirala465/web-development-portfolio',
     thumbnail: '/cc/templates/09-prashant.jpeg',
     tags: ['Professional'],
+    type: 'template',
   },
   {
     id: 10,
@@ -135,6 +145,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/sanidhyy/3d-portfolio',
     thumbnail: '/cc/templates/10-shubam.jpeg',
     tags: ['3D', 'Impact'],
+    type: 'template',
   },
   {
     id: 11,
@@ -145,6 +156,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/sanidhyy/modern-portfolio',
     thumbnail: '/cc/templates/11-awersome.jpeg',
     tags: ['Modern', 'Balanced'],
+    type: 'template',
   },
   {
     id: 12,
@@ -155,6 +167,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/AntoineW/AW-2025-Portfolio',
     thumbnail: '/cc/templates/12-wodniack.jpeg',
     tags: ['Experimental', 'Interactive'],
+    type: 'template',
   },
   {
     id: 13,
@@ -165,6 +178,7 @@ const templates: Template[] = [
     repoUrl: 'https://github.com/VERIDIITE/Personal-Portfolio',
     thumbnail: '/cc/templates/13-veridiite.jpeg',
     tags: ['Simple', 'Beginner'],
+    type: 'template',
   },
   // Builder 스타일 (2/14)
   {
@@ -304,13 +318,20 @@ const templates: Template[] = [
 ]
 
 const CATEGORIES = ['전체', 'Builder', 'Hybrid', 'Nostalgia']
+const TYPES = ['전체', '오픈소스 템플릿', '레퍼런스']
 
 export default function TemplatesPage() {
   const [activeCategory, setActiveCategory] = useState<string>('전체')
+  const [activeType, setActiveType] = useState<string>('전체')
 
-  const filtered = activeCategory === '전체'
-    ? templates
-    : templates.filter(t => t.category === activeCategory || (!t.category && activeCategory === '전체'))
+  const filtered = templates.filter(t => {
+    const matchCategory = activeCategory === '전체' || t.category === activeCategory
+    const matchType =
+      activeType === '전체' ||
+      (activeType === '오픈소스 템플릿' && t.type === 'template') ||
+      (activeType === '레퍼런스' && t.type !== 'template')
+    return matchCategory && matchType
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -332,21 +353,40 @@ export default function TemplatesPage() {
 
       {/* Template Grid */}
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* 카테고리 필터 */}
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === cat
-                  ? 'bg-[#c8ff00] text-black'
-                  : 'bg-white border border-gray-300 text-gray-600 hover:border-gray-400'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* 필터 */}
+        <div className="flex flex-col gap-3 mb-6">
+          <div className="flex gap-2 flex-wrap items-center">
+            <span className="text-xs text-gray-400 w-12">종류</span>
+            {TYPES.map(t => (
+              <button
+                key={t}
+                onClick={() => setActiveType(t)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                  activeType === t
+                    ? 'bg-[#c8ff00] text-black'
+                    : 'bg-white border border-gray-300 text-gray-600 hover:border-gray-400'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-2 flex-wrap items-center">
+            <span className="text-xs text-gray-400 w-12">스타일</span>
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                  activeCategory === cat
+                    ? 'bg-[#c8ff00] text-black'
+                    : 'bg-white border border-gray-300 text-gray-600 hover:border-gray-400'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="mb-4 text-sm text-gray-500">
           총 {filtered.length}개 템플릿
@@ -403,6 +443,19 @@ export default function TemplatesPage() {
                   ))}
                 </div>
 
+                {/* 타입 뱃지 */}
+                <div className="mb-3">
+                  {template.type === 'template' ? (
+                    <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full font-medium">
+                      🔓 오픈소스 템플릿
+                    </span>
+                  ) : (
+                    <span className="text-xs bg-blue-50 text-blue-600 border border-blue-200 px-2 py-0.5 rounded-full font-medium">
+                      👁 레퍼런스
+                    </span>
+                  )}
+                </div>
+
                 {/* Links */}
                 <div className="flex gap-2">
                   <a
@@ -413,16 +466,20 @@ export default function TemplatesPage() {
                   >
                     사이트 보기
                   </a>
-                  <CopyButton url={template.repoUrl} />
-                  <a
-                    href={template.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm py-2 px-3 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
-                    title="GitHub 바로가기"
-                  >
-                    →
-                  </a>
+                  {template.type === 'template' && template.repoUrl && (
+                    <>
+                      <CopyButton url={template.repoUrl} />
+                      <a
+                        href={template.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm py-2 px-3 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
+                        title="GitHub 바로가기"
+                      >
+                        →
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
