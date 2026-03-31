@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import confetti from 'canvas-confetti'
 import { useParams, useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth-context'
@@ -37,6 +38,173 @@ function ImageModal({ src, onClose }: { src: string; onClose: () => void }) {
           onClick={(e) => e.stopPropagation()}
         />
       </div>
+    </div>
+  )
+}
+
+const RAINBOW_COLORS = [
+  '#f97316', // orange
+  '#eab308', // yellow
+  '#22c55e', // green
+  '#3b82f6', // blue
+  '#a855f7', // purple
+  '#ec4899', // pink
+]
+
+function DancingText({ text }: { text: string }) {
+  return (
+    <span className="inline-flex flex-wrap justify-center">
+      {text.split('').map((char, index) => (
+        <span
+          key={index}
+          className="dancing-char inline-block"
+          style={{
+            animationDelay: `${index * 0.05}s`,
+            color: RAINBOW_COLORS[index % RAINBOW_COLORS.length],
+          }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function CelebrationModal({ onClose }: { onClose: () => void }) {
+  const fireConfetti = useCallback(() => {
+    // 불꽃놀이 효과
+    const duration = 3000
+    const end = Date.now() + duration
+
+    const frame = () => {
+      // 왼쪽에서 발사
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.7 },
+        colors: ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899']
+      })
+      // 오른쪽에서 발사
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.7 },
+        colors: ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899']
+      })
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame)
+      }
+    }
+
+    // 초기 빵빠레
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899']
+    })
+
+    frame()
+  }, [])
+
+  useEffect(() => {
+    fireConfetti()
+  }, [fireConfetti])
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60" onClick={onClose}>
+
+      {/* Modal Content */}
+      <div
+        className="relative bg-white rounded-t-3xl sm:rounded-3xl p-6 md:p-8 max-w-2xl w-full sm:w-auto mx-0 sm:mx-4 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="text-center">
+          <div className="text-6xl mb-4">🎉</div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'KyoboHandwriting2019' }}>
+            <DancingText text="포폴 없는 프리랜서 구출 챌린지 완료!!" />
+          </h2>
+          <p className="text-gray-600 mb-6">완주하신 여러분들 진심으로 축하드립니다!</p>
+        </div>
+
+        <div className="bg-gray-50 rounded-xl p-5 mb-6">
+          <p className="font-semibold text-gray-900 mb-3">여정을 돌아보면</p>
+          <div className="space-y-1.5 text-gray-700">
+            <p>✅ Day 1, <strong>AI 도구</strong>를 처음 만났습니다.</p>
+            <p>✅ Day 2, <strong>멋진 템플릿</strong>을 가져왔습니다.</p>
+            <p>✅ Day 3, <strong>내 이야기</strong>를 채워넣었습니다.</p>
+            <p>✅ Day 4, <strong>세상에 공개</strong>했습니다.</p>
+            <p>✅ Day 5, <strong>누가 봤는지</strong> 확인할 수 있게 됐습니다.</p>
+            <p>✅ Day 6, <strong>나만의 도메인</strong>을 갖게 됐습니다.</p>
+          </div>
+        </div>
+
+        <div className="text-gray-600 space-y-4 mb-6 leading-relaxed">
+          <p>
+            AI로 만든다는게 어떤 건지 감이 안오셨을텐데, 직접 해보니 어떠셨나요?<br />
+            쉬우면서도 어렵다면, 잘 따라오셨습니!!😂
+          </p>
+          <p>
+            이번 챌린지는 완성 단계가 아니라,<br />
+            <strong className="text-gray-900">가능성과 방향을 확인하는 과정</strong>이었습니다.
+          </p>
+          <p>
+            결과물이 부족하게 느껴지는 것도 자연스러운 상태입니다.<br />
+            이제부터는 그 결과물을 기준으로 계속 개선해 나가면 됩니다 :)
+          </p>
+        </div>
+
+        <p className="text-center text-lg font-semibold text-gray-900 mb-6">
+          고생 많으셨습니다! 뒷풀이에서 만나요~! 🍻
+        </p>
+
+        <button
+          onClick={onClose}
+          className="w-full px-8 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors"
+        >
+          확인
+        </button>
+      </div>
+
+      <style jsx global>{`
+        @keyframes slide-up {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          60% {
+            transform: translateY(-10px);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes dance {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          25% {
+            transform: translateY(-8px) rotate(-5deg);
+          }
+          50% {
+            transform: translateY(0) rotate(0deg);
+          }
+          75% {
+            transform: translateY(-4px) rotate(5deg);
+          }
+        }
+        .dancing-char {
+          animation: dance 0.8s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   )
 }
@@ -98,6 +266,7 @@ export default function WorkbookDayPage() {
   const [copied, setCopied] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [completedDays, setCompletedDays] = useState(0)
+  const [showCelebration, setShowCelebration] = useState(false)
 
   const dayKey = `day${day}` as 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6'
 
@@ -350,6 +519,11 @@ export default function WorkbookDayPage() {
       setProgress({ status: 'completed' })
       // 제출 성공 시 세션 스토리지 비우기
       sessionStorage.removeItem(sessionKey)
+
+      // Day 6 완료 시 축하 팝업
+      if (day === 6) {
+        setShowCelebration(true)
+      }
     } else {
       // Legacy: simple text submission
       if (!submission.trim()) return
@@ -448,6 +622,11 @@ export default function WorkbookDayPage() {
       {/* Image Modal */}
       {modalImage && (
         <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
+      )}
+
+      {/* Celebration Modal */}
+      {showCelebration && (
+        <CelebrationModal onClose={() => setShowCelebration(false)} />
       )}
 
       <div className="min-h-screen">

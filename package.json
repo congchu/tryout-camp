@@ -12,6 +12,7 @@
     "@anthropic-ai/sdk": "^0.39.0",
     "@tailwindcss/typography": "^0.5.19",
     "@uiw/react-md-editor": "^4.0.11",
+    "canvas-confetti": "^1.9.4",
     "firebase": "^11.4.0",
     "firebase-admin": "^13.7.0",
     "framer-motion": "^12.4.7",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
     "@tailwindcss/postcss": "^4.0.15",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

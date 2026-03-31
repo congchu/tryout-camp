@@ -107,8 +107,50 @@ ${url || '-'}
 *느낀 점*
 ${feedback || '-'}`
 
+    } else if (day === 5) {
+      // Day 5: Mixpanel 분석
+      const { success, info, want, feedback } = data
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*어디까지 확인해봤나요?*
+${success || '-'}
+
+*확인한 정보*
+${info || '-'}
+
+*더 알고 싶은 정보*
+${want || '-'}
+
+*소감*
+${feedback || '-'}`
+
+    } else if (day === 6) {
+      // Day 6: 커스텀 도메인 연결
+      const { success, domain, provider, feedback } = data
+
+      text = `🎉 *Day ${day} 미션을 제출했어요!*
+
+*제출자*
+${userName}
+
+*도메인 연결 결과*
+${success || '-'}
+
+*도메인 주소*
+${domain || '-'}
+
+*도메인 제공업체*
+${provider || '-'}
+
+*소감*
+${feedback || '-'}`
+
     } else {
-      // Day 5: 기본 포맷
+      // 기본 포맷
       text = `🎉 *Day ${day} 미션을 제출했어요!*
 
 *제출자*

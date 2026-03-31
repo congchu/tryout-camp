@@ -32,11 +32,6 @@ export default function RootLayout({
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
-        <script
-          defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id="28014736-7220-46a4-917b-0d4cd7a7b186"
-        />
       </head>
       <body>{children}</body>
     </html>

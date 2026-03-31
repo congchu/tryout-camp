@@ -53,16 +53,12 @@ Day 1~4에서 우리는:
     },
     {
       id: 'step-2',
-      title: '방문자 확인 설정하기',
+      title: '믹스패널 세팅하기',
       duration: '10분',
       content: `## Mixpanel(믹스패널)을 사용할 겁니다
 
-> **[Mixpanel](https://mixpanel.com) = 실리콘밸리 스타트업들이 쓰는 분석 도구**
+> **[Mixpanel](https://mixpanel.com) = 내 사이트에 누가 왔는지 알려주는 서비스**
 
-Netflix, Uber, Airbnb 같은 회사들이 사용하는 서비스예요.
-<br>
-"누가 우리 서비스를 어떻게 쓰고 있지?"를 분석해주죠.
-<br><br>
 우리 사이트에 Mixpanel을 연결하면:
 - 누가 언제 방문했는지 **자동으로 기록**
 - 대시보드에서 **한눈에 확인**
@@ -145,139 +141,153 @@ Mixpanel 대시보드 열어줘
     },
     {
       id: 'step-3',
-      title: '어떤 정보를 볼 수 있나요?',
-      duration: '3분',
-      content: `## 기본으로 볼 수 있는 것
+      title: '데일리 접속자수 보기',
+      duration: '5분',
+      content: `## 접속자 수는 어디서 봐요?
 
-Mixpanel을 연결하면 **자동으로** 이런 정보가 쌓여요:
-
-- **몇 명**이 방문했는지
-- **언제** 방문했는지 (날짜/시간)
-- **어느 나라/도시**에서 봤는지
-- **어떤 기기**로 봤는지 (PC/모바일)
+Mixpanel에 들어가면 숫자가 보이긴 하는데...
+<br>
+**"언제 몇 명이 왔는지"** 한눈에 보려면 **Board**를 만들어야 해요.
 
 ---
 
-## 개인정보는 안 보여요
+## Board 만들기
 
-걱정하지 마세요:
-- 이름, 이메일 같은 **개인정보는 안 보임**
-- "누군가 봤다" 정도만 알 수 있음
-- 합법적이고 일반적인 방식이에요
+> 🎬 **영상으로 따라해보세요!**
+
+<iframe width="100%" height="450" src="https://www.youtube.com/embed/Bvkh225nRzQ" frameborder="0" allowfullscreen></iframe>
+
+**1. 왼쪽 상단 [+ Create New] 클릭**
+
+**2. [Insights] 선택**
+
+**3. 오른쪽에서 [Select Metric] 클릭 → [Page View] 선택**
+
+**4. 오른쪽 상단 [Save to New Board] 클릭**
+
+**5. 이름에 "접속자수" 입력하고 저장**
 
 ---
 
-## 더 자세히 보고 싶다면?
+## 다음부터는?
 
-Mixpanel에는 **Session Replay**라는 기능이 있습니다.
+왼쪽 메뉴 **Your Boards** 아래에 **[접속자수]** 가 생겼어요!
 <br><br>
-방문자가 **실제로 어떻게 사이트를 봤는지** 녹화해서 보여줍니다.
-
-> 🎬 이 기능은 **영상**으로 따로 안내드릴게요!`
+이걸 클릭하면 **언제든 최신 접속자 수**를 확인할 수 있습니다.`
     },
     {
       id: 'step-4',
-      title: '5일 챌린지 완료!',
+      title: '기본 템플릿 활용하기',
       duration: '3분',
-      content: `## 축하합니다!!! 🎉🎉🎉
+      content: `Mixpanel에는 **미리 만들어진 대시보드 템플릿**이 있어요.
+<br><br>
+이런 재미있는 주제들을 볼 수 있어요:
+- **DAU** - 오늘 몇 명이 왔는지
+- **WAU** - 이번 주에 몇 명이 왔는지
+- **MAU** - 이번 달에 몇 명이 왔는지
+- **New Users** - 신규 방문자는 몇 명인지
+- 사용자는 **어느 국가**에서 방문하고 있는가?
+- 사용자는 **어떤 플랫폼**(디바이스/환경)을 사용하고 있는가?
 
-처음엔 낯설었을 겁니다.
-<br><br>
-"코딩을 몰라도 만들 수 있을까?"
 <br>
-"AI로 실제 결과물이 나올까?"
-<br>
-"5일 동안 꾸준히 할 수 있을까?"
-<br><br>
-**직접 해보면서 어느 정도 답을 확인했을 겁니다.**
-<br><br>
-이번 5일은 완성 단계가 아니라,
-<br>
-**가능성과 방향을 확인하는 과정**이었습니다.
-<br><br>
-결과물이 부족하게 느껴지는 것도 자연스러운 상태입니다.
-<br>
-이제부터는 그 결과물을 기준으로 **계속 개선해 나가면 됩니다.**
+재미삼아 한번 따라해보세요!
 
----
+**모르는 내용이 잔뜩이어도 걱정할 필요 없답니다~!**
 
-## 5일간의 여정을 돌아보면
+Codex에게 물어보면 친절하게 설명해줘요(호호, 이제 아시죠?!)
 
-✅ Day 1, **AI 도구**를 처음 만났습니다.
-<br>
-✅ Day 2, **멋진 템플릿**을 가져왔습니다.
-<br>
-✅ Day 3, **내 이야기**를 채워넣었습니다.
-<br>
-✅ Day 4, **세상에 공개**했습니다.
-<br>
-✅ Day 5, **누가 봤는지** 확인할 수 있게 됐습니다.
+쭉 긁어서 물어보거나, **스크린샷** 찍어서 물어봐도 잘 이해한답니다! 
+
+> 🎬 **영상으로 따라해보세요!**
+
+<iframe width="100%" height="450" src="https://www.youtube.com/embed/u1giI2TEJeI" frameborder="0" allowfullscreen></iframe>`
+    },
+    {
+      id: 'step-5',
+      title: 'Session Replay',
+      duration: '2분',
+      content: `왼쪽 메뉴에서 **Session Replay**를 클릭해보세요.
 <br><br>
-**매일 한 걸음씩.**
+방문자가 **실제로 내 사이트를 어떻게 봤는지** 녹화된 영상으로 볼 수 있어요!
 <br><br>
-그 한 걸음들이 모여서 **지금의 포트폴리오**가 됐습니다.
+- 어디를 클릭했는지
+- 어디서 멈췄는지
+- 어디까지 스크롤했는지
 
 ---
 
-## 이제 여러분은
+## 이걸로 뭘 알 수 있냐면...
 
-누군가 "포트폴리오 있어요?" 라고 물으면
+- 채용담당자가 **어떤 프로젝트에 관심** 가졌는지
+- **연락처까지 갔는지** (컨택 의향 있는지)
+- "봤어요~" 했는데 실제로는 **3초 보고 나갔는지** 😅
 <br><br>
-**"네, 여기요."**
+포트폴리오 **어디를 고쳐야 할지** 힌트를 얻을 수 있어요!
+
+> 🎬 **영상으로 확인해보세요!**
+
+<iframe width="100%" height="450" src="https://www.youtube.com/embed/CJ21GKCUVpA" frameborder="0" allowfullscreen></iframe>`
+    },
+    {
+      id: 'step-6',
+      title: 'Day 5 완료!',
+      duration: '2분',
+      content: `## 수고하셨습니다! 🎉
+
+이제 **몇 명이 내 포트폴리오를 봤는지** 확인할 수 있게 됐어요!
 <br><br>
-**링크 하나로 대답할 수 있는 사람**이 됐습니다.
-<br><br>
-이력서에 넣어도 되고,
+링크를 보내고, 며칠 뒤에 Mixpanel을 확인해보세요.
 <br>
-링크드인에 연결해도 되고,
-<br>
-클라이언트에게 카톡으로 바로 보내도 됩니다.
-<br><br>
-👉 명함에 QR코드로 넣고 싶다면? [무료 QR 생성](https://qr.io)
+생각보다 재미있을 거예요 😎
 
 ---
 
-## 마지막 미션
-[오늘의 미션](?step=mission)에서 5일 챌린지 소감을 나눠주세요!`
+## 🎁 보너스 Day 6
+
+여기까지 오셨다면, **Day 6도 도전해보세요!**
+<br><br>
+\`yourname.netlify.app\` 대신
+<br>
+**\`yourname.com\`** 같은 나만의 도메인을 연결하는 방법을 알려드려요.
+<br><br>
+명함에 넣기 훨씬 멋지겠죠? ✨
+
+---
+
+## 미션 제출
+[오늘의 미션](?step=mission)에서 Day 5 미션을 제출해주세요!`
     }
   ],
   mission: {
     title: 'Day 5 미션 제출',
-    description: '5일 챌린지를 완료하셨나요?',
+    description: 'Mixpanel 어디까지 해봤나요?',
     fields: [
       {
         id: 'success',
-        label: '미션 성공 여부',
+        label: '어디까지 확인해봤나요?',
         type: 'radio',
-        options: ['성공! Mixpanel 연동 완료', '부분 성공 (연동은 했는데 확인 못함)', '실패 (연동 안 됨)'],
+        options: ['실패했어요 😢', '접속자수 Board까지 만들었어요', '기본 템플릿도 해봤어요', 'Session Replay까지 다 해봤어요'],
         required: true
       },
       {
-        id: 'url',
-        label: '포트폴리오 URL',
-        type: 'text',
-        placeholder: 'https://yourname.netlify.app',
-        required: false
-      },
-      {
-        id: 'visitors',
-        label: '현재 방문자 수',
-        type: 'text',
-        placeholder: '예: 3명',
-        required: false
-      },
-      {
-        id: 'overall',
-        label: '5일 챌린지 전체 소감',
+        id: 'info',
+        label: '어떤 정보를 확인했나요?',
         type: 'textarea',
-        placeholder: '어땠나요? 어려웠던 점, 좋았던 점, 아쉬운 점 등',
+        placeholder: '예: 방문자 3명, 한국에서 접속, 모바일로 봤더라 등',
         required: false
       },
       {
-        id: 'next',
-        label: '앞으로 하고 싶은 것',
+        id: 'want',
+        label: '더 알고 싶은 정보가 있나요?',
         type: 'textarea',
-        placeholder: '포트폴리오에 더 추가하고 싶은 것, 개선하고 싶은 것이 있다면?',
+        placeholder: '예: 어떤 프로젝트를 오래 봤는지 알고 싶어요',
+        required: false
+      },
+      {
+        id: 'feedback',
+        label: '셋팅하는 과정이 어떠셨나요? 알려주세요!',
+        type: 'textarea',
+        placeholder: '어땠나요?',
         required: false
       }
     ]

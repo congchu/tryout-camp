@@ -516,17 +516,7 @@ export default function WorkbookPage() {
             </div>
           )}
 
-          {/* CTA */}
-          <div className="mt-8 text-center">
-            <button
-              onClick={() => router.push(`/cc/ai-portfolio/workbook/day/1`)}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200"
-            >
-              <PlayCircle className="w-5 h-5" />
-              Day 1 {getDayStatus(1) === 'in_progress' ? '계속하기' : '시작하기'}
-            </button>
-          </div>
-        </div>
+                  </div>
       </section>
     </div>
   )
