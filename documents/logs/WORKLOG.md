@@ -585,3 +585,11 @@ Day 3 흐름 확정:
 ## 2026-03-31 02:28 - Day 4 잠금 해제
 WHY: 4일차 콘텐츠 오픈
 -> workbook/page.tsx: isLocked 조건 mission.day > 3 → mission.day > 4로 변경
+
+## 2026-04-01 - Day 5, 6 잠금 해제 + Day 5 보너스로 이동
+WHY: Day 5, Day 6 콘텐츠 오픈
+HOW:
+- MISSIONS에서 Day 5 제거, BONUS_MISSIONS로 이동
+- Day 6의 isLocked: true → false로 변경
+- MISSIONS 잠금 조건 제거 (Day 1~4 모두 열림)
+-> workbook/page.tsx 수정

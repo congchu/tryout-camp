@@ -40,21 +40,22 @@ const MISSIONS = [
     mission: '실제 URL로 세상에 공개',
     duration: '30분',
   },
+]
+
+const BONUS_MISSIONS = [
   {
     day: 5,
     title: '방문자 확인',
     mission: 'Mixpanel 연동 + 분석',
     duration: '30분',
+    isLocked: false,
   },
-]
-
-const BONUS_MISSIONS = [
   {
     day: 6,
     title: '커스텀 도메인 연결',
     mission: 'hongildong.com 같은 나만의 주소 만들기',
     duration: '20분',
-    isLocked: true, // 잠금 상태
+    isLocked: false,
   },
 ]
 
@@ -365,7 +366,7 @@ export default function WorkbookPage() {
                 const status = getDayStatus(mission.day)
                 const isCompleted = status === 'completed'
                 const isFirst = mission.day === firstIncomplete
-                const isLocked = mission.day > 4 // Day 5부터는 잠금
+                const isLocked = false // 모든 Day 열림
 
                 return (
                   <button

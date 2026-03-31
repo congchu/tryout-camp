@@ -39,7 +39,9 @@
       "mcp__notion__notion-search",
       "Bash(git mv:*)",
       "Bash(ls:*)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(echo:*)",
+      "Bash(git pull:*)"
     ]
   }
 }

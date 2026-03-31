@@ -57,8 +57,12 @@ Day 1~4에서 우리는:
       duration: '10분',
       content: `## Mixpanel(믹스패널)을 사용할 겁니다
 
-> **[Mixpanel](https://mixpanel.com) = 방문자 수를 세어주는 서비스**
+> **[Mixpanel](https://mixpanel.com) = 실리콘밸리 스타트업들이 쓰는 분석 도구**
 
+Netflix, Uber, Airbnb 같은 회사들이 사용하는 서비스예요.
+<br>
+"누가 우리 서비스를 어떻게 쓰고 있지?"를 분석해주죠.
+<br><br>
 우리 사이트에 Mixpanel을 연결하면:
 - 누가 언제 방문했는지 **자동으로 기록**
 - 대시보드에서 **한눈에 확인**
