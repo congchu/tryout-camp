@@ -41,7 +41,9 @@
       "Bash(ls:*)",
       "Bash(git diff:*)",
       "Bash(echo:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "WebFetch(domain:docsify.js.org)",
+      "Bash(npx docsify-cli serve:*)"
     ]
   }
 }

@@ -331,8 +331,7 @@ export default function FeedbackPage() {
                   '에러 잡는 법 (막혔을 때 해결하고 싶어요)',
                   '프롬프팅 방법 (AI한테 잘 시키고 싶어요)',
                   '디자인 레퍼런스/템플릿 (다양한 예시가 보고 싶어요)',
-                  '개발 용어 (무슨 말인지 알고 싶어요)',
-                  '자동화/노코드 (반복 작업 줄이고 싶어요)',
+                  '웹 용어 (AI한테 정확하게 설명하고 싶어요)',
                 ].map((option) => (
                   <label key={option} className="flex items-center gap-3 cursor-pointer">
                     <input
