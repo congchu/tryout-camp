@@ -322,59 +322,122 @@ export default function FeedbackPage() {
             {/* 심화 과정 */}
             <div>
               <label className="block text-sm font-semibold text-gray-800 mb-4">
-                AI 포폴 챌린지 심화 과정이 생긴다면, 더 알고 싶은 건? <span className="text-gray-400 font-normal">(선택)</span>
+                AI 포폴 챌린지 심화 과정이 생긴다면, 더 알고싶은 게 있으신가요? <span className="text-gray-400 font-normal">(선택)</span>
               </label>
-              <div className="space-y-2">
-                {[
-                  'AI 도구 다양하게 써보기 (Cursor, v0 등)',
-                  'HTML/CSS 기초 (직접 수정하고 싶어요)',
-                  '에러 잡는 법 (막혔을 때 해결하고 싶어요)',
-                  '프롬프팅 방법 (AI한테 잘 시키고 싶어요)',
-                  '디자인 레퍼런스/템플릿 (다양한 예시가 보고 싶어요)',
-                  '웹 용어 (AI한테 정확하게 설명하고 싶어요)',
-                ].map((option) => (
-                  <label key={option} className="flex items-center gap-3 cursor-pointer">
+              <div className="space-y-4">
+                {/* AI 활용 */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">AI 활용</p>
+                  <div className="space-y-2">
+                    {[
+                      '더 많은 AI 도구가 궁금해요 (Figma AI, Google Stitch 등)',
+                      '원하는 결과를 잘 뽑고 싶어요 (프롬프팅)',
+                      'AI로 이미지도 만들고 싶어요 (이미지 생성)',
+                    ].map((option) => (
+                      <label key={option} className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={wantToLearn.includes(option)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setWantToLearn([...wantToLearn, option])
+                            } else {
+                              setWantToLearn(wantToLearn.filter(item => item !== option))
+                            }
+                          }}
+                          className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 디자인 */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">디자인</p>
+                  <div className="space-y-2">
+                    {[
+                      '다양한 예시가 보고 싶어요 (디자인 레퍼런스/템플릿)',
+                      '웹 사이트를 직접 설계하고 싶어요 (웹 기획)',
+                      '좀 더 역동적으로 만들고 싶어요 (애니메이션)',
+                    ].map((option) => (
+                      <label key={option} className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={wantToLearn.includes(option)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setWantToLearn([...wantToLearn, option])
+                            } else {
+                              setWantToLearn(wantToLearn.filter(item => item !== option))
+                            }
+                          }}
+                          className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 개발 기초 */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">개발 기초</p>
+                  <div className="space-y-2">
+                    {[
+                      '헤더/푸터/섹션 이런 웹 용어들을 알고 싶어요',
+                      '디테일한 스타일을 직접 수정하고 싶어요 (HTML/CSS)',
+                      '에러가 발생했을 때, 해결하는 방법을 알고 싶어요',
+                      '모바일에서도 잘 보이게 하고 싶어요 (반응형)',
+                    ].map((option) => (
+                      <label key={option} className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={wantToLearn.includes(option)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setWantToLearn([...wantToLearn, option])
+                            } else {
+                              setWantToLearn(wantToLearn.filter(item => item !== option))
+                            }
+                          }}
+                          className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 기타 옵션 */}
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={wantToLearn.includes(option)}
+                      checked={wantToLearn.includes('기타')}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setWantToLearn([...wantToLearn, option])
+                          setWantToLearn([...wantToLearn, '기타'])
                         } else {
-                          setWantToLearn(wantToLearn.filter(item => item !== option))
+                          setWantToLearn(wantToLearn.filter(item => item !== '기타'))
+                          setWantToLearnOther('')
                         }
                       }}
                       className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                     />
-                    <span className="text-sm text-gray-700">{option}</span>
+                    <span className="text-sm text-gray-700">기타</span>
                   </label>
-                ))}
-                {/* 기타 옵션 */}
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={wantToLearn.includes('기타')}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setWantToLearn([...wantToLearn, '기타'])
-                      } else {
-                        setWantToLearn(wantToLearn.filter(item => item !== '기타'))
-                        setWantToLearnOther('')
-                      }
-                    }}
-                    className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                  />
-                  <span className="text-sm text-gray-700">기타</span>
-                </label>
-                {wantToLearn.includes('기타') && (
-                  <input
-                    type="text"
-                    value={wantToLearnOther}
-                    onChange={(e) => setWantToLearnOther(e.target.value)}
-                    placeholder="직접 입력해주세요"
-                    className="ml-8 w-[calc(100%-2rem)] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
-                  />
-                )}
+                  {wantToLearn.includes('기타') && (
+                    <input
+                      type="text"
+                      value={wantToLearnOther}
+                      onChange={(e) => setWantToLearnOther(e.target.value)}
+                      placeholder="직접 입력해주세요"
+                      className="mt-2 ml-8 w-[calc(100%-2rem)] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
