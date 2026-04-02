@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
 
     const {
       name,
+      bank,
+      account,
       expectation,
       nps,
       recommendTo,
@@ -34,6 +36,9 @@ export async function POST(request: NextRequest) {
 
 *제출자*
 ${name}
+
+*환급 계좌*
+${bank} ${account}
 
 *만족도*
 ${expectation}

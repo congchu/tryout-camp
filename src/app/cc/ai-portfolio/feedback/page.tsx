@@ -22,6 +22,8 @@ export default function FeedbackPage() {
 
   // Form states
   const [name, setName] = useState('')
+  const [bank, setBank] = useState('')
+  const [account, setAccount] = useState('')
   const [expectation, setExpectation] = useState<string>('')
   const [nps, setNps] = useState<number | null>(null)
   const [recommendTo, setRecommendTo] = useState('')
@@ -36,6 +38,8 @@ export default function FeedbackPage() {
 
   const isFormValid =
     name.trim() &&
+    bank.trim() &&
+    account.trim() &&
     expectation &&
     nps !== null &&
     recommendTo.trim() &&
@@ -54,6 +58,8 @@ export default function FeedbackPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
+          bank,
+          account,
           expectation,
           nps,
           recommendTo,
@@ -131,18 +137,42 @@ export default function FeedbackPage() {
       {/* Form */}
       <section className="px-4 pb-20">
         <div className="max-w-2xl mx-auto space-y-8">
-          {/* 이름 */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <label className="block text-sm font-semibold text-gray-800 mb-3">
-              이름 <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="홍길동"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
-            />
+          {/* 이름 + 환급 계좌 */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-3">
+                이름 <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="홍길동"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-3">
+                환급 계좌 <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={bank}
+                  onChange={(e) => setBank(e.target.value)}
+                  placeholder="은행명"
+                  className="w-1/3 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                />
+                <input
+                  type="text"
+                  value={account}
+                  onChange={(e) => setAccount(e.target.value)}
+                  placeholder="계좌번호"
+                  className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                />
+              </div>
+            </div>
           </div>
 
           {/* 섹션: 만족도 */}
