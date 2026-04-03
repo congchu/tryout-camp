@@ -315,6 +315,17 @@ const templates: Template[] = [
     tags: ['Nostalgia', 'Classic', 'Elegant'],
     category: 'Nostalgia',
   },
+  {
+    id: 26,
+    name: 'ElMehdi Bekkous Portfolio',
+    author: 'ElMehdi Bekkous',
+    description: '깔끔한 레이아웃의 개발자 포트폴리오. 오픈소스로 그대로 활용 가능',
+    siteUrl: 'https://elmehdibekkousportfolio.vercel.app',
+    repoUrl: 'https://github.com/ElMehdiBekkous/MyPortfolio',
+    thumbnail: '',
+    tags: ['Clean', 'Developer', 'Modern'],
+    type: 'template',
+  },
 ]
 
 const CATEGORIES = ['전체', 'Builder', 'Hybrid', 'Nostalgia']
